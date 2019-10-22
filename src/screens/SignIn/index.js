@@ -12,8 +12,7 @@ import { loginUser } from '../../redux/actions/user'
 import { SignInForm } from '../../components/index'
 import { CircularProgress } from '@material-ui/core'
 
-const MESSAGE =
-  'Hubo un problema iniciando sesión. Por favor intentalo de nuevo.'
+const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
 class SignInScreen extends React.Component {
   constructor(props) {
@@ -35,7 +34,8 @@ class SignInScreen extends React.Component {
 
     this.setState({ loading: false })
 
-    if (user.error || !user.payload.data.email) return alert(MESSAGE)
+    if (user.error || !user.payload.data.user || !user.payload.data.user.email)
+      return alert(MESSAGE)
 
     cookies.set('@userToken', user.token)
     cookies.set('@userId', user.user_id)
