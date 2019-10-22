@@ -99,17 +99,6 @@ class SignUpForm extends React.Component {
     return validity && this.state.password === this.state.passwordRepeat
   }
 
-  onSubmit() {
-    this.props.onSubmit({
-      name: this.state.name,
-      lastName: this.state.lastname,
-      email: this.state.email,
-      phone: this.state.phoneNumber,
-      password: this.state.password,
-      passwordRepeat: this.state.passwordRepeat,
-    })
-  }
-
   render() {
     const { onSubmit } = this.props
     const {
