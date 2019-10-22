@@ -1,11 +1,11 @@
 import React from 'react'
 import './style.sass'
 
-import { Button } from '@material-ui/core'
+import { SignUpForm } from '../../components/index'
 
 const Home = () => (
   <div className="home">
-    <Button>Click me!</Button>
+    <SignUpForm />
   </div>
 )
 
