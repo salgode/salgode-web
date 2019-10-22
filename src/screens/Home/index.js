@@ -1,6 +1,12 @@
 import React from 'react'
 import './style.sass'
 
-const Home = () => <div className="home"></div>
+import { SignUpForm } from '../../components/index'
+
+const Home = () => (
+  <div className="home">
+    <SignUpForm />
+  </div>
+)
 
 export default Home
