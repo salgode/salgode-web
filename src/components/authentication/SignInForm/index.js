@@ -63,7 +63,7 @@ class SignInForm extends React.Component {
 
         <Button
           disabled={!this.getValidity()}
-          onClick={() => onSubmit(email, password)}
+          onClick={() => onSubmit({ email, password })}
         >
           Ingresar
         </Button>
