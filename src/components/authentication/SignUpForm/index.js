@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 // Components
 import { Button, FormControl, Input, InputLabel } from '@material-ui/core'
 
-class SignUpForm extends Component {
+class SignUpForm extends React.Component {
   constructor(props) {
     super(props)
 
@@ -100,8 +100,8 @@ class SignUpForm extends Component {
     return validity && this.state.password === this.state.passwordRepeat
   }
 
-  onPress() {
-    this.props.onSend({
+  onSubmit() {
+    this.props.onSubmit({
       name: this.state.name,
       lastName: this.state.lastname,
       email: this.state.email,
@@ -174,7 +174,7 @@ class SignUpForm extends Component {
 }
 
 SignUpForm.propTypes = {
-  onSend: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 }
 
 export default SignUpForm
