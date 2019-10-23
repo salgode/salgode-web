@@ -16,52 +16,52 @@ import FindTripsCard from './../../components/FindTripsCard/index'
 
 const trips = [
   {
-    driver: 'Martin Anselmo',
+    trip_id: 'tri_12345',
     trip_status: 'open',
-    created_at: '2019-10-22T16:41:55-04:00',
-    trip_id: 'tri_112b05c8-0973-4160-a40b-f0d588ec2503',
-    etd: '2019-10-22T17:10:00.000Z',
+    driver: {
+      driver_id: 'usr_12345',
+      driver_name: 'Nicolas',
+      driver_phone: '+56 9 9999 9999',
+    },
+    vehicle_id: 'veh_12345',
+    trip_times: {
+      etd: '2019-10-23T05:40:00.000Z',
+      etd_policy: 'strict',
+      max_wait: 5,
+    },
+    seats: 4,
+    available_seats: 3,
+    route: {
+      start: 'pnt_1',
+      end: 'pnt_4',
+    },
+    trip_route: {
+      start: {
+        id: 'pnt_1',
+        name: 'Centro Artesanal Pueblito Los Dominicos',
+      },
+      end: {
+        id: 'pnt_4',
+        name: 'TOBALABA L1',
+      },
+    },
+    route_points: ['pnt_1', 'pnt_2', 'pnt_3', 'pnt_4'],
     trip_route_points: [
       {
-        city: 'SANTIAGO',
-        commune: 'PROVIDENCIA',
-        address: 'San Pío X 5255, Vitacura, Providencia, Región Metropolitana',
-        id: 'spt_d1cd6d79-6fad-4b37-9f87-48e169c9d530',
-        name: 'Centro comercial Plaza San Pío, Vitacura 5255',
-        type: ['shopping_mall', 'point_of_interest', 'establishment'],
+        id: 'pnt_1',
+        name: 'Centro Artesanal Pueblito Los Dominicos',
       },
       {
-        city: 'SANTIAGO',
-        commune: 'MAIPU',
-        address: 'Avda. Pajaritos 5090',
-        id: 'spt_d5eb212a-ab53-4f0e-9e49-15f288ee2cbf',
-        name: 'LAS PARCELAS',
-        type: ['subway_station'],
-      },
-    ],
-  },
-  {
-    driver: 'Martin Anselmo',
-    trip_status: 'open',
-    created_at: '2019-10-22T16:41:55-04:00',
-    trip_id: 'tri_112b05c8-0973-4160-a40b-f0d588ec2503',
-    etd: '2019-10-22T17:10:00.000Z',
-    trip_route_points: [
-      {
-        city: 'SANTIAGO',
-        commune: 'PROVIDENCIA',
-        address: 'San Pío X 5255, Vitacura, Providencia, Región Metropolitana',
-        id: 'spt_d1cd6d79-6fad-4b37-9f87-48e169c9d530',
-        name: 'Centro comercial Plaza San Pío, Vitacura 5255',
-        type: ['shopping_mall', 'point_of_interest', 'establishment'],
+        id: 'pnt_2',
+        name: 'METRO MANQUEHUE',
       },
       {
-        city: 'SANTIAGO',
-        commune: 'MAIPU',
-        address: 'Avda. Pajaritos 5090',
-        id: 'spt_d5eb212a-ab53-4f0e-9e49-15f288ee2cbf',
-        name: 'LAS PARCELAS',
-        type: ['subway_station'],
+        id: 'pnt_3',
+        name: 'METRO ESCUELA MILITAR',
+      },
+      {
+        id: 'pnt_4',
+        name: 'TOBALABA L1',
       },
     ],
   },

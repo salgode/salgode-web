@@ -24,7 +24,7 @@ const App = () => {
       <div className="App">
         <BrowserRouter>
           <Navbar />
-          <Container maxWidth="sm" className="appContainer">
+          <Container className="appContainer">
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/pedir-viaje" component={RequestTrip} />
