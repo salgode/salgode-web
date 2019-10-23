@@ -3,12 +3,11 @@ import UpdateUserForm from '../../components/User/UpdateForm'
 
 const UpdateUser = () => {
   return (
-    <div className="container has-margin-top-70">
-      <div className="columns">
-        <div className="column is-6">
-          <h1 className="subtitle is-4"> Actualizar informacion de usuario </h1>
-          <UpdateUserForm />
-        </div>
+    <div className="columns has-margin-top-40">
+      <div className="column">
+        <h1 className="title is-2"> Tus datos </h1>
+        {/* Estos datos 'usr_12345' son de prueba */}
+        <UpdateUserForm user_id={'usr_12345'} />
       </div>
     </div>
   )
