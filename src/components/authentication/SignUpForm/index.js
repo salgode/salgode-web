@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 // Components
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
-import Typography from '@material-ui/core/Typography'
-import { Link } from 'react-router-dom'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
-import CssBaseline from '@material-ui/core/CssBaseline'
+import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = theme => ({
@@ -23,16 +23,18 @@ const styles = theme => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '50%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
+  },
+  [theme.breakpoints.down('sm')]: {
+    form: {
+      width: '80%',
+    },
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    padding: '10px',
   },
 })
 class SignUpForm extends React.Component {
@@ -148,7 +150,7 @@ class SignUpForm extends React.Component {
         <CssBaseline />
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">
-            Sign up
+            Registrarse
           </Typography>
 
           <form className={classes.form} noValidate>
@@ -236,7 +238,7 @@ class SignUpForm extends React.Component {
               type="button"
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               className={classes.submit}
               disabled={!this.getValidity()}
               onClick={() =>
@@ -250,7 +252,7 @@ class SignUpForm extends React.Component {
                 })
               }
             >
-              Sign Up
+              Registrarse
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
