@@ -58,47 +58,21 @@ class CreateTripScreen extends Component {
   render() {
     const { startStop, endStop, startTime, spots } = this.props
     const disabled = startStop && endStop && startTime ? false : true
-    const { pickedDate } = this.state
-    let day
-    let hours
-    let minutes
-    if (pickedDate) {
-      day = pickedDate.toLocaleDateString()
-      hours = pickedDate.getHours()
-      minutes = pickedDate.getMinutes()
-    }
     const filteredSlots = spotsFilter(spots, [startStop, endStop]).map(
       spot => ({
         label: `${spot.name}, ${spot.address}`,
         spot: spot,
       })
     )
-    console.log(filteredSlots)
 
     return (
       <Grid container direction="column" justify="center" alignItems="center">
-        {/* <CardInputSelector
-          text="#Desde"
-          placeHolder="Filtra por Comuna o Parada"
-          onSelect={item => this.props.setStartStop(item)}
-          onClear={this.props.clearStartStop}
-          data={filteredSlots}
-        />
-
-        <CardInputSelector
-          text="#A"
-          placeHolder="Filtra por Comuna o Parada"
-          onSelect={item => this.props.setEndStop(item)}
-          onClear={this.props.clearEndStop}
-          data={filteredSlots}
-        /> */}
-
         <Typography>Desde:</Typography>
         <Select
           className="search"
           isSearchable={true}
           options={filteredSlots}
-          onChange={value => this.props.setEndStop(value.spot)}
+          onChange={value => this.props.setStartStop(value.spot)}
         />
 
         <Typography>Hasta:</Typography>
@@ -109,13 +83,7 @@ class CreateTripScreen extends Component {
           onChange={value => this.props.setEndStop(value.spot)}
         />
 
-        <Button onPress={this.showDateTimePicker}>
-          <p>
-            {pickedDate
-              ? `${day} - ${hours}:${minutes < 10 ? '0' : ''}${minutes}`
-              : 'Hora/Fecha de Salida'}
-          </p>
-        </Button>
+        <Typography>Hora/Fecha de Salida:</Typography>
 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <DateTimePicker
