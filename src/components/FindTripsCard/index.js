@@ -106,6 +106,10 @@ class FindTripsCard extends React.Component {
     this.setState({ anchorEl: event.currentTarget })
   }
   handleClose = stop => {
+    if (typeof stop === 'object') {
+      this.setState({ anchorEl: null, stop: '' })
+      return
+    }
     this.setState({ anchorEl: null, stop })
   }
   renderSwitchStop(key, last) {
