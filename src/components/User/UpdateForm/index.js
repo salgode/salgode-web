@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Field, reduxForm } from 'redux-form'
-//import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { updateUserThunk } from '../../../redux/actions/updateUser'
 
 const testInfo = {
   user: {
@@ -17,7 +18,7 @@ const testInfo = {
   },
 }
 
-const UpdateForm = () => {
+const UpdateForm = ({ user_id }) => {
   // Podemos recibir la id del usuario a actualizar mediante un parametro o trayendola desde algun reducer
   // Si es mediante parametro podriamos despachar una accion para traer los datos de esa id en especifico, y setearlas como initialValues en este reduxForm
   // Si es mediante un reducer tambien se debe setear como initialValues
@@ -25,7 +26,7 @@ const UpdateForm = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [hasCar, setHasCar] = useState(false)
 
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setIsLoading(false)
@@ -35,11 +36,7 @@ const UpdateForm = () => {
 
   const updateUser = e => {
     e.preventDefault()
-    // Aqui despachamos la accion que realiza la peticion
-    // Los datos del formulario llegan desde redux-form, desde el formulario updateForm
-    // state.form.updateUser.values ó getState().form.updateUser.values
-
-    // dispatch(updateUserAction())
+    dispatch(updateUserThunk(user_id))
   }
 
   const tengoAuto = () => {
