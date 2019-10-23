@@ -12,7 +12,8 @@ import { spotsModel } from './models/spots'
 import slotsReducer from './reducers/slots'
 import { reducer as formReducer } from 'redux-form'
 const client = axios.create({
-  baseURL: 'https://7wsx5vxfbi.execute-api.us-east-1.amazonaws.com/staging',
+  // baseURL: 'https://7wsx5vxfbi.execute-api.us-east-1.amazonaws.com/staging',
+  baseURL: 'https://playground-api.salgode.com/',
   responseType: 'json',
   requestType: 'json',
 })
