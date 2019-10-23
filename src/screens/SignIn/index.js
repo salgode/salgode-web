@@ -45,7 +45,7 @@ class SignInScreen extends React.Component {
     const { loading } = this.state
 
     return (
-      <div className="sign-up">
+      <div className="sign-in">
         <SignInForm onSubmit={this.onSubmit} />
 
         {loading && <CircularProgress />}
@@ -63,7 +63,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  signIn: payload => dispatch(loginUser(payload.name, payload.password)),
+  signIn: payload => dispatch(loginUser(payload.email, payload.password)),
 })
 
 export default connect(
