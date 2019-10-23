@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import './Navbar.sass'
 
 import AppBar from '@material-ui/core/AppBar'
+import Box from '@material-ui/core/Box'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Divider from '@material-ui/core/Divider'
@@ -15,7 +17,6 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import MailIcon from '@material-ui/icons/Mail'
 import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -26,6 +27,8 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCarAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+
+import { Link } from 'react-router-dom'
 
 const drawerWidth = 240
 
@@ -40,6 +43,7 @@ const useStyles = makeStyles(theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    color: '#0000ff',
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -49,11 +53,11 @@ const useStyles = makeStyles(theme => ({
     }),
     marginRight: drawerWidth,
   },
-  hide: {
-    display: 'none',
-  },
-  menuButton: {
-    marginLeft: theme.spacing(2),
+  appName: {
+    flexGrow: 1,
+    fontFamily: 'Kepler296',
+    color: 'white',
+    textAlign: 'center',
   },
   drawer: {
     width: drawerWidth,
@@ -68,6 +72,15 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
+  },
+  hide: {
+    display: 'none',
+  },
+  menuButton: {
+    marginLeft: theme.spacing(2),
+  },
+  navbarOffset: {
+    width: theme.spacing(6),
   },
 }))
 
@@ -160,35 +173,30 @@ function DrawerRender(open, setOpen) {
       </div>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItem button component={Link} to="/pedir-viaje">
           <ListItemIcon>
             <FontAwesomeIcon icon={faCarAlt} />
           </ListItemIcon>
           <ListItemText primary="Pedir Viaje" />
         </ListItem>
-        <ListItem button>
+        <ListItem button component={Link} to="/mis-viajes">
           <ListItemIcon>
             <FontAwesomeIcon icon={faCarAlt} />
           </ListItemIcon>
-          <ListItemText primary="Viajes" />
+          <ListItemText primary="Mis Viajes" />
         </ListItem>
-        <ListItem button>
+        <ListItem button component={Link} to="/crear-viaje">
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlusCircle} />
           </ListItemIcon>
           <ListItemText primary="Crear Viaje" />
         </ListItem>
-      </List>
-      <Divider />
-      <List>
-        {['Perfil'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button component={Link} to="/perfil">
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="Perfil" />
+        </ListItem>
       </List>
     </Drawer>
   )
@@ -212,20 +220,19 @@ export default function Navbar(props) {
           })}
         >
           <Toolbar>
-            <Typography variant="h6" style={{ flex: 1 }}>
-              Scroll to see button
+            <Box className={classes.navbarOffset} />
+            <Typography variant="h5" className={classes.appName}>
+              SalgoDe
             </Typography>
-            <div>
-              <IconButton
-                edge="end"
-                className={clsx(classes.menuButton, open && classes.hide)}
-                onClick={handleDrawerOpen}
-                color="inherit"
-                aria-label="menu"
-              >
-                <MenuIcon />
-              </IconButton>
-            </div>
+            <IconButton
+              edge="end"
+              className={clsx(classes.menuButton, open && classes.hide)}
+              onClick={handleDrawerOpen}
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon className="icon-color" />
+            </IconButton>
           </Toolbar>
         </AppBar>
       </ElevationScroll>

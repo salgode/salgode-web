@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { loginUser } from '../../redux/actions/user'
-import { Grid, Button } from '@material-ui/core'
+import { Grid, Button, Typography } from '@material-ui/core'
 import DateFnsUtils from '@date-io/date-fns'
-import { DateTimePicker, MuiPickersUtilsProvider } from 'material-ui-pickers'
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import PropTypes from 'prop-types'
-import CardInputSelector from '../../components/CardInputSelector/CardInputSelector'
 import {
   setStartStop,
   setEndStop,
@@ -15,8 +14,9 @@ import {
 } from '../../redux/actions/createtrip'
 import { getAllSpots } from '../../redux/actions/spots'
 import { spotsFilter } from '../../utils/spotsFilter'
+import Select from 'react-select'
 
-import styles from './CreateTripScreen.sass'
+import './style.sass'
 
 class CreateTripScreen extends Component {
   state = {
@@ -67,12 +67,17 @@ class CreateTripScreen extends Component {
       hours = pickedDate.getHours()
       minutes = pickedDate.getMinutes()
     }
-    const filteredSlots = spotsFilter(spots, [startStop, endStop])
-    // const filteredSlots = spots
+    const filteredSlots = spotsFilter(spots, [startStop, endStop]).map(
+      spot => ({
+        label: `${spot.name}, ${spot.address}`,
+        spot: spot,
+      })
+    )
+    console.log(filteredSlots)
 
     return (
       <Grid container direction="column" justify="center" alignItems="center">
-        <CardInputSelector
+        {/* <CardInputSelector
           text="#Desde"
           placeHolder="Filtra por Comuna o Parada"
           onSelect={item => this.props.setStartStop(item)}
@@ -86,10 +91,26 @@ class CreateTripScreen extends Component {
           onSelect={item => this.props.setEndStop(item)}
           onClear={this.props.clearEndStop}
           data={filteredSlots}
+        /> */}
+
+        <Typography>Desde:</Typography>
+        <Select
+          className="search"
+          isSearchable={true}
+          options={filteredSlots}
+          onChange={value => this.props.setEndStop(value.spot)}
         />
 
-        <Button style={styles.dateButton} onPress={this.showDateTimePicker}>
-          <p style={styles.whiteText}>
+        <Typography>Hasta:</Typography>
+        <Select
+          className="search"
+          isSearchable={true}
+          options={filteredSlots}
+          onChange={value => this.props.setEndStop(value.spot)}
+        />
+
+        <Button onPress={this.showDateTimePicker}>
+          <p>
             {pickedDate
               ? `${day} - ${hours}:${minutes < 10 ? '0' : ''}${minutes}`
               : 'Hora/Fecha de Salida'}
@@ -106,11 +127,10 @@ class CreateTripScreen extends Component {
 
         <Button
           block
-          style={disabled ? styles.addButtonDisabled : styles.addButton}
           disabled={disabled}
           // TODO: onPress={() => navigation.navigate('AddStopsScreen')}
         >
-          <p style={styles.whiteText}>Siguiente</p>
+          <p>Siguiente</p>
         </Button>
       </Grid>
     )
