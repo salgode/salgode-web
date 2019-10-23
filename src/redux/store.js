@@ -15,7 +15,7 @@ import updateUserReducer from './reducers/updateUser'
 import thunk from 'redux-thunk'
 
 const client = axios.create({
-  baseURL: 'https://7wsx5vxfbi.execute-api.us-east-1.amazonaws.com/staging',
+  baseURL: 'https://playground-api.salgode.com',
   responseType: 'json',
   requestType: 'json',
 })
