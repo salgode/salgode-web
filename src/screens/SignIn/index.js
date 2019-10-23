@@ -63,7 +63,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  signIn: payload => dispatch(loginUser(payload.name, payload.password)),
+  signIn: payload => dispatch(loginUser(payload.email, payload.password)),
 })
 
 export default connect(

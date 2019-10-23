@@ -115,7 +115,7 @@ class SignInForm extends React.Component {
               onChange={this.onChangePassword}
             />
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
               color="primary"

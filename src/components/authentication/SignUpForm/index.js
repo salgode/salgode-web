@@ -41,7 +41,7 @@ class SignUpForm extends React.Component {
 
     this.state = {
       name: '',
-      lastname: '',
+      lastName: '',
       email: '',
       phoneNumber: '',
       password: '',
@@ -49,7 +49,7 @@ class SignUpForm extends React.Component {
 
       validity: {
         name: false,
-        lastname: false,
+        lastName: false,
         email: false,
         phoneNumber: false,
         password: false,
@@ -74,10 +74,10 @@ class SignUpForm extends React.Component {
     }))
   }
 
-  onChangeLastname({ target: { value: lastname } }) {
+  onChangeLastname({ target: { value: lastName } }) {
     this.setState(oldState => ({
-      lastname,
-      validity: { ...oldState.validity, lastname: lastname.length > 2 },
+      lastName,
+      validity: { ...oldState.validity, lastName: lastName.length > 2 },
     }))
   }
 
@@ -122,7 +122,7 @@ class SignUpForm extends React.Component {
   getValidity() {
     const validity =
       this.state.validity.name &&
-      this.state.validity.lastname &&
+      this.state.validity.lastName &&
       this.state.validity.email &&
       this.state.validity.phoneNumber &&
       this.state.validity.password &&
@@ -134,7 +134,7 @@ class SignUpForm extends React.Component {
     const { onSubmit } = this.props
     const {
       name,
-      lastname,
+      lastName,
       email,
       phoneNumber,
       password,
@@ -176,7 +176,7 @@ class SignUpForm extends React.Component {
                   label="Apellido"
                   name="lastName"
                   autoComplete="lname"
-                  value={lastname}
+                  value={lastName}
                   onChange={this.onChangeLastname}
                 />
               </Grid>
@@ -233,7 +233,7 @@ class SignUpForm extends React.Component {
               </Grid>
             </Grid>
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
               color="primary"
@@ -242,9 +242,9 @@ class SignUpForm extends React.Component {
               onClick={() =>
                 onSubmit({
                   name,
-                  lastname,
+                  lastName,
                   email,
-                  phoneNumber,
+                  phone: phoneNumber,
                   password,
                   passwordRepeat,
                 })
