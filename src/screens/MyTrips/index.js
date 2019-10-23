@@ -1,21 +1,20 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { fetchFutureTrips } from '../../redux/actions/trips'
 import './style.sass'
 import MyTripsCard from '../../components/MyTripsCard/index'
+import { ParseDate, ParseHour } from '../../components/ParseDate/index'
 
 // Store
 
 // Components
-// import { SignUpForm } from '../../components/index'
-// import { CircularProgress } from '@material-ui/core'
+import { CircularProgress } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 // const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
 class MyTrips extends Component {
-  static navigationOptions = {
-    title: 'Mis Viajes',
-  }
-
   constructor(props) {
     super(props)
 
@@ -24,14 +23,12 @@ class MyTrips extends Component {
       trips: [],
     }
     this.getTrips = this.getTrips.bind(this)
-  }
-
-  onPressTrip(asDriver) {
-    this.props.navigation.navigate('DetailedTrip', { asDriver })
+    this.getTrips2 = this.getTrips2.bind(this)
   }
 
   componentDidMount() {
-    this.getTrips(123)
+    this.getTrips(1234)
+    // this.getTrips2()
   }
 
   async fetchTrips(token) {
@@ -117,6 +114,10 @@ class MyTrips extends Component {
   async getTrips(token) {
     this.setState({ loading: true })
 
+    const etd = '2019-10-23T05:40:00.000Z'
+    console.log(ParseDate(etd))
+    console.log(ParseHour(etd))
+
     await this.fetchTrips(token)
       .then(trips => this.setState({ trips }))
       .catch(err => {
@@ -127,18 +128,32 @@ class MyTrips extends Component {
     this.setState({ loading: false })
   }
 
+  async getTrips2() {
+    const response = await this.props.fetchFutureTrips(12345) // this.props.user.token
+
+    if (response.error) {
+      alert(
+        'Error obteniendo viajes',
+        'Hubo un problema obteniendo los viajes. Por favor intentalo de nuevo.'
+      )
+    }
+    console.log(this.props.trips)
+
+    this.setState({ trips: this.props.trips })
+  }
+
   render() {
-    // const { loading } = this.state
+    const { loading } = this.state
     const { trips } = this.state
     console.log(this.state.trips)
     return (
-      // <div className="sign-up">{loading && <CircularProgress />}</div>
       <div>
+        {loading && <CircularProgress />}
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
             console.log(trip)
             console.log(trip.spacesUsed)
-            console.log('Entered')
+            console.log('Enteredd')
             // Return the element. Also pass key
             return (
               <Grid item md={4} key={i}>
@@ -154,12 +169,27 @@ class MyTrips extends Component {
 
 MyTrips.propTypes = {
   isRequestedTrips: PropTypes.bool,
-  navigation: PropTypes.shape({ navigate: PropTypes.func.isRequired })
-    .isRequired,
+  fetchFutureTrips: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    token: PropTypes.string.isRequired,
+    userId: PropTypes.string.isRequired,
+  }).isRequired,
+  trips: PropTypes.array,
 }
 
 MyTrips.defaultProps = {
   isRequestedTrips: false,
 }
 
-export default MyTrips
+const mapDispatchToProps = dispatch => ({
+  fetchFutureTrips: token => dispatch(fetchFutureTrips(token)),
+})
+
+const mapStateToProps = state => ({
+  user: state.user,
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MyTrips)
