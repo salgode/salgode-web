@@ -27,7 +27,7 @@ class SignInScreen extends React.Component {
   }
 
   async onSubmit(payload) {
-    const { signIn } = this.props
+    const { signIn, history } = this.props
 
     this.setState({ loading: true })
 
@@ -38,11 +38,12 @@ class SignInScreen extends React.Component {
     if (user.error || !user.payload.data.email) return alert(MESSAGE)
     cookies.set('@userToken', user.payload.data.token)
     cookies.set('@userId', user.payload.data.userId)
+    history.push('/')
   }
 
   render() {
     const { loading } = this.state
-
+    console.log(this.props)
     return (
       <div className="sign-in">
         <SignInForm onSubmit={this.onSubmit} />
