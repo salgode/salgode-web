@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+// import { Link } from 'react-router-dom'
+import { ParseDate, ParseHour } from '../../components/Parse/index'
 
 // Components
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
-
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 import Card from '@material-ui/core/Card'
+// import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
@@ -41,34 +43,38 @@ const styles = theme => ({
 class MyTripsCard extends Component {
   constructor(props) {
     super(props)
+
     this.state = {}
   }
 
   render() {
     const { classes, trip } = this.props
 
+    const date = ParseDate(trip.trip_times.etd)
+    const hour = ParseHour(trip.trip_times.etd)
+
     return (
       <Card className={classes.card}>
         <CardContent>
-          <Typography variant="body1" component="p">
+          <Typography variant="body2" component="p">
             <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-            {trip.start}
+            {trip.trip_route.start.name}
           </Typography>
           <Typography className="relative" color="textSecondary">
-            {trip.spacesUsed}
+            {trip.available_seats}
             <FontAwesomeIcon icon={faUsers} className="relative" />
           </Typography>
           <Typography variant="body2" component="p">
             <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-            {trip.end}
+            {trip.trip_route.end.name}
           </Typography>
           <Typography variant="body2" component="p">
             <FontAwesomeIcon icon={faCalendarAlt} className="calendar-icon" />
-            {trip.timestamp}
+            {date}
           </Typography>
           <Typography variant="body2" component="p">
             <FontAwesomeIcon icon={faClock} className="calendar-icon" />
-            {trip.timestamp}
+            {hour}
           </Typography>
         </CardContent>
       </Card>
@@ -77,8 +83,8 @@ class MyTripsCard extends Component {
 }
 
 MyTripsCard.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  trip: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(MyTripsCard)
