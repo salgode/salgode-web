@@ -45,36 +45,10 @@ class MyTripsCard extends Component {
     super(props)
 
     this.state = {}
-
-    this.onChangeEmail = this.onChangeEmail.bind(this)
-    this.onChangePassword = this.onChangePassword.bind(this)
-
-    this.getValidity = this.getValidity.bind(this)
-  }
-
-  onChangeEmail({ target: { value: email } }) {
-    const validity = email.match(
-      // eslint-disable-next-line no-useless-escape
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    )
-
-    this.setState(oldState => ({
-      email,
-      validity: { ...oldState.validity, email: !!validity },
-    }))
-  }
-
-  onChangePassword({ target: { value: password } }) {
-    this.setState({ password })
-  }
-
-  getValidity() {
-    return this.state.validity.email
   }
 
   render() {
-    const { classes } = this.props
-    const { trip } = this.props
+    const { classes, trip } = this.props
 
     const date = ParseDate(trip.trip_times.etd)
     const hour = ParseHour(trip.trip_times.etd)
