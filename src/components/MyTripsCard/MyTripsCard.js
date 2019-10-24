@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import { Link } from 'react-router-dom'
 
 // Components
-// import Button from '@material-ui/core/Button'
-// import Container from '@material-ui/core/Container'
-// import CssBaseline from '@material-ui/core/CssBaseline'
-// import TextField from '@material-ui/core/TextField'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 import Card from '@material-ui/core/Card'
-// import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
@@ -47,32 +41,7 @@ const styles = theme => ({
 class MyTripsCard extends Component {
   constructor(props) {
     super(props)
-
     this.state = {}
-
-    this.onChangeEmail = this.onChangeEmail.bind(this)
-    this.onChangePassword = this.onChangePassword.bind(this)
-    this.getValidity = this.getValidity.bind(this)
-  }
-
-  onChangeEmail({ target: { value: email } }) {
-    const validity = email.match(
-      // eslint-disable-next-line no-useless-escape
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    )
-
-    this.setState(oldState => ({
-      email,
-      validity: { ...oldState.validity, email: !!validity },
-    }))
-  }
-
-  onChangePassword({ target: { value: password } }) {
-    this.setState({ password })
-  }
-
-  getValidity() {
-    return this.state.validity.email
   }
 
   render() {

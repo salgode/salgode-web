@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
-// import { Link } from 'react-router-dom'
 
 // Components
 import Button from '@material-ui/core/Button'
-// import Container from '@material-ui/core/Container'
-// import CssBaseline from '@material-ui/core/CssBaseline'
-// import TextField from '@material-ui/core/TextField'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle } from '@fortawesome/free-solid-svg-icons'
 
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 import Card from '@material-ui/core/Card'
-// import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
@@ -174,8 +168,5 @@ class RequestedTrip extends Component {
     )
   }
 }
-
-// RequestedTrip.propTypes = {
-// }
 
 export default withStyles(styles)(RequestedTrip)

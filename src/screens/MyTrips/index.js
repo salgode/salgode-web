@@ -6,7 +6,6 @@ import PropTypes from 'prop-types'
 import { fetchFutureTrips } from '../../redux/actions/trips'
 import './style.sass'
 import { MyTripsCard } from '../../components/MyTripsCard/index'
-import { ParseDate, ParseHour } from '../../components/Parse/index'
 
 // Store
 
