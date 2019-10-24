@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 // import { Link } from 'react-router-dom'
 
 // Components
-// import Button from '@material-ui/core/Button'
+import Button from '@material-ui/core/Button'
 // import Container from '@material-ui/core/Container'
 // import CssBaseline from '@material-ui/core/CssBaseline'
 // import TextField from '@material-ui/core/TextField'
@@ -18,6 +18,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Avatar from '@material-ui/core/Avatar'
 import Chip from '@material-ui/core/Chip'
 import CardHeader from '@material-ui/core/CardHeader'
+import CardActions from '@material-ui/core/CardActions'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import { ParseDate } from '../index'
@@ -30,7 +31,7 @@ const styles = theme => ({
     marginLeft: '10%',
     marginTop: '20px',
     minWidth: 300,
-    minHeight: 220,
+    minHeight: 250,
   },
   [theme.breakpoints.down('sm')]: {
     card: {
@@ -59,6 +60,34 @@ const styles = theme => ({
   marginCard: {
     marginBottom: '3%',
   },
+  buttonContainer: {
+    padding: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  buttonSuccess: {
+    color: '#064acb',
+    borderColor: '#064acb',
+  },
+  buttonCancel: {
+    color: 'red',
+    borderColor: 'red',
+  },
+  primary: {
+    backgroundColor: 'green',
+    color: 'white',
+    margin: '12px 12px 0px',
+  },
+  secondary: {
+    backgroundColor: '#ec9b3b',
+    color: 'white',
+    margin: '12px 12px 0px',
+  },
+  danger: {
+    backgroundColor: 'red',
+    color: 'white',
+    margin: '12px 12px 0px',
+  },
 })
 
 class RequestedTrip extends Component {
@@ -67,11 +96,27 @@ class RequestedTrip extends Component {
     this.state = {}
   }
 
+  setColorChip = status => {
+    const { classes } = this.props
+    if (status === 'Aceptado') {
+      return classes.primary
+    }
+    if (status === 'Rechazado') {
+      return classes.danger
+    } else {
+      return classes.secondary
+    }
+  }
+
   render() {
     const { classes, trip } = this.props
     return (
       <Card className={classes.card}>
-        <Chip className={classes.chip} size="small" label={trip.status} />
+        <Chip
+          className={this.setColorChip(trip.status)}
+          size="small"
+          label={trip.status}
+        />
         <CardHeader
           className={classes.avatar}
           avatar={
@@ -87,7 +132,7 @@ class RequestedTrip extends Component {
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
               {trip.start}
             </Typography>
-            <Typography variant="body2" component="p">
+            <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
               {trip.end}
             </Typography>
@@ -111,6 +156,20 @@ class RequestedTrip extends Component {
             {trip.timestamp}
           </Typography>
         </CardContent>
+        <CardActions className={classes.buttonContainer}>
+          <Button
+            variant="outlined"
+            className={classes.buttonSuccess}
+            color="success"
+          >
+            VER VIAJE
+          </Button>
+          {trip.status !== 'Rechazado' && (
+            <Button variant="outlined" className={classes.buttonCancel}>
+              CANCELAR
+            </Button>
+          )}
+        </CardActions>
       </Card>
     )
   }
