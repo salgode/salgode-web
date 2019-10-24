@@ -9,14 +9,14 @@ import CardContent from '@material-ui/core/CardContent'
 import Collapse from '@material-ui/core/Collapse'
 import { Grid } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -26,6 +26,7 @@ import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { red } from '@material-ui/core/colors'
 
+import { ParseDate, ParseHour } from '../../components/Parse/index'
 import './style.sass'
 
 const styles = theme => ({
@@ -99,6 +100,7 @@ class FindTripsCard extends React.Component {
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget })
   }
+
   handleClose = stop => {
     if (typeof stop === 'object') {
       this.setState({ anchorEl: null, stop: '' })
@@ -106,6 +108,7 @@ class FindTripsCard extends React.Component {
     }
     this.setState({ anchorEl: null, stop })
   }
+
   renderSwitchStop(key, last) {
     switch (key) {
       case 0:
@@ -150,8 +153,8 @@ class FindTripsCard extends React.Component {
     const departurePoint = trip_route.start.name
     const arrivalPoint = trip_route.end.name
 
-    const date = trip_times.etd.split('T')[0]
-    const time = trip_times.etd.split('T')[1].split('.')[0]
+    const date = ParseDate(trip_times.etd)
+    const time = ParseHour(trip_times.etd)
 
     return (
       <Card className={classes.card}>
