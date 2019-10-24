@@ -132,6 +132,29 @@ class SignUpForm extends React.Component {
     return validity && this.state.password === this.state.passwordRepeat
   }
 
+  handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && this.getValidity()) {
+      e.preventDefault()
+      const { onSubmit } = this.props
+      const {
+        name,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        passwordRepeat,
+      } = this.state
+      onSubmit({
+        name,
+        lastName,
+        email,
+        phone: phoneNumber,
+        password,
+        passwordRepeat,
+      })
+    }
+  }
+
   render() {
     const { onSubmit } = this.props
     const {
@@ -167,6 +190,7 @@ class SignUpForm extends React.Component {
                   autoFocus
                   value={name}
                   onChange={this.onChangeName}
+                  onKeyPress={this.handleEnter}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -180,6 +204,7 @@ class SignUpForm extends React.Component {
                   autoComplete="lname"
                   value={lastName}
                   onChange={this.onChangeLastname}
+                  onKeyPress={this.handleEnter}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -194,6 +219,7 @@ class SignUpForm extends React.Component {
                   type="email"
                   value={email}
                   onChange={this.onChangeEmail}
+                  onKeyPress={this.handleEnter}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -205,6 +231,7 @@ class SignUpForm extends React.Component {
                   type="tel"
                   value={phoneNumber}
                   onChange={this.onChangePhoneNumber}
+                  onKeyPress={this.handleEnter}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -218,6 +245,7 @@ class SignUpForm extends React.Component {
                   type="password"
                   value={password}
                   onChange={this.onChangePassword}
+                  onKeyPress={this.handleEnter}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -231,6 +259,7 @@ class SignUpForm extends React.Component {
                   type="password"
                   value={passwordRepeat}
                   onChange={this.onChangePasswordRepeat}
+                  onKeyPress={this.handleEnter}
                 />
               </Grid>
             </Grid>
