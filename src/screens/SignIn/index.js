@@ -36,9 +36,8 @@ class SignInScreen extends React.Component {
     this.setState({ loading: false })
 
     if (user.error || !user.payload.data.email) return alert(MESSAGE)
-
-    cookies.set('@userToken', user.token)
-    cookies.set('@userId', user.user_id)
+    cookies.set('@userToken', user.payload.data.token)
+    cookies.set('@userId', user.payload.data.userId)
   }
 
   render() {

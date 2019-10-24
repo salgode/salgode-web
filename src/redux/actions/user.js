@@ -12,7 +12,7 @@ export function loginUser(email, password) {
     type: actions.USER_LOGIN,
     payload: {
       request: {
-        url: `/users/login`,
+        url: `/signin`,
         method: 'post',
         data: {
           email,
@@ -70,7 +70,7 @@ export function signupUser(
     type: actions.USER_SIGNUP,
     payload: {
       request: {
-        url: `/users`,
+        url: `/signup`,
         method: 'post',
         data: data,
       },
