@@ -27,6 +27,9 @@ export const client = axios.create({
   baseURL: 'https://playground-api.salgode.com',
   responseType: 'json',
   requestType: 'json',
+  headers: {
+    Authorization: 'Bearer 12345',
+  },
 })
 
 const middlewares = [axiosMiddleware(client), thunk]

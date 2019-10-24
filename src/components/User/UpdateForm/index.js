@@ -191,3 +191,7 @@ const UpdateForm = () => {
 export default reduxForm({
   form: 'updateUser',
 })(UpdateForm)
+
+UpdateForm.propTypes = {
+  user_id: PropTypes.string.isRequired,
+}
