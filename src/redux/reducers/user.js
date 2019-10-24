@@ -9,7 +9,6 @@ export default function userReducer(state = {}, action) {
         ...state,
         loading: false,
         ...action.payload.data,
-        token: action.payload.data.bearer_token,
       }
     case userActions.USER_LOGIN_FAIL:
       return {
