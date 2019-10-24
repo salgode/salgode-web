@@ -33,9 +33,9 @@ class SignInScreen extends React.Component {
 
     const user = await signIn(payload)
 
-    this.setState({ loading: false })
-
     if (user.error || !user.payload.data.email) return alert(MESSAGE)
+
+    this.setState({ loading: false })
     cookies.set('@userToken', user.payload.data.token)
     cookies.set('@userId', user.payload.data.userId)
     history.push('/')
@@ -43,7 +43,6 @@ class SignInScreen extends React.Component {
 
   render() {
     const { loading } = this.state
-    console.log(this.props)
     return (
       <div className="sign-in">
         <SignInForm onSubmit={this.onSubmit} />
@@ -56,6 +55,7 @@ class SignInScreen extends React.Component {
 
 SignInScreen.propTypes = {
   signIn: PropTypes.func.isRequired,
+  history: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
