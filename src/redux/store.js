@@ -12,12 +12,16 @@ import { createTripModel } from './models/createTrip'
 import { spotsModel } from './models/spots'
 import slotsReducer from './reducers/slots'
 import { reducer as formReducer } from 'redux-form'
+import updateUserReducer from './reducers/updateUser'
+import thunk from 'redux-thunk'
+
 const client = axios.create({
-  // baseURL: 'https://7wsx5vxfbi.execute-api.us-east-1.amazonaws.com/staging',
-  baseURL: 'https://playground-api.salgode.com/',
+  baseURL: 'https://playground-api.salgode.com',
   responseType: 'json',
   requestType: 'json',
 })
+
+const middlewares = [axiosMiddleware(client), thunk]
 
 const reducer = combineReducers({
   user: userReducer,
@@ -27,6 +31,7 @@ const reducer = combineReducers({
   spots: spotsReducer,
   slots: slotsReducer,
   form: formReducer,
+  updateUser: updateUserReducer,
   loading: false,
 })
 
@@ -38,5 +43,5 @@ export const store = createStore(
     spots: spotsModel,
     futureTrips: futureTripsModel,
   },
-  applyMiddleware(axiosMiddleware(client))
+  applyMiddleware(...middlewares)
 )
