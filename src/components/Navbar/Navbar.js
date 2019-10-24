@@ -185,6 +185,12 @@ function DrawerRender(open, setOpen) {
           </ListItemIcon>
           <ListItemText primary="Mis Viajes" />
         </ListItem>
+        <ListItem button component={Link} to="/requested-trip">
+          <ListItemIcon>
+            <FontAwesomeIcon icon={faCarAlt} />
+          </ListItemIcon>
+          <ListItemText primary="Pedidos" />
+        </ListItem>
         <ListItem button component={Link} to="/crear-viaje">
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlusCircle} />

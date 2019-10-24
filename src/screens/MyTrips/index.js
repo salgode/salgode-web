@@ -4,8 +4,11 @@ import PropTypes from 'prop-types'
 
 // Store
 import { fetchFutureTrips } from '../../redux/actions/trips'
-import MyTripsCard from '../../components/MyTripsCard/index'
 import './style.sass'
+import { MyTripsCard } from '../../components/MyTripsCard/index'
+import { ParseDate, ParseHour } from '../../components/Parse/index'
+
+// Store
 
 // Components
 import { CircularProgress } from '@material-ui/core'
