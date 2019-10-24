@@ -13,7 +13,7 @@ import './style.sass'
 
 // reducers
 import { getAllSpots } from '../../redux/actions/spots'
-import { addMiddleStop } from '../../redux/actions/createtrip'
+import { addMiddleStop, removeMiddleStop } from '../../redux/actions/createtrip'
 
 class AddStopsScreen extends Component {
   propTypes = {
@@ -22,6 +22,7 @@ class AddStopsScreen extends Component {
     startStop: PropTypes.string.isRequired,
     middleStops: PropTypes.array.isRequired,
     addMiddleStop: PropTypes.func.isRequired,
+    removeMiddleStop: PropTypes.func.isRequired,
   }
   componentDidMount = () => {
     this.props.getAllSpots()
@@ -42,7 +43,7 @@ class AddStopsScreen extends Component {
           </Grid>
           <Grid item xs={2}>
             <Box mt={2} ml={1}>
-              <IconButton>
+              <IconButton onClick={() => this.props.removeMiddleStop(stop)}>
                 <ClearIcon />
               </IconButton>
             </Box>
@@ -73,7 +74,7 @@ class AddStopsScreen extends Component {
           options={filteredSpots}
           onChange={option => this.props.addMiddleStop(option.value)}
         />
-        <Button>Avanzar</Button>
+        <Button color="primary">Crear Viaje</Button>
       </Grid>
     )
   }
@@ -96,6 +97,7 @@ const mapStateToProps = ({ user, createTrip, spots }) => {
 const mapDispatchToProps = {
   getAllSpots,
   addMiddleStop,
+  removeMiddleStop,
 }
 
 // TODO: CreateTripScreen.navigationOptions = {
