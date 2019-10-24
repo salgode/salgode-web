@@ -82,6 +82,15 @@ class SignInForm extends React.Component {
     return this.state.validity.email
   }
 
+  handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && this.getValidity()) {
+      e.preventDefault()
+      const { onSubmit } = this.props
+      const { email, password } = this.state
+      onSubmit({ email, password })
+    }
+  }
+
   render() {
     const { onSubmit } = this.props
     const { email, password } = this.state
@@ -107,6 +116,7 @@ class SignInForm extends React.Component {
               type="email"
               value={email}
               onChange={this.onChangeEmail}
+              onKeyPress={this.handleEnter}
             />
             <TextField
               variant="outlined"
@@ -120,6 +130,7 @@ class SignInForm extends React.Component {
               autoComplete="current-password"
               value={password}
               onChange={this.onChangePassword}
+              onKeyPress={this.handleEnter}
             />
             <Button
               type="button"
