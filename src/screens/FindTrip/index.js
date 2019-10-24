@@ -5,8 +5,11 @@ import './style.sass'
 import { Container } from '@material-ui/core'
 
 import FindTripsCard from './../../components/FindTripsCard/index'
+
+import { fetchAllFutureTrips } from '../../redux/actions/allTrips'
+
 // Store
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 
 // Components
 // import { CircularProgress } from '@material-ui/core'
@@ -72,7 +75,31 @@ class FindTripScreen extends React.Component {
     super(props)
     this.state = {
       loading: false,
+      trips: [],
     }
+    this.getTrips = this.getTrips.bind(this)
+  }
+
+  componentDidMount() {
+    this.getTrips()
+  }
+
+  async getTrips() {
+    this.setState({ loading: true })
+    // console.log(this.props)
+    const response = await this.props.fetchAllFutureTrips(12345) // this.props.user.token
+
+    console.log(response)
+
+    // if (response.error) {
+    //   this.setState({ loading: false })
+    //   alert(
+    //     'Error obteniendo viajes',
+    //     'Hubo un problema obteniendo los viajes. Por favor intentalo de nuevo.'
+    //   )
+    // }
+
+    // this.setState({ trips: this.props.futureTrips.trips, loading: false })
   }
 
   render() {
@@ -88,21 +115,16 @@ class FindTripScreen extends React.Component {
   }
 }
 
-export default FindTripScreen
+const mapDispatchToProps = dispatch => ({
+  fetchAllFutureTrips: token => dispatch(fetchAllFutureTrips(token)),
+})
 
-// FindTripScreen.propTypes = {
-//     signIn: PropTypes.func.isRequired,
-// }
+const mapStateToProps = state => ({
+  user: state.user,
+  futureTrips: state.futureTrips,
+})
 
-// const mapStateToProps = state => ({
-//     user: state.user,
-// })
-
-// const mapDispatchToProps = dispatch => ({
-//     signIn: payload => dispatch(loginUser(payload.email, payload.password)),
-// })
-
-// export default connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(SignInScreen)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FindTripScreen)
