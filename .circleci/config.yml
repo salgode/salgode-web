@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  build:
+    branches:
+      only:
+        - master
+        - dev
+    docker:
+      - image: circleci/node:current
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: Installing dependencies
+          working_directory: /
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y python-pip python-dev
+            sudo pip install awscli
+
+      - run:
+          name: Installing npm dependencies
+          working_directory: ~/repo
+          command: |
+            npm ci
+
+      - run:
+          name: Linting
+          working_directory: ~/repo
+          command: |
+            npm run lint
+
+      - run:
+          name: Building Files
+          working_directory: ~/repo
+          command: |
+            npm run build
+
+      - run:
+          name: Deploying to S3
+          working_directory: ~/repo
+          command: |
+            aws s3 sync build/ s3://salgode-app --delete
+
+      - run:
+          name: Invalidating CloudFront Cache
+          command: |
+            aws cloudfront create-invalidation --region=sa-east-1  --distribution-id EN284WAK2ZUSQ --paths /\*
