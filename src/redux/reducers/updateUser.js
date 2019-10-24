@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 
 const reducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case updateUserActions.LOADING_UPDATE_USER:
+    case updateUserActions.STARTING_UPDATE_USER:
       return Object.assign({}, state, {
         loading: true,
         success: false,

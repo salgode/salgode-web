@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateUserThunk } from '../../../redux/actions/updateUser'
+import TextField from '@material-ui/core/TextField'
+import { Typography } from '@material-ui/core'
+import PropTypes from 'prop-types'
 
 const testInfo = {
   user: {
@@ -19,9 +22,7 @@ const testInfo = {
 }
 
 const UpdateForm = ({ user_id }) => {
-  // Podemos recibir la id del usuario a actualizar mediante un parametro o trayendola desde algun reducer
-  // Si es mediante parametro podriamos despachar una accion para traer los datos de esa id en especifico, y setearlas como initialValues en este reduxForm
-  // Si es mediante un reducer tambien se debe setear como initialValues
+  const uploadAvatarInput = useRef()
 
   const [isLoading, setIsLoading] = useState(true)
   const [hasCar, setHasCar] = useState(false)
@@ -31,6 +32,8 @@ const UpdateForm = ({ user_id }) => {
   useEffect(() => {
     setIsLoading(false)
   }, [])
+
+  const updateUserState = useSelector(state => state.updateUser)
 
   if (isLoading) return 'Loading..'
 
@@ -47,58 +50,89 @@ const UpdateForm = ({ user_id }) => {
     }
   }
 
+  // eslint-disable-next-line react/prop-types
+  const renderTextField = ({ input, label, ...custom }) => (
+    <TextField
+      variant="outlined"
+      margin="normal"
+      label={label}
+      fullWidth
+      {...input}
+      {...custom}
+    />
+  )
+
   return (
     <form>
+      <Typography component="h1" variant="h4">
+        Datos del usuario
+      </Typography>
       <div className="field">
-        <label className="label">Nombre</label>
         <div className="control">
           <Field
             name="name"
-            className="input"
-            component="input"
+            component={renderTextField}
             type="text"
-            value={testInfo.user.firstName}
+            label="Nombre"
           />
         </div>
       </div>
 
       <div className="field">
-        <label className="label">Apellido</label>
         <div className="control">
           <Field
             name="lastName"
-            className="input"
-            component="input"
+            component={renderTextField}
             type="text"
-            value={testInfo.user.lastName}
+            label="Apellido"
           />
         </div>
       </div>
 
       <div className="field">
-        <label className="label">Email</label>
         <div className="control">
           <Field
             name="email"
-            className="input"
-            component="input"
+            component={renderTextField}
             type="text"
-            value={testInfo.user.firstName}
+            label="Email"
           />
         </div>
       </div>
       <div className="field">
-        <label className="label">Numero</label>
         <div className="control">
           <Field
             name="phone"
-            className="input"
-            component="input"
+            component={renderTextField}
             type="text"
-            value={testInfo.user.phone}
+            label="Numero telefonico"
           />
         </div>
       </div>
+
+      <div className="field">
+        <div className="control">
+          <span className="file has-name">
+            <label className="file-label">
+              <input
+                ref={uploadAvatarInput}
+                className="file-input"
+                type="file"
+                name="resume"
+                disabled
+              />
+              <span className="file-cta">
+                <span className="file-icon has-margin-right-10">
+                  <i className="material-icons">cloud_upload</i>
+                </span>
+                <span className="file-label">Actualizar Avatar</span>
+              </span>
+              {/* <span className="file-name">Screen Shot 2017-07-29 at 15.54.25.png</span> */}
+            </label>
+          </span>
+        </div>
+      </div>
+
       <div className="field">
         <label className="checkbox">
           <input type="checkbox" onClick={() => tengoAuto()} />
@@ -109,60 +143,81 @@ const UpdateForm = ({ user_id }) => {
       {hasCar && (
         <>
           <div className="field">
-            <label className="label">Patente</label>
             <div className="control">
               <Field
                 name="plate"
-                className="input"
-                component="input"
+                component={renderTextField}
                 type="text"
-                value={testInfo.car.plate}
+                label="Patente"
               />
             </div>
           </div>
           <div className="field">
-            <label className="label">Color</label>
             <div className="control">
               <Field
                 name="color"
-                className="input"
-                component="input"
+                component={renderTextField}
                 type="text"
-                value={testInfo.car.color}
+                label="Color"
               />
             </div>
           </div>
           <div className="field">
-            <label className="label">Marca</label>
             <div className="control">
               <Field
                 name="brand"
-                className="input"
-                component="input"
+                component={renderTextField}
                 type="text"
-                value={testInfo.car.brand}
+                label="Marca"
               />
             </div>
           </div>
 
           <div className="field">
-            <label className="label">Modelo</label>
             <div className="control">
               <Field
                 name="model"
-                className="input"
-                component="input"
+                component={renderTextField}
                 type="text"
-                value={testInfo.car.model}
+                label="Modelo"
               />
             </div>
           </div>
         </>
       )}
 
-      <button className="button is-link" onClick={e => updateUser(e)}>
-        Actualizar
+      <button
+        className={`button is-link ${updateUserState.loading && 'is-loading'}`}
+        onClick={e => updateUser(e)}
+      >
+        {updateUserState.loading ? 'Loading' : 'Actualizar'}
       </button>
+
+      <div className="field has-margin-top-40">
+        <div className="control">
+          {updateUserState.loading && (
+            <h1 className="subtitle has-text-primary">
+              Estamos actualizando tu perfil..
+            </h1>
+          )}
+
+          {updateUserState.success && (
+            <h1 className="subtitle has-text-primary">
+              Perfil actualizado con exito !
+            </h1>
+          )}
+
+          {/* 
+            // No se con que key devuelven el error, posiblemente err, error, o message, pero para que no de error luego lo cambiamos
+            {updateUserState.error && (
+            <h1 className="subtitle has-text-primary">
+              {updateUserState.error}
+            </h1>
+            )}
+            
+            */}
+        </div>
+      </div>
     </form>
   )
 }
@@ -180,3 +235,7 @@ export default reduxForm({
     model: testInfo.car.model,
   },
 })(UpdateForm)
+
+UpdateForm.propTypes = {
+  user_id: PropTypes.string.isRequired,
+}
