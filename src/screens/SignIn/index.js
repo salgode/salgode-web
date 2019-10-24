@@ -38,7 +38,7 @@ class SignInScreen extends React.Component {
     this.setState({ loading: false })
     cookies.set('@userToken', user.payload.data.token)
     cookies.set('@userId', user.payload.data.userId)
-    history.push('/')
+    history.push('/find-trip')
   }
 
   render() {
