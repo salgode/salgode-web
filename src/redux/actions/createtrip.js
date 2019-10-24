@@ -1,7 +1,6 @@
 export const actions = {
   SET_START_STOP: 'SET_START_STOP',
   SET_END_STOP: 'SET_END_STOP',
-  SET_MIDDLE_STOPS: 'SET_MIDDLE_STOPS',
   SET_START_TIME: 'SET_START_TIME',
   CLEAR_CREATE_TRIP_INFO: 'CLEAR_CREATE_TRIP_INFO',
   CLEAR_START_STOP: 'CLEAR_START_STOP',
@@ -9,6 +8,8 @@ export const actions = {
   CREATE_TRIP: 'CREATE_TRIP',
   CREATE_TRIP_SUCCESS: 'CREATE_TRIP_SUCCESS',
   CREATE_TRIP_FAIL: 'CREATE_TRIP_FAIL',
+  ADD_MIDDLE_STOP: 'ADD_MIDDLE_STOP',
+  REMOVE_MIDDLE_STOP: 'REMOVE_MIDDLE_STOP',
 }
 
 export function setStartStop(startStop) {
@@ -25,10 +26,17 @@ export function setEndStop(endStop) {
   }
 }
 
-export function setMiddleStops(stops) {
+export function addMiddleStop(stop) {
   return {
-    type: actions.SET_MIDDLE_STOPS,
-    payload: stops,
+    type: actions.ADD_MIDDLE_STOP,
+    payload: stop,
+  }
+}
+
+export function removeMiddleStop(stop) {
+  return {
+    type: actions.REMOVE_MIDDLE_STOP,
+    payload: stop,
   }
 }
 

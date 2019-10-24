@@ -13,8 +13,10 @@ import {
   Profile,
   RequestedTrip,
   UpdateUser,
+  AddStops,
 } from './screens'
 
+import routes from './routes.js'
 import Navbar from './components/Navbar/Navbar'
 import PrivateRoute from './components/Routes/PrivateRoute'
 import Container from '@material-ui/core/Container'
@@ -39,6 +41,7 @@ const App = () => {
                 path="/requested-trip"
                 component={RequestedTrip}
               />
+              <Route exact path={routes.addStops} component={AddStops} />
               <Route component={NotFound} />
             </Switch>
           </Container>
