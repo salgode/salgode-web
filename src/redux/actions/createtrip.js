@@ -1,6 +1,7 @@
 export const actions = {
   SET_START_STOP: 'SET_START_STOP',
   SET_END_STOP: 'SET_END_STOP',
+  SET_MIDDLE_STOPS: 'SET_MIDDLE_STOPS',
   SET_START_TIME: 'SET_START_TIME',
   CLEAR_CREATE_TRIP_INFO: 'CLEAR_CREATE_TRIP_INFO',
   CLEAR_START_STOP: 'CLEAR_START_STOP',
@@ -21,6 +22,13 @@ export function setEndStop(endStop) {
   return {
     type: actions.SET_END_STOP,
     payload: endStop,
+  }
+}
+
+export function setMiddleStops(stops) {
+  return {
+    type: actions.SET_MIDDLE_STOPS,
+    payload: stops,
   }
 }
 

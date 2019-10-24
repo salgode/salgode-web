@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import {
   setStartStop,
   setEndStop,
+  setMiddleStops,
   setStartTime,
   clearStartStop,
   clearEndStop,
@@ -30,15 +31,17 @@ class CreateTripScreen extends Component {
     startTime: PropTypes.string.isRequired,
     endStop: PropTypes.string.isRequired,
     startStop: PropTypes.string.isRequired,
+    middleStops: PropTypes.array.isRequired,
     clearEndStop: PropTypes.func.isRequired,
     clearStartStop: PropTypes.func.isRequired,
     getAllSpots: PropTypes.func.isRequired,
     setStartStop: PropTypes.func.isRequired,
     setEndStop: PropTypes.func.isRequired,
+    setMiddleStops: PropTypes.func.isRequired,
   }
 
   componentDidMount = () => {
-    this.props.getAllSpots()
+    //this.props.getAllSpots()
   }
 
   showDateTimePicker = () => {
@@ -56,14 +59,16 @@ class CreateTripScreen extends Component {
   }
 
   render() {
-    const { startStop, endStop, startTime, spots } = this.props
+    const { startStop, endStop, middleStops, startTime, spots } = this.props
     const disabled = startStop && endStop && startTime ? false : true
-    const filteredSlots = spotsFilter(spots, [startStop, endStop]).map(
-      spot => ({
-        label: `${spot.name}, ${spot.address}`,
-        spot: spot,
-      })
-    )
+    const filteredSlots = spotsFilter(spots, [
+      ...middleStops,
+      startStop,
+      endStop,
+    ]).map(spot => ({
+      label: `${spot.name}, ${spot.address}`,
+      value: spot,
+    }))
 
     return (
       <Grid container direction="column" justify="center" alignItems="center">
@@ -72,7 +77,7 @@ class CreateTripScreen extends Component {
           className="search"
           isSearchable={true}
           options={filteredSlots}
-          onChange={value => this.props.setStartStop(value.spot)}
+          onChange={option => this.props.setStartStop(option.value)}
         />
 
         <Typography>Hasta:</Typography>
@@ -80,7 +85,18 @@ class CreateTripScreen extends Component {
           className="search"
           isSearchable={true}
           options={filteredSlots}
-          onChange={value => this.props.setEndStop(value.spot)}
+          onChange={option => this.props.setEndStop(option.value)}
+        />
+
+        <Typography>Paradas:</Typography>
+        <Select
+          isMulti
+          className="search"
+          isSearchable={true}
+          options={filteredSlots}
+          onChange={optionsList =>
+            this.props.setMiddleStops(optionsList.map(option => option.value))
+          }
         />
 
         <Typography>Hora/Fecha de Salida:</Typography>
@@ -114,6 +130,7 @@ const mapStateToProps = ({ user, createTrip, spots }) => {
     user: user,
     startStop: createTrip.startStop,
     endStop: createTrip.endStop,
+    middleStops: createTrip.middleStops,
     startTime: createTrip.startTime,
     spots: spots.spots,
   }
@@ -123,6 +140,7 @@ const mapDispatchToProps = {
   loginUser,
   setStartStop,
   setEndStop,
+  setMiddleStops,
   setStartTime,
   clearStartStop,
   clearEndStop,
