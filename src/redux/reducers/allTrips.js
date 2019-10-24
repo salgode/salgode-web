@@ -1,7 +1,6 @@
 import { actions as tripActions } from '../actions/allTrips'
 
 export default function allFutureTripsReducer(state = {}, action) {
-  console.log('ACTION', action)
   switch (action.type) {
     case tripActions.ALL_TRIPS_FETCH_FUTURE_TRIPS:
       return { ...state, loading: true }

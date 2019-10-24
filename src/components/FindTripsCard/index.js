@@ -1,36 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-// import clsx from 'clsx'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Collapse from '@material-ui/core/Collapse'
-import Avatar from '@material-ui/core/Avatar'
+import { Grid } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-// import Icon from '@material-ui/core/Icon'
+import { withStyles } from '@material-ui/core/styles'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
-// import { faCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
-
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
-// import { , faClock, faUsers } from '@fortawesome/free-regular-svg-icons'
-import { red } from '@material-ui/core/colors'
-// import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
-import { withStyles } from '@material-ui/core/styles'
-import { Grid } from '@material-ui/core'
 
-// import { MdAccessibility } from 'react-icons/md'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import { red } from '@material-ui/core/colors'
 
 import './style.sass'
 
@@ -164,7 +158,7 @@ class FindTripsCard extends React.Component {
         <CardHeader
           avatar={
             <Avatar aria-label="recipe" className={classes.avatar}>
-              R
+              {driver.driver_name[0]}
             </Avatar>
           }
           action={

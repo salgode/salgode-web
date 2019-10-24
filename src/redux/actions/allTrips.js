@@ -5,12 +5,11 @@ export const actions = {
 }
 
 export function fetchAllFutureTrips(authToken) {
-  console.log(`Bearer ${authToken}`)
   return {
     type: actions.ALL_TRIPS_FETCH_FUTURE_TRIPS,
     payload: {
       request: {
-        url: `/trips/open`,
+        url: `trips/open`,
         method: 'get',
         headers: {
           Authorization: `Bearer ${authToken}`,
