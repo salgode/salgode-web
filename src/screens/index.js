@@ -5,5 +5,6 @@ export { default as RequestTrip } from './FindTrip/index'
 export { default as MyTrips } from './MyTrips/index'
 export { default as CreateTrip } from './CreateTrip/index'
 export { default as Profile } from './Profile/index'
+export { default as RequestedTrip } from './RequestedTrip/index'
 
 export { default as NotFound } from './NotFound'

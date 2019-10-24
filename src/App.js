@@ -12,6 +12,7 @@ import {
   MyTrips,
   CreateTrip,
   Profile,
+  RequestedTrip,
 } from './screens'
 
 import UpdateUser from './screens/UpdateUser'
@@ -34,6 +35,7 @@ const App = () => {
               <Route exact path="/perfil/editar" component={UpdateUser} />
               <Route exact path="/sign-in" component={SignIn} />
               <Route exact path="/sign-up" component={SignUp} />
+              <Route exact path="/requested-trip" component={RequestedTrip} />
               <Route component={NotFound} />
             </Switch>
           </Container>
