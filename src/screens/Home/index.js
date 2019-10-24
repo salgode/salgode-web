@@ -1,6 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
+
 import './style.sass'
 
-const Home = () => <div className="home"></div>
+const Home = props => <div className="home">{JSON.stringify(props.user)}</div>
 
-export default Home
+const mapStateToProps = state => {
+  const { user } = state
+  return {
+    user,
+  }
+}
+
+export default connect(mapStateToProps)(Home)

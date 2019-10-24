@@ -1,4 +1,4 @@
-import { applyMiddleware, combineReducers, createStore } from 'redux'
+import { applyMiddleware, combineReducers, createStore, compose } from 'redux'
 import axiosMiddleware from 'redux-axios-middleware'
 import axios from 'axios'
 import userReducer from './reducers/user'
@@ -22,6 +22,7 @@ const client = axios.create({
 })
 
 const middlewares = [axiosMiddleware(client), thunk]
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const reducer = combineReducers({
   user: userReducer,
@@ -43,5 +44,5 @@ export const store = createStore(
     spots: spotsModel,
     futureTrips: futureTripsModel,
   },
-  applyMiddleware(...middlewares)
+  composeEnhancer(applyMiddleware(...middlewares))
 )
