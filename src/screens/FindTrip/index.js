@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Container } from '@material-ui/core'
-import FindTripsCard from './../../components/FindTripsCard/index'
+import { FindTripsCard } from './../../components/MyTripsCard/index'
 import './style.sass'
 
 import { fetchAllFutureTrips } from '../../redux/actions/allTrips'

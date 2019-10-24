@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Avatar from '@material-ui/core/Avatar'
@@ -27,7 +27,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { red } from '@material-ui/core/colors'
 
 import { ParseDate, ParseHour } from '../../components/Parse/index'
-import './style.sass'
+import './index.sass'
 
 const styles = theme => ({
   card: {
@@ -81,7 +81,7 @@ const styles = theme => ({
   },
 })
 
-class FindTripsCard extends React.Component {
+class FindTripsCard extends Component {
   constructor(props) {
     super(props)
 
