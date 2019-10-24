@@ -3,9 +3,10 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 // ui components
-import { Grid, Button, Typography } from '@material-ui/core'
+import { Grid, Button, Typography, Box, IconButton } from '@material-ui/core'
 import Select from 'react-select'
 import StopCard from '../../components/StopCard'
+import ClearIcon from '@material-ui/icons/Clear'
 
 // style
 import './style.sass'
@@ -32,15 +33,19 @@ class AddStopsScreen extends Component {
     const middleStopsComponents = middleStops.map((stop, i) => {
       return (
         <Grid item container key={i}>
-          <Grid item xs={8}>
+          <Grid item xs={10}>
             <StopCard
               label="Parada"
               number={i + 1}
               stopName={stop.name}
             ></StopCard>
           </Grid>
-          <Grid item xs={4}>
-            <Typography>X</Typography>
+          <Grid item xs={2}>
+            <Box mt={2} ml={1}>
+              <IconButton>
+                <ClearIcon />
+              </IconButton>
+            </Box>
           </Grid>
         </Grid>
       )
