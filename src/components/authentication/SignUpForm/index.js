@@ -256,7 +256,7 @@ class SignUpForm extends React.Component {
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                <Link to="/sign-in" variant="body2">
+                <Link to="/" variant="body2">
                   ¿Ya tienes una cuenta? Ingresa
                 </Link>
               </Grid>

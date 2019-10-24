@@ -173,13 +173,13 @@ function DrawerRender(open, setOpen) {
       </div>
       <Divider />
       <List>
-        <ListItem button component={Link} to="/pedir-viaje">
+        <ListItem button component={Link} to="/find-trip">
           <ListItemIcon>
             <FontAwesomeIcon icon={faCarAlt} />
           </ListItemIcon>
           <ListItemText primary="Pedir Viaje" />
         </ListItem>
-        <ListItem button component={Link} to="/mis-viajes">
+        <ListItem button component={Link} to="/my-trips">
           <ListItemIcon>
             <FontAwesomeIcon icon={faCarAlt} />
           </ListItemIcon>
@@ -191,13 +191,13 @@ function DrawerRender(open, setOpen) {
           </ListItemIcon>
           <ListItemText primary="Pedidos" />
         </ListItem>
-        <ListItem button component={Link} to="/crear-viaje">
+        <ListItem button component={Link} to="/create-trip">
           <ListItemIcon>
             <FontAwesomeIcon icon={faPlusCircle} />
           </ListItemIcon>
           <ListItemText primary="Crear Viaje" />
         </ListItem>
-        <ListItem button component={Link} to="/perfil">
+        <ListItem button component={Link} to="/profile">
           <ListItemIcon>
             <InboxIcon />
           </ListItemIcon>

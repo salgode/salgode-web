@@ -7,7 +7,7 @@ const Profile = () => {
   return (
     <div className="profile">
       Mi Perfil
-      <Link to="/perfil/editar">
+      <Link to="/profile/edit">
         <button> Editar Perfil </button>
       </Link>
     </div>
