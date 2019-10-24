@@ -69,7 +69,7 @@ export function createTrip(route_points, etd) {
     type: actions.CREATE_TRIP,
     payload: {
       request: {
-        url: `/trips`,
+        url: `/driver/trips`,
         method: 'post',
         data: {
           route_points,

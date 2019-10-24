@@ -11,9 +11,16 @@ import ClearIcon from '@material-ui/icons/Clear'
 // style
 import './style.sass'
 
+// utils
+import { spotsFilter } from '../../utils/spotsFilter'
+
 // reducers
 import { getAllSpots } from '../../redux/actions/spots'
-import { addMiddleStop, removeMiddleStop } from '../../redux/actions/createtrip'
+import {
+  addMiddleStop,
+  removeMiddleStop,
+  createTrip,
+} from '../../redux/actions/createtrip'
 
 class AddStopsScreen extends Component {
   propTypes = {
@@ -21,16 +28,25 @@ class AddStopsScreen extends Component {
     endStop: PropTypes.string.isRequired,
     startStop: PropTypes.string.isRequired,
     middleStops: PropTypes.array.isRequired,
+    startTime: PropTypes.array.isRequired,
     addMiddleStop: PropTypes.func.isRequired,
     removeMiddleStop: PropTypes.func.isRequired,
+    createTrip: PropTypes.func.isRequired,
   }
   componentDidMount = () => {
     this.props.getAllSpots()
   }
 
   render() {
-    const { startStop, endStop, spots, middleStops } = this.props
-    const filteredSpots = spots.map(spot => ({ label: spot.name, value: spot }))
+    const { startStop, endStop, spots, middleStops, startTime } = this.props
+    const filteredSpots = spotsFilter(spots, [
+      startStop,
+      endStop,
+      ...middleStops,
+    ]).map(spot => ({
+      label: `${spot.name}, ${spot.address}`,
+      value: spot,
+    }))
     const middleStopsComponents = middleStops.map((stop, i) => {
       return (
         <Grid item container key={i}>
@@ -74,7 +90,17 @@ class AddStopsScreen extends Component {
           options={filteredSpots}
           onChange={option => this.props.addMiddleStop(option.value)}
         />
-        <Button color="primary">Crear Viaje</Button>
+        <Button
+          color="primary"
+          onClick={() =>
+            this.props.createTrip(
+              [startStop, ...middleStops, endStop],
+              startTime
+            )
+          }
+        >
+          Crear Viaje
+        </Button>
       </Grid>
     )
   }
@@ -90,6 +116,7 @@ const mapStateToProps = ({ user, createTrip, spots }) => {
     startStop: createTrip.startStop,
     endStop: createTrip.endStop,
     middleStops: createTrip.middleStops,
+    startTime: createTrip.startTime,
     spots: spots.spots,
   }
 }
@@ -98,6 +125,7 @@ const mapDispatchToProps = {
   getAllSpots,
   addMiddleStop,
   removeMiddleStop,
+  createTrip,
 }
 
 // TODO: CreateTripScreen.navigationOptions = {
