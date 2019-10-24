@@ -51,7 +51,7 @@ class MyTripsCard extends Component {
     const { classes, trip } = this.props
 
     const date = ParseDate(trip.trip_times.etd)
-    const hour = ParseHour(trip.trip_times.etd)
+    const time = ParseHour(trip.trip_times.etd)
 
     return (
       <Card className={classes.card}>
@@ -74,7 +74,7 @@ class MyTripsCard extends Component {
           </Typography>
           <Typography variant="body2" component="p">
             <FontAwesomeIcon icon={faClock} className="calendar-icon" />
-            {hour}
+            {time}
           </Typography>
         </CardContent>
       </Card>
