@@ -15,10 +15,13 @@ import { reducer as formReducer } from 'redux-form'
 import updateUserReducer from './reducers/updateUser'
 import thunk from 'redux-thunk'
 
-const client = axios.create({
+export const client = axios.create({
   baseURL: 'https://playground-api.salgode.com',
   responseType: 'json',
   requestType: 'json',
+  headers: {
+    Authorization: 'Bearer 12345',
+  },
 })
 
 const middlewares = [axiosMiddleware(client), thunk]

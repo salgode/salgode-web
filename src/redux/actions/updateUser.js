@@ -1,9 +1,8 @@
-import axios from 'axios'
-
+import { client as axiosClient } from '../store'
 export const actions = {
   STARTING_UPDATE_USER: 'STARTING_UPDATE_USER',
   SUCCESS_UPDATE_USER: 'SUCCESS_UPDATE_USER',
-  LOADING_UPDATE_USER: 'LOADING_UPDATE_USER',
+  ERROR_UPDATE_USER: 'ERROR_UPDATE_USER',
 }
 
 export const startingUpdateUser = () => {
@@ -18,9 +17,9 @@ export const successUpdateUser = () => {
   }
 }
 
-export const loadingUpdateUser = payload => {
+export const errorUpdateUser = payload => {
   return {
-    type: actions.LOADING_UPDATE_USER,
+    type: actions.ERROR_UPDATE_USER,
     payload,
   }
 }
@@ -41,27 +40,19 @@ export const updateUserThunk = user_id => {
       } = getState().form.updateUser.values
 
       const data = {
+        user_id: user_id,
         first_name: name,
         last_name: lastName,
         email: email,
         phone: phone,
       }
 
-      const res = await axios.put(
-        `https://playground-api.salgode.com/user/${user_id}`,
-        data,
-        {
-          headers: {
-            Authorization: 'Bearer 12345',
-          },
-        }
-      )
-
-      if (res.status === 200 && res.statusText === 'OK') {
+      const res = await axiosClient.put(`/user`, data)
+      if (res.status === 200 && res.data.success) {
         dispatch(successUpdateUser())
       }
     } catch (error) {
-      dispatch(loadingUpdateUser(error.response))
+      dispatch(errorUpdateUser(error.response))
     }
   }
 }
