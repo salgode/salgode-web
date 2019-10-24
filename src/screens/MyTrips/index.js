@@ -30,7 +30,7 @@ class MyTrips extends Component {
     this.setState({ loading: true })
     // console.log(this.props.user.token)
     const response = await this.props.fetchFutureTrips(12345) // this.props.user.token
-    console.log(typeof this.props.futureTrips)
+
     if (response.error) {
       this.setState({ loading: false })
       alert(
@@ -69,7 +69,7 @@ MyTrips.propTypes = {
     token: PropTypes.string,
     userId: PropTypes.string,
   }).isRequired,
-  futureTrips: PropTypes.arrayOf(PropTypes.object),
+  futureTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
 
 const mapDispatchToProps = dispatch => ({
