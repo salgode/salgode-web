@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { fetchFutureTrips } from '../../redux/actions/trips'
 import './style.sass'
 import MyTripsCard from '../../components/MyTripsCard/index'
-import { ParseDate, ParseHour } from '../../components/ParseDate/index'
 
 // Store
 
@@ -27,8 +26,8 @@ class MyTrips extends Component {
   }
 
   componentDidMount() {
-    this.getTrips(1234)
-    // this.getTrips2()
+    // this.getTrips(1234)
+    this.getTrips2()
   }
 
   async fetchTrips(token) {
@@ -114,10 +113,6 @@ class MyTrips extends Component {
   async getTrips(token) {
     this.setState({ loading: true })
 
-    const etd = '2019-10-23T05:40:00.000Z'
-    console.log(ParseDate(etd))
-    console.log(ParseHour(etd))
-
     await this.fetchTrips(token)
       .then(trips => this.setState({ trips }))
       .catch(err => {
@@ -129,31 +124,29 @@ class MyTrips extends Component {
   }
 
   async getTrips2() {
+    this.setState({ loading: true })
+    // console.log(this.props.user.token)
     const response = await this.props.fetchFutureTrips(12345) // this.props.user.token
 
     if (response.error) {
+      this.setState({ loading: false })
       alert(
         'Error obteniendo viajes',
         'Hubo un problema obteniendo los viajes. Por favor intentalo de nuevo.'
       )
     }
-    console.log(this.props.trips)
 
-    this.setState({ trips: this.props.trips })
+    this.setState({ trips: this.props.futureTrips.trips, loading: false })
   }
 
   render() {
-    const { loading } = this.state
-    const { trips } = this.state
+    const { loading, trips } = this.state
     console.log(this.state.trips)
     return (
       <div>
         {loading && <CircularProgress />}
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
-            console.log(trip)
-            console.log(trip.spacesUsed)
-            console.log('Enteredd')
             // Return the element. Also pass key
             return (
               <Grid item md={4} key={i}>
@@ -174,7 +167,7 @@ MyTrips.propTypes = {
     token: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
   }).isRequired,
-  trips: PropTypes.array,
+  futureTrips: PropTypes.array,
 }
 
 MyTrips.defaultProps = {
@@ -187,6 +180,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   user: state.user,
+  futureTrips: state.futureTrips,
 })
 
 export default connect(
