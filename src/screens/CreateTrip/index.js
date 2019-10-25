@@ -27,35 +27,13 @@ class CreateTripScreen extends Component {
     pickedDate: null,
   }
 
-  propTypes = {
-    setStartTime: PropTypes.string.isRequired,
-    spots: PropTypes.string.isRequired,
-    startTime: PropTypes.string.isRequired,
-    endStop: PropTypes.string.isRequired,
-    startStop: PropTypes.string.isRequired,
-    clearEndStop: PropTypes.func.isRequired,
-    clearStartStop: PropTypes.func.isRequired,
-    getAllSpots: PropTypes.func.isRequired,
-    setStartStop: PropTypes.func.isRequired,
-    setEndStop: PropTypes.func.isRequired,
-  }
-
   componentDidMount = () => {
     this.props.getAllSpots()
-  }
-
-  showDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: true })
-  }
-
-  hideDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: false })
   }
 
   handleDatePicked = date => {
     this.props.setStartTime(date)
     this.setState({ pickedDate: date })
-    this.hideDateTimePicker()
   }
 
   render() {
@@ -89,13 +67,18 @@ class CreateTripScreen extends Component {
         <Typography>Hora/Fecha de Salida:</Typography>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <DateTimePicker
-            isVisible={this.state.isDateTimePickerVisible}
             value={this.pickedDate}
             onChange={this.handleDatePicked}
           />
         </MuiPickersUtilsProvider>
 
-        <Button block disabled={disabled}>
+        <Button
+          variant="contained"
+          color="primary"
+          component="span"
+          disabled={disabled}
+          className="submit"
+        >
           <Link to={routes.addStops}>Siguiente</Link>
         </Button>
       </Grid>
@@ -103,8 +86,19 @@ class CreateTripScreen extends Component {
   }
 }
 
-CreateTripScreen.navigationOptions = {
-  header: null,
+CreateTripScreen.propTypes = {
+  setStartTime: PropTypes.func.isRequired,
+  spots: PropTypes.array.isRequired,
+  startTime: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+    .isRequired,
+  endStop: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  startStop: PropTypes.oneOfType([PropTypes.string, PropTypes.object])
+    .isRequired,
+  clearEndStop: PropTypes.func.isRequired,
+  clearStartStop: PropTypes.func.isRequired,
+  getAllSpots: PropTypes.func.isRequired,
+  setStartStop: PropTypes.func.isRequired,
+  setEndStop: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = ({ user, createTrip, spots }) => {
