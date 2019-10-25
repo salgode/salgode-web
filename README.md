@@ -2,6 +2,7 @@
 [![stdVersionB]][stdVersionL]
 [![commitsB]][commitsL]
 [![prettierB]][prettierL]
+[![CircleCI](https://circleci.com/gh/salgode/salgode-web/tree/master.svg?style=svg)](https://circleci.com/gh/salgode/salgode-web/tree/master)
 
 # Salgode API
 
