@@ -2,11 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
 
-import cookies from 'js-cookie'
-
 // Store
 import { connect } from 'react-redux'
 import { loginUser } from '../../redux/actions/user'
+import { setObject, USER_DATA, TOKEN } from '../../utils/storeData'
 
 // Components
 import { SignInForm } from '../../components/index'
@@ -27,25 +26,24 @@ class SignInScreen extends React.Component {
   }
 
   async onSubmit(payload) {
-    const { signIn } = this.props
+    const { signIn, history } = this.props
 
     this.setState({ loading: true })
 
     const user = await signIn(payload)
 
-    this.setState({ loading: false })
-
     if (user.error || !user.payload.data.email) return alert(MESSAGE)
 
-    cookies.set('@userToken', user.token)
-    cookies.set('@userId', user.user_id)
+    this.setState({ loading: false })
+    setObject(USER_DATA, user.payload.data)
+    setObject(TOKEN, user.payload.data.token)
+    history.push('/find-trip')
   }
 
   render() {
     const { loading } = this.state
-
     return (
-      <div className="sign-up">
+      <div className="sign-in">
         <SignInForm onSubmit={this.onSubmit} />
 
         {loading && <CircularProgress />}
@@ -56,6 +54,7 @@ class SignInScreen extends React.Component {
 
 SignInScreen.propTypes = {
   signIn: PropTypes.func.isRequired,
+  history: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
@@ -63,7 +62,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  signIn: payload => dispatch(loginUser(payload.name, payload.password)),
+  signIn: payload => dispatch(loginUser(payload.email, payload.password)),
 })
 
 export default connect(

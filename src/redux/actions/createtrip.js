@@ -8,6 +8,8 @@ export const actions = {
   CREATE_TRIP: 'CREATE_TRIP',
   CREATE_TRIP_SUCCESS: 'CREATE_TRIP_SUCCESS',
   CREATE_TRIP_FAIL: 'CREATE_TRIP_FAIL',
+  ADD_MIDDLE_STOP: 'ADD_MIDDLE_STOP',
+  REMOVE_MIDDLE_STOP: 'REMOVE_MIDDLE_STOP',
 }
 
 export function setStartStop(startStop) {
@@ -21,6 +23,20 @@ export function setEndStop(endStop) {
   return {
     type: actions.SET_END_STOP,
     payload: endStop,
+  }
+}
+
+export function addMiddleStop(stop) {
+  return {
+    type: actions.ADD_MIDDLE_STOP,
+    payload: stop,
+  }
+}
+
+export function removeMiddleStop(stop) {
+  return {
+    type: actions.REMOVE_MIDDLE_STOP,
+    payload: stop,
   }
 }
 
@@ -53,7 +69,7 @@ export function createTrip(route_points, etd) {
     type: actions.CREATE_TRIP,
     payload: {
       request: {
-        url: `/trips`,
+        url: `/driver/trips`,
         method: 'post',
         data: {
           route_points,

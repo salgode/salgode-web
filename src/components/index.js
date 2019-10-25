@@ -1,2 +1,6 @@
 export { default as SignInForm } from './authentication/SignInForm/index'
 export { default as SignUpForm } from './authentication/SignUpForm/index'
+export { default as Navbar } from './Navbar/Navbar'
+export { MyTripsCard, RequestedTripCard } from './MyTripsCard/index'
+export { ParseDate, ParseHour } from './Parse/index'
+// export { default as SignUpForm } from './authentication/SignUpForm/index'
