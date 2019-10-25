@@ -192,7 +192,7 @@ class FindTripsCard extends Component {
       trip_route,
       trip_route_points,
       driver,
-      etd_info,
+      trip_times,
     } = this.props.trip
     const { expanded, reserved_seats, stop, end } = this.state
     const { classes, onSubmit } = this.props
@@ -200,8 +200,8 @@ class FindTripsCard extends Component {
     const departurePoint = trip_route.start.name
     const arrivalPoint = trip_route.end.name
 
-    const date = ParseDate(etd_info.etd)
-    const time = ParseHour(etd_info.etd)
+    const date = ParseDate(trip_times.etd)
+    const time = ParseHour(trip_times.etd)
 
     return (
       <Card className={classes.card}>
