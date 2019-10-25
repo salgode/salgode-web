@@ -12,6 +12,16 @@ export default function allFutureTripsReducer(state = {}, action) {
         loading: false,
         error: 'Error while fetching trips',
       }
+    case tripActions.RESERVE_TRIP:
+      return { ...state, loading: true }
+    case tripActions.RESERVE_TRIP_SUCCESS:
+      return { ...state, loading: false, trip: action.payload.data }
+    case tripActions.RESERVE_TRIP_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: 'Error reservando el viaje',
+      }
     default:
       return state
   }
