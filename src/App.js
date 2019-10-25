@@ -13,8 +13,10 @@ import {
   Profile,
   RequestedTrip,
   UpdateUser,
+  AddStops,
 } from './screens'
 
+import routes from './routes.js'
 import Navbar from './components/Navbar/Navbar'
 import PrivateRoute from './components/Routes/PrivateRoute'
 import Container from '@material-ui/core/Container'
@@ -27,18 +29,31 @@ const App = () => {
           <Navbar />
           <Container className="appContainer">
             <Switch>
-              <Route exact path="/" component={SignIn} />
-              <Route exact path="/sign-up" component={SignUp} />
-              <PrivateRoute exact path="/find-trip" component={RequestTrip} />
-              <PrivateRoute exact path="/my-trips" component={MyTrips} />
-              <PrivateRoute exact path="/create-trip" component={CreateTrip} />
-              <PrivateRoute exact path="/profile" component={Profile} />
-              <PrivateRoute exact path="/profile/edit" component={UpdateUser} />
+              <Route exact path={routes.signIn} component={SignIn} />
+              <Route exact path={routes.signUp} component={SignUp} />
               <PrivateRoute
                 exact
-                path="/requested-trip"
+                path={routes.requestTrip}
+                component={RequestTrip}
+              />
+              <PrivateRoute exact path={routes.myTrips} component={MyTrips} />
+              <PrivateRoute
+                exact
+                path={routes.createTrip}
+                component={CreateTrip}
+              />
+              <PrivateRoute exact path={routes.profile} component={Profile} />
+              <PrivateRoute
+                exact
+                path={routes.updateUser}
+                component={UpdateUser}
+              />
+              <PrivateRoute
+                exact
+                path={routes.requestedTrip}
                 component={RequestedTrip}
               />
+              <Route exact path={routes.addStops} component={AddStops} />
               <Route component={NotFound} />
             </Switch>
           </Container>

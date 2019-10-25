@@ -41,11 +41,14 @@ const UpdateForm = ({ user_id }) => {
   const updateUser = e => {
     e.preventDefault()
 
-    uploadFile(uploadAvatarInput).then(res => {
+    uploadFile(uploadAvatarInput).then(() => {
+      /*
+       chage to res =>
+      */
       // esta es la id que se almacena como avatar
-      console.log(res.image_id)
+      // console.log(res.image_id)
       // esta es la url de la imagen
-      console.log(res.image_urls.fetch)
+      // console.log(res.image_urls.fetch)
       dispatch(updateUserThunk(user_id))
     })
   }
@@ -199,14 +202,14 @@ const UpdateForm = ({ user_id }) => {
             </h1>
           )}
 
-          {/* 
+          {/*
             // No se con que key devuelven el error, posiblemente err, error, o message, pero para que no de error luego lo cambiamos
             {updateUserState.error && (
             <h1 className="subtitle has-text-primary">
               {updateUserState.error}
             </h1>
             )}
-            
+
             */}
         </div>
       </div>
