@@ -22,6 +22,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Zoom from '@material-ui/core/Zoom'
+import InputIcon from '@material-ui/icons/Input'
 
 import { makeStyles } from '@material-ui/core/styles'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
@@ -210,7 +211,10 @@ function DrawerRender(open, setOpen) {
         </ListItem>
         <Divider />
         <ListItem button component={Link} to="/" onClick={() => logout()}>
-          <ListItemText inset primary="Log Out" />
+          <ListItemIcon>
+            <InputIcon />
+          </ListItemIcon>
+          <ListItemText primary="Log Out" />
         </ListItem>
       </List>
     </Drawer>

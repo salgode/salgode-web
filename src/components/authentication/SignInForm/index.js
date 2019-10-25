@@ -92,9 +92,8 @@ class SignInForm extends React.Component {
   }
 
   render() {
-    const { onSubmit } = this.props
+    const { onSubmit, classes } = this.props
     const { email, password } = this.state
-    const { classes } = this.props
     return (
       <Container component="main">
         <CssBaseline />
