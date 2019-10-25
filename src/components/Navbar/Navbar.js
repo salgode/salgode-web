@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import './Navbar.sass'
+import { resetStorage } from '../../utils/storeData'
 
 import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
@@ -149,6 +150,10 @@ ScrollTop.propTypes = {
   window: PropTypes.func,
 }
 
+function logout() {
+  resetStorage()
+}
+
 function DrawerRender(open, setOpen) {
   const classes = useStyles()
 
@@ -202,6 +207,10 @@ function DrawerRender(open, setOpen) {
             <InboxIcon />
           </ListItemIcon>
           <ListItemText primary="Perfil" />
+        </ListItem>
+        <Divider />
+        <ListItem button component={Link} to="/" onClick={() => logout()}>
+          <ListItemText inset primary="Log Out" />
         </ListItem>
       </List>
     </Drawer>
