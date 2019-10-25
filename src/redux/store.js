@@ -14,6 +14,8 @@ import slotsReducer from './reducers/slots'
 import { reducer as formReducer } from 'redux-form'
 import updateUserReducer from './reducers/updateUser'
 import thunk from 'redux-thunk'
+import vehiclesReducer from './reducers/vehicles'
+import { vehiclesModel } from './models/vehicles'
 
 export const client = axios.create({
   baseURL: 'https://playground-api.salgode.com',
@@ -37,6 +39,7 @@ const reducer = combineReducers({
   form: formReducer,
   updateUser: updateUserReducer,
   loading: false,
+  vehicles: vehiclesReducer,
 })
 
 export const store = createStore(
@@ -46,6 +49,7 @@ export const store = createStore(
     createTrip: createTripModel,
     spots: spotsModel,
     futureTrips: futureTripsModel,
+    vehicles: vehiclesModel,
   },
   composeEnhancer(applyMiddleware(...middlewares))
 )
