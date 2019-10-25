@@ -6,6 +6,15 @@ export default function createTripReducer(state = {}, action) {
       return { ...state, startStop: action.payload }
     case createTripActions.SET_END_STOP:
       return { ...state, endStop: action.payload }
+    case createTripActions.ADD_MIDDLE_STOP:
+      return { ...state, middleStops: [...state.middleStops, action.payload] }
+    case createTripActions.REMOVE_MIDDLE_STOP:
+      return {
+        ...state,
+        middleStops: state.middleStops.filter(
+          stop => stop.id !== action.payload.id
+        ),
+      }
     case createTripActions.CLEAR_START_STOP:
       return { ...state, startStop: '' }
     case createTripActions.CLEAR_END_STOP:

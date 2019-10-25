@@ -12,7 +12,7 @@ export function loginUser(email, password) {
     type: actions.USER_LOGIN,
     payload: {
       request: {
-        url: `/users/login`,
+        url: `/signin`,
         method: 'post',
         data: {
           email,
@@ -26,9 +26,11 @@ export function loginUser(email, password) {
             lastName: data.last_name,
             phone: data.phone,
             userId: data.user_id,
-            selfieLink: data.user_identifications.selfie_image,
-            dniFrontLink: data.user_identifications.identification_image_front,
-            dniBackLink: data.user_identifications.identification_image_back,
+            selfieLink: data.user_identifications.selfie,
+            dniFrontLink: data.user_identifications.identification.front,
+            dniBackLink: data.user_identifications.identification.back,
+            driFrontLink: data.user_identifications.drivers_license.front,
+            driBackLink: data.user_identifications.drivers_license.back,
           }
         },
       },
@@ -44,7 +46,7 @@ export function signupUser(
   password,
   passwordRepeat,
   selfieLink = 'placeholder',
-  // driverLicenseLink = 'placeholder',
+  driverLicenseLink = 'placeholder',
   dniFrontLink = 'placeholder',
   dniBackLink = 'placeholder'
   // carPlate,
@@ -58,18 +60,19 @@ export function signupUser(
     first_name: name,
     phone,
     password,
-    passwordRepeat,
+    // password_repeat: passwordRepeat,
     user_identifications: {
       selfie_image: selfieLink,
       identification_image_front: dniFrontLink,
       identification_image_back: dniBackLink,
+      driver_license: driverLicenseLink,
     },
   }
   return {
     type: actions.USER_SIGNUP,
     payload: {
       request: {
-        url: `/users`,
+        url: `/signup`,
         method: 'post',
         data: data,
       },

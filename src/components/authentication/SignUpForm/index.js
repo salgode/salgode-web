@@ -1,16 +1,49 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 // Components
-import { Button, FormControl, Input, InputLabel } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Container from '@material-ui/core/Container'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Grid from '@material-ui/core/Grid'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
 
+const styles = theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  form: {
+    width: '50%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  [theme.breakpoints.down('sm')]: {
+    form: {
+      width: '80%',
+    },
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    padding: '10px',
+  },
+})
 class SignUpForm extends React.Component {
   constructor(props) {
     super(props)
 
     this.state = {
       name: '',
-      lastname: '',
+      lastName: '',
       email: '',
       phoneNumber: '',
       password: '',
@@ -18,7 +51,7 @@ class SignUpForm extends React.Component {
 
       validity: {
         name: false,
-        lastname: false,
+        lastName: false,
         email: false,
         phoneNumber: false,
         password: false,
@@ -43,10 +76,10 @@ class SignUpForm extends React.Component {
     }))
   }
 
-  onChangeLastname({ target: { value: lastname } }) {
+  onChangeLastname({ target: { value: lastName } }) {
     this.setState(oldState => ({
-      lastname,
-      validity: { ...oldState.validity, lastname: lastname.length > 2 },
+      lastName,
+      validity: { ...oldState.validity, lastName: lastName.length > 2 },
     }))
   }
 
@@ -91,7 +124,7 @@ class SignUpForm extends React.Component {
   getValidity() {
     const validity =
       this.state.validity.name &&
-      this.state.validity.lastname &&
+      this.state.validity.lastName &&
       this.state.validity.email &&
       this.state.validity.phoneNumber &&
       this.state.validity.password &&
@@ -99,83 +132,174 @@ class SignUpForm extends React.Component {
     return validity && this.state.password === this.state.passwordRepeat
   }
 
+  handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && this.getValidity()) {
+      e.preventDefault()
+      const { onSubmit } = this.props
+      const {
+        name,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        passwordRepeat,
+      } = this.state
+      onSubmit({
+        name,
+        lastName,
+        email,
+        phone: phoneNumber,
+        password,
+        passwordRepeat,
+      })
+    }
+  }
+
   render() {
     const { onSubmit } = this.props
     const {
       name,
-      lastname,
+      lastName,
       email,
       phoneNumber,
       password,
       passwordRepeat,
     } = this.state
 
+    const { classes } = this.props
+
     return (
-      <FormControl>
-        <FormControl>
-          <InputLabel>Nombre</InputLabel>
-          <Input value={name} onChange={this.onChangeName} />
-        </FormControl>
+      <Container component="main">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Registrarse
+          </Typography>
 
-        <FormControl>
-          <InputLabel>Apellido</InputLabel>
-          <Input value={lastname} onChange={this.onChangeLastname} />
-        </FormControl>
-
-        <FormControl>
-          <InputLabel>Número de Teléfono</InputLabel>
-          <Input
-            type="tel"
-            value={phoneNumber}
-            onChange={this.onChangePhoneNumber}
-          />
-        </FormControl>
-
-        <FormControl>
-          <InputLabel>E-mail</InputLabel>
-          <Input type="email" value={email} onChange={this.onChangeEmail} />
-        </FormControl>
-
-        <FormControl>
-          <InputLabel>Contraseña</InputLabel>
-          <Input
-            type="password"
-            value={password}
-            onChange={this.onChangePassword}
-          />
-        </FormControl>
-
-        <FormControl>
-          <InputLabel>Confirma tu contraseña</InputLabel>
-          <Input
-            type="password"
-            value={passwordRepeat}
-            onChange={this.onChangePasswordRepeat}
-          />
-        </FormControl>
-
-        <Button
-          disabled={!this.getValidity()}
-          onClick={() =>
-            onSubmit({
-              name,
-              lastname,
-              email,
-              phoneNumber,
-              password,
-              passwordRepeat,
-            })
-          }
-        >
-          Siguiente
-        </Button>
-      </FormControl>
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="fname"
+                  name="firstName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="Nombre"
+                  autoFocus
+                  value={name}
+                  onChange={this.onChangeName}
+                  onKeyPress={this.handleEnter}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Apellido"
+                  name="lastName"
+                  autoComplete="lname"
+                  value={lastName}
+                  onChange={this.onChangeLastname}
+                  onKeyPress={this.handleEnter}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="E-mail"
+                  name="email"
+                  autoComplete="email"
+                  type="email"
+                  value={email}
+                  onChange={this.onChangeEmail}
+                  onKeyPress={this.handleEnter}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Número de Teléfono"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={this.onChangePhoneNumber}
+                  onKeyPress={this.handleEnter}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Contraseña"
+                  id="password"
+                  autoComplete="current-password"
+                  type="password"
+                  value={password}
+                  onChange={this.onChangePassword}
+                  onKeyPress={this.handleEnter}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Confirma tu contraseña"
+                  id="passwordRepeat"
+                  autoComplete="current-password"
+                  type="password"
+                  value={passwordRepeat}
+                  onChange={this.onChangePasswordRepeat}
+                  onKeyPress={this.handleEnter}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="secondary"
+              className={classes.submit}
+              disabled={!this.getValidity()}
+              onClick={() =>
+                onSubmit({
+                  name,
+                  lastName,
+                  email,
+                  phone: phoneNumber,
+                  password,
+                  passwordRepeat,
+                })
+              }
+            >
+              Registrarse
+            </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link to="/" variant="body2">
+                  ¿Ya tienes una cuenta? Ingresa
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Container>
     )
   }
 }
 
 SignUpForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
 }
 
-export default SignUpForm
+export default withStyles(styles)(SignUpForm)

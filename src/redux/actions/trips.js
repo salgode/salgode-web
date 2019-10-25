@@ -9,10 +9,10 @@ export function fetchFutureTrips(authToken) {
     type: actions.TRIPS_FETCH_FUTURE_TRIPS,
     payload: {
       request: {
-        url: `/trips`,
+        url: `driver/trips`,
         method: 'get',
         headers: {
-          Authorization: authToken,
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },

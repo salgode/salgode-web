@@ -34,11 +34,11 @@ class SignUpScreen extends React.Component {
 
     this.setState({ loading: false })
 
-    if (user.error || !user.payload.data.user || !user.payload.data.user.email)
+    if (user.error || !user.payload.data.email || !user.payload.data.user_id)
       return alert(MESSAGE)
 
-    cookies.set('@userToken', user.token)
-    cookies.set('@userId', user.user_id)
+    cookies.set('@userToken', user.payload.data.bearer_token)
+    cookies.set('@userId', user.payload.data.user_id)
   }
 
   render() {

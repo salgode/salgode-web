@@ -1,8 +1,49 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 // Components
-import { Button, FormControl, Input, InputLabel } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import Container from '@material-ui/core/Container'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Grid from '@material-ui/core/Grid'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
+
+import './index.sass'
+
+const styles = theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  form: {
+    width: '50%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  [theme.breakpoints.down('sm')]: {
+    form: {
+      width: '80%',
+    },
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    padding: '10px',
+  },
+  [theme.breakpoints.up('sm')]: {
+    alignRight: {
+      'text-align': 'right',
+    },
+  },
+})
 
 class SignInForm extends React.Component {
   constructor(props) {
@@ -41,39 +82,88 @@ class SignInForm extends React.Component {
     return this.state.validity.email
   }
 
+  handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && this.getValidity()) {
+      e.preventDefault()
+      const { onSubmit } = this.props
+      const { email, password } = this.state
+      onSubmit({ email, password })
+    }
+  }
+
   render() {
-    const { onSubmit } = this.props
+    const { onSubmit, classes } = this.props
     const { email, password } = this.state
-
     return (
-      <FormControl>
-        <FormControl>
-          <InputLabel>E-mail</InputLabel>
-          <Input type="email" value={email} onChange={this.onChangeEmail} />
-        </FormControl>
-
-        <FormControl>
-          <InputLabel>Contraseña</InputLabel>
-          <Input
-            type="password"
-            value={password}
-            onChange={this.onChangePassword}
-          />
-        </FormControl>
-
-        <Button
-          disabled={!this.getValidity()}
-          onClick={() => onSubmit({ email, password })}
-        >
-          Ingresar
-        </Button>
-      </FormControl>
+      <Container component="main">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Ingresar
+          </Typography>
+          <form className={classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="E-mail"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              type="email"
+              value={email}
+              onChange={this.onChangeEmail}
+              onKeyPress={this.handleEnter}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={this.onChangePassword}
+              onKeyPress={this.handleEnter}
+            />
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              disabled={!this.getValidity()}
+              onClick={() => onSubmit({ email, password })}
+            >
+              Ingresar
+            </Button>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm={6}>
+                <Link to="/recover" variant="body2">
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </Grid>
+              <Grid item xs={12} sm={6} className={classes.alignRight}>
+                <Link to="/sign-up" variant="body2">
+                  {'¿No tienes una cuenta? Registrate'}
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Container>
     )
   }
 }
 
 SignInForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
 }
 
-export default SignInForm
+export default withStyles(styles)(SignInForm)
