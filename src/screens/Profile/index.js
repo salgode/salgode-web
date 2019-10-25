@@ -1,9 +1,10 @@
-import './style.sass'
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import ProfileCard from '../../components/Profile/ProfileCard.js'
-import { fetchUserVehicles } from '../../redux/actions/vehicles'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
+import './style.sass'
+import { fetchUserVehicles } from '../../redux/actions/vehicles'
+import ProfileCard from '../../components/Profile/ProfileCard.js'
 
 export class Profile extends Component {
   constructor(props) {
