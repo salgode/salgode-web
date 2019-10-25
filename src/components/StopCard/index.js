@@ -21,7 +21,7 @@ function StopCard(props) {
 StopCard.propTypes = {
   label: PropTypes.string.isRequired,
   number: PropTypes.number,
-  stopName: PropTypes.string.isRequired,
+  stopName: PropTypes.string,
 }
 
 export default StopCard

@@ -14,8 +14,9 @@ import './style.sass'
 // utils
 import { spotsFilter } from '../../utils/spotsFilter'
 import { MAX_MIDDLE_STOPS } from '../../constants'
+import routes from '../../routes'
 
-// reducers
+// action creators
 import { getAllSpots } from '../../redux/actions/spots'
 import {
   addMiddleStop,
@@ -27,15 +28,18 @@ class AddStopsScreen extends Component {
   constructor(props) {
     super(props)
     this.createMiddleStop = this.createMiddleStop.bind(this)
+    this.submitTrip = this.submitTrip.bind(this)
   }
 
   componentDidMount = () => {
-    this.props.getAllSpots() // TODO unnecesary call if comming from createTrip screen
+    if (!this.props.spots.length) {
+      this.props.getAllSpots() // TODO unnecesary call if comming from createTrip screen
+    }
   }
 
   createMiddleStop(stop, index) {
     return (
-      <Grid item xs={12} container>
+      <Grid key={index} item xs={12} container>
         <Grid item xs={10}>
           <StopCard
             label="Parada"
@@ -54,8 +58,19 @@ class AddStopsScreen extends Component {
     )
   }
 
+  async submitTrip() {
+    const { startStop, endStop, middleStops, startTime, history } = this.props
+    const { payload } = await this.props.createTrip(
+      [startStop, ...middleStops, endStop],
+      startTime
+    )
+    if (payload) {
+      history.push(routes.myTrips)
+    }
+  }
+
   render() {
-    const { startStop, endStop, spots, middleStops, startTime } = this.props
+    const { startStop, endStop, spots, middleStops } = this.props
     const filteredSpots = spotsFilter(spots, [
       startStop,
       endStop,
@@ -75,10 +90,9 @@ class AddStopsScreen extends Component {
         </Grid>
         {middleStopsComponents}
         <Grid item xs={10}>
-          <Typography>
-            <p> Agrega paradas extra (opcional)</p>
-          </Typography>
+          <Typography component="p">Agrega paradas extra (opcional)</Typography>
           <Select
+            value={null}
             className="search"
             isSearchable={true}
             isDisabled={middleStops.length >= MAX_MIDDLE_STOPS}
@@ -87,15 +101,7 @@ class AddStopsScreen extends Component {
           />
         </Grid>
         <Grid container item xs={10} justify="center">
-          <Button
-            color="primary"
-            onClick={() =>
-              this.props.createTrip(
-                [startStop, ...middleStops, endStop],
-                startTime
-              )
-            }
-          >
+          <Button color="primary" onClick={this.submitTrip}>
             Crear Viaje
           </Button>
         </Grid>
@@ -105,15 +111,16 @@ class AddStopsScreen extends Component {
 }
 
 AddStopsScreen.propTypes = {
-  spots: PropTypes.string.isRequired,
-  endStop: PropTypes.string.isRequired,
-  startStop: PropTypes.string.isRequired,
+  spots: PropTypes.array.isRequired,
+  endStop: PropTypes.object.isRequired,
+  startStop: PropTypes.object.isRequired,
   middleStops: PropTypes.array.isRequired,
-  startTime: PropTypes.array.isRequired,
+  startTime: PropTypes.instanceOf(Date).isRequired,
   addMiddleStop: PropTypes.func.isRequired,
   removeMiddleStop: PropTypes.func.isRequired,
   createTrip: PropTypes.func.isRequired,
   getAllSpots: PropTypes.func.isRequired,
+  history: PropTypes.object,
 }
 
 const mapStateToProps = ({ user, createTrip, spots }) => {
