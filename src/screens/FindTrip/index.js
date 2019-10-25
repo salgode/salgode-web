@@ -27,7 +27,6 @@ class FindTripScreen extends Component {
 
   async getTrips() {
     this.setState({ loading: true })
-    // console.log(this.props)
     const response = await this.props.fetchAllFutureTrips(12345) // this.props.user.token
 
     if (response.error) {
@@ -64,7 +63,6 @@ class FindTripScreen extends Component {
         'Hubo un problema reservando el viaje. Por favor intentalo de nuevo.'
       )
     }
-    console.log(reserve)
     this.setState({ loading: false })
   }
 

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 // Components
 import Button from '@material-ui/core/Button'
@@ -167,6 +168,11 @@ class RequestedTrip extends Component {
       </Card>
     )
   }
+}
+
+RequestedTrip.propTypes = {
+  classes: PropTypes.object.isRequired,
+  trip: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(RequestedTrip)
