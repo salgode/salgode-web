@@ -29,6 +29,7 @@
     "bulma-helpers": "^0.3.8",
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "classnames": "^2.2.6",
     "css-loader": "3.2.0",
     "date-fns": "^2.5.1",
     "dotenv": "8.1.0",

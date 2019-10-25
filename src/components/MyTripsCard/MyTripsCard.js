@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
 // import { Link } from 'react-router-dom'
 import { ParseDate, ParseHour } from '../../components/Parse/index'
@@ -54,13 +55,13 @@ class MyTripsCard extends Component {
     const time = ParseHour(trip.trip_times.etd)
 
     return (
-      <Card className={classes.card}>
-        <CardContent>
+      <Card className={classnames(classes.card, 'main-card')}>
+        <CardContent className="card-content">
           <Typography variant="body2" component="p">
             <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
             {trip.trip_route.start.name}
           </Typography>
-          <Typography className="relative" color="textSecondary">
+          <Typography className="available-seats" color="textSecondary">
             {trip.available_seats}
             <FontAwesomeIcon icon={faUsers} className="relative" />
           </Typography>
