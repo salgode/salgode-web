@@ -1,20 +1,23 @@
-export const userModel = {
-  token: null,
-  email: null,
-  name: null,
-  lastName: null,
-  phone: null,
-  passwordRepeat: null,
-  // selfieLink: null,
-  // driverLicenseLink: null,
-  // dniLink: null,
-  // car: {
-  //   carPlate: null,
-  //   carColor: null,
-  //   carBrand: null,
-  //   carModel: null,
-  // },
-}
+import { getObject, USER_DATA } from '../../utils/storeData'
+
+export const userModel = getObject(USER_DATA)
+// export const userModel = {
+//   token: null,
+//   email: null,
+//   name: null,
+//   lastName: null,
+//   phone: null,
+//   passwordRepeat: null,
+//   // selfieLink: null,
+//   // driverLicenseLink: null,
+//   // dniLink: null,
+//   // car: {
+//   //   carPlate: null,
+//   //   carColor: null,
+//   //   carBrand: null,
+//   //   carModel: null,
+//   // },
+// }
 
 /*
 API answer:

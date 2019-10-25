@@ -46,7 +46,6 @@ class MyTrips extends Component {
 
   render() {
     const { loading, trips } = this.state
-    console.log(this.state.trips)
     return (
       <div>
         {loading && <CircularProgress />}

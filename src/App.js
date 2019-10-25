@@ -12,10 +12,11 @@ import {
   CreateTrip,
   Profile,
   RequestedTrip,
+  UpdateUser,
 } from './screens'
 
-import UpdateUser from './screens/UpdateUser'
 import Navbar from './components/Navbar/Navbar'
+import PrivateRoute from './components/Routes/PrivateRoute'
 import Container from '@material-ui/core/Container'
 
 const App = () => {
@@ -28,12 +29,16 @@ const App = () => {
             <Switch>
               <Route exact path="/" component={SignIn} />
               <Route exact path="/sign-up" component={SignUp} />
-              <Route exact path="/find-trip" component={RequestTrip} />
-              <Route exact path="/my-trips" component={MyTrips} />
-              <Route exact path="/create-trip" component={CreateTrip} />
-              <Route exact path="/profile" component={Profile} />
-              <Route exact path="/profile/edit" component={UpdateUser} />
-              <Route exact path="/requested-trip" component={RequestedTrip} />
+              <PrivateRoute exact path="/find-trip" component={RequestTrip} />
+              <PrivateRoute exact path="/my-trips" component={MyTrips} />
+              <PrivateRoute exact path="/create-trip" component={CreateTrip} />
+              <PrivateRoute exact path="/profile" component={Profile} />
+              <PrivateRoute exact path="/profile/edit" component={UpdateUser} />
+              <PrivateRoute
+                exact
+                path="/requested-trip"
+                component={RequestedTrip}
+              />
               <Route component={NotFound} />
             </Switch>
           </Container>

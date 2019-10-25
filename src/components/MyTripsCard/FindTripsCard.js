@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import Avatar from '@material-ui/core/Avatar'
@@ -15,6 +15,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import Select from '@material-ui/core/Select'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
@@ -27,7 +28,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { red } from '@material-ui/core/colors'
 
 import { ParseDate, ParseHour } from '../../components/Parse/index'
-import './style.sass'
+import './index.sass'
 
 const styles = theme => ({
   card: {
@@ -79,16 +80,22 @@ const styles = theme => ({
   avatar: {
     backgroundColor: red[500],
   },
+  form: {
+    flexGrow: 1,
+  },
 })
 
-class FindTripsCard extends React.Component {
+class FindTripsCard extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       expanded: false,
       anchorEl: null,
+      anchorEnd: null,
+      reserved_seats: 1,
       stop: '',
+      end: '',
     }
   }
 
@@ -97,16 +104,39 @@ class FindTripsCard extends React.Component {
     this.setState({ expanded: !expanded })
   }
 
-  handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget })
+  handleClick = name => event => {
+    this.setState({ [name]: event.currentTarget })
   }
 
-  handleClose = stop => {
-    if (typeof stop === 'object') {
-      this.setState({ anchorEl: null, stop: '' })
-      return
+  handleClose = (name, stop) => {
+    const out = typeof stop === 'object' ? '' : stop
+    if (name === 'anchorEl') {
+      this.setState({ [name]: null, stop: out, end: '' })
+    } else {
+      this.setState({ [name]: null, end: out })
     }
-    this.setState({ anchorEl: null, stop })
+  }
+
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.value })
+  }
+
+  handleFilter = () => {
+    const { trip_route_points } = this.props.trip
+    let newList = []
+    const toFilter = trip_route_points
+    if (typeof this.state.stop !== 'object') {
+      const { stop } = this.state
+      const position = toFilter
+        .map(function(e) {
+          return e.name
+        })
+        .indexOf(stop)
+      newList = toFilter.filter(function(value, index) {
+        return index > position
+      })
+      return newList
+    }
   }
 
   renderSwitchStop(key, last) {
@@ -125,13 +155,16 @@ class FindTripsCard extends React.Component {
     }
   }
 
-  renderSelectStop(trip_route_points) {
+  renderSelectStop(stop) {
+    const { trip_route_points } = this.props.trip
     const menuItems = []
-
-    trip_route_points.map((point, i, arr) => {
-      if (i !== arr.length - 1) {
+    const points = stop ? this.handleFilter() : trip_route_points
+    const name = stop ? 'anchorEnd' : 'anchorEl'
+    const rest = stop ? 0 : 1
+    points.map((point, i, arr) => {
+      if (i !== arr.length - rest) {
         menuItems.push(
-          <MenuItem onClick={() => this.handleClose(point.name)} key={i}>
+          <MenuItem onClick={() => this.handleClose(name, point.name)} key={i}>
             {point.name}
           </MenuItem>
         )
@@ -140,15 +173,29 @@ class FindTripsCard extends React.Component {
     return menuItems
   }
 
+  rederSelectOptions() {
+    const { available_seats } = this.props.trip
+    const items = []
+    for (let step = 1; step <= available_seats; step++) {
+      items.push(
+        <option value={step} key={step}>
+          {step}
+        </option>
+      )
+    }
+    return items
+  }
+
   render() {
     const {
+      trip_id,
       trip_route,
       trip_route_points,
       driver,
       trip_times,
     } = this.props.trip
-    const { expanded } = this.state
-    const { classes } = this.props
+    const { expanded, reserved_seats, stop, end } = this.state
+    const { classes, onSubmit } = this.props
 
     const departurePoint = trip_route.start.name
     const arrivalPoint = trip_route.end.name
@@ -240,32 +287,85 @@ class FindTripsCard extends React.Component {
               anchorEl={this.state.anchorEl}
               keepMounted
               open={Boolean(this.state.anchorEl)}
-              onClose={this.handleClose}
             >
-              {this.renderSelectStop(trip_route_points)}
+              {this.renderSelectStop(false)}
             </Menu>
-            <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Seleccionar parada"
-                autoFocus
-                value={this.state.stop}
-                onClick={this.handleClick}
-                aria-controls="simple-menu"
-                aria-haspopup="true"
-              />
-              <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Confirmar solicitud
-              </Button>
+            <Menu
+              id="end-menu"
+              anchorEl={this.state.anchorEnd}
+              keepMounted
+              open={Boolean(this.state.anchorEnd)}
+            >
+              {this.renderSelectStop(true)}
+            </Menu>
+            <form noValidate>
+              <div className={classes.form}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={12}>
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      label="Seleccionar parada"
+                      autoFocus
+                      value={this.state.stop}
+                      onClick={this.handleClick('anchorEl')}
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      label="Seleccionar Destino"
+                      autoFocus
+                      value={this.state.end}
+                      onClick={this.handleClick('anchorEnd')}
+                      aria-controls="end-menu"
+                      aria-haspopup="true"
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={3}>
+                    <Typography align="center">Asientos a reservar</Typography>
+                  </Grid>
+                  <Grid item xs={4} md={1}></Grid>
+                  <Grid item xs={4} md={2} align="center">
+                    <Select
+                      native
+                      value={this.state.reserved_seats}
+                      onChange={this.handleChange('reserved_seats')}
+                      className="input-layout"
+                      inputProps={{ style: { textIndent: 30 } }}
+                    >
+                      {this.rederSelectOptions()}
+                    </Select>
+                  </Grid>
+                  <Grid item xs={12} md={12}>
+                    <Button
+                      type="button"
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      onClick={() =>
+                        onSubmit({
+                          trip_id,
+                          reserved_seats,
+                          stop,
+                          end,
+                          trip_route_points,
+                        })
+                      }
+                    >
+                      Confirmar solicitud
+                    </Button>
+                  </Grid>
+                </Grid>
+              </div>
             </form>
           </CardContent>
         </Collapse>
@@ -275,6 +375,7 @@ class FindTripsCard extends React.Component {
 }
 
 FindTripsCard.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
   trip: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 }

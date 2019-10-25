@@ -2,11 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
 
-import cookies from 'js-cookie'
-
 // Store
 import { connect } from 'react-redux'
 import { loginUser } from '../../redux/actions/user'
+import { setObject, USER_DATA, TOKEN } from '../../utils/storeData'
 
 // Components
 import { SignInForm } from '../../components/index'
@@ -36,8 +35,8 @@ class SignInScreen extends React.Component {
     if (user.error || !user.payload.data.email) return alert(MESSAGE)
 
     this.setState({ loading: false })
-    cookies.set('@userToken', user.payload.data.token)
-    cookies.set('@userId', user.payload.data.userId)
+    setObject(USER_DATA, user.payload.data)
+    setObject(TOKEN, user.payload.data.token)
     history.push('/find-trip')
   }
 

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 
 import { fetchFutureTrips } from '../../redux/actions/trips'
 import { RequestedTripCard } from '../../components/MyTripsCard/index'
-import { ParseDate, ParseHour } from '../../components/Parse/index'
 
 // Store
 
@@ -30,9 +29,9 @@ class RequestedTrip extends Component {
     // this.getTrips2()
   }
 
-  async fetchTrips(token) {
+  async fetchTrips() {
     // eslint-disable-next-line no-console
-    console.log(token)
+    // console.log(token)
     // fetch from server
     return [
       {
@@ -110,14 +109,10 @@ class RequestedTrip extends Component {
     ]
   }
 
-  async getTrips(token) {
+  async getTrips() {
     this.setState({ loading: true })
 
-    const etd = '2019-10-23T05:40:00.000Z'
-    console.log(ParseDate(etd))
-    console.log(ParseHour(etd))
-
-    await this.fetchTrips(token)
+    await this.fetchTrips()
       .then(trips => this.setState({ trips }))
       .catch(err => {
         this.setState({ loading: false })
