@@ -5,6 +5,7 @@ import { updateUserThunk } from '../../../redux/actions/updateUser'
 import TextField from '@material-ui/core/TextField'
 import { Typography } from '@material-ui/core'
 import PropTypes from 'prop-types'
+import uploadFile from '../../../utils/uploadFile'
 
 const testInfo = {
   user: {
@@ -39,7 +40,14 @@ const UpdateForm = ({ user_id }) => {
 
   const updateUser = e => {
     e.preventDefault()
-    dispatch(updateUserThunk(user_id))
+
+    uploadFile(uploadAvatarInput).then(res => {
+      // esta es la id que se almacena como avatar
+      console.log(res.image_id)
+      // esta es la url de la imagen
+      console.log(res.image_urls.fetch)
+      dispatch(updateUserThunk(user_id))
+    })
   }
 
   const tengoAuto = () => {
@@ -111,25 +119,9 @@ const UpdateForm = ({ user_id }) => {
       </div>
 
       <div className="field">
+        <label htmlFor="Avatar">Avatar</label>
         <div className="control">
-          <span className="file has-name">
-            <label className="file-label">
-              <input
-                ref={uploadAvatarInput}
-                className="file-input"
-                type="file"
-                name="resume"
-                disabled
-              />
-              <span className="file-cta">
-                <span className="file-icon has-margin-right-10">
-                  <i className="material-icons">cloud_upload</i>
-                </span>
-                <span className="file-label">Actualizar Avatar</span>
-              </span>
-              {/* <span className="file-name">Screen Shot 2017-07-29 at 15.54.25.png</span> */}
-            </label>
-          </span>
+          <input ref={uploadAvatarInput} id="file-upload-avatar" type="file" />
         </div>
       </div>
 
