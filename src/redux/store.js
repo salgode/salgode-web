@@ -8,12 +8,8 @@ import axios from 'axios'
 import userReducer from './reducers/user'
 import futureTripReducer from './reducers/trips'
 import allFutureTripReducer from './reducers/allTrips'
-import { userModel } from './models/user'
-import { futureTripsModel } from './models/trips'
 import createTripReducer from './reducers/createTrip'
 import spotsReducer from './reducers/spots'
-import { createTripModel } from './models/createTrip'
-import { spotsModel } from './models/spots'
 import slotsReducer from './reducers/slots'
 import updateUserReducer from './reducers/updateUser'
 import vehiclesReducer from './reducers/vehicles'
@@ -58,6 +54,7 @@ export const store = createStore(
     createTrip: createTripModel,
     spots: spotsModel,
     futureTrips: futureTripsModel,
+    vehicles: vehiclesModel,
   },
   composeEnhancer(applyMiddleware(...middlewares))
 )

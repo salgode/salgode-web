@@ -42,10 +42,6 @@ import { faAddressBook, faListAlt } from '@fortawesome/free-regular-svg-icons'
 
 import { Link } from 'react-router-dom'
 
-import { Link } from 'react-router-dom'
-
-import { Link } from 'react-router-dom'
-
 const drawerWidth = 240
 
 const useStyles = makeStyles(theme => ({
