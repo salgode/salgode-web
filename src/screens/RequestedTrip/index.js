@@ -2,15 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+// Store
 import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
 import { RequestedTripCard } from '../../components/MyTripsCard/index'
-
-// Store
 
 // Components
 import { CircularProgress } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
-// const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
 class RequestedTrip extends Component {
   constructor(props) {
@@ -25,8 +23,8 @@ class RequestedTrip extends Component {
   }
 
   componentDidMount() {
-    this.getTrips(1234)
-    // this.getTrips2()
+    // this.getTrips()
+    this.getTrips2()
   }
 
   async fetchTrips() {
@@ -125,7 +123,7 @@ class RequestedTrip extends Component {
   async getTrips2() {
     this.setState({ loading: true })
 
-    const response = await this.props.fetchRequestedTrips(12345) // this.props.user.token
+    const response = await this.props.fetchRequestedTrips(this.props.user.token)
 
     if (response.error) {
       alert(
@@ -135,7 +133,6 @@ class RequestedTrip extends Component {
     }
 
     this.setState({ trips: this.props.requestedTrips.trips, loading: false })
-    // this.setState({ trips: this.props.trips })
   }
 
   render() {
@@ -145,7 +142,6 @@ class RequestedTrip extends Component {
         {loading && <CircularProgress />}
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
-            // Return the element. Also pass key
             return (
               <Grid item md={4} key={i}>
                 <RequestedTripCard trip={trip} />

@@ -18,8 +18,7 @@ export class Profile extends Component {
   }
   async getVehicles() {
     this.setState({ loading: true })
-    // console.log(this.props.user.token)
-    const response = await this.props.fetchVehicles(12345) // this.props.user.token
+    const response = await this.props.fetchVehicles(this.props.user.token)
 
     if (response.error) {
       this.setState({ loading: false })

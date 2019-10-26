@@ -107,6 +107,9 @@ class RequestedTrip extends Component {
     if (status === 'accepted') {
       return classes.primary
     }
+    if (status === 'completed') {
+      return classes.primary
+    }
     if (status === 'declined' || status === 'cancelled') {
       return classes.danger
     } else {
@@ -116,6 +119,7 @@ class RequestedTrip extends Component {
 
   setLabelChip = status => {
     if (status === 'accepted') return 'Aceptado'
+    if (status === 'completed') return 'Completado'
     if (status === 'declined') return 'Rechazado'
     if (status === 'cancelled') {
       return 'Cancelado'
@@ -129,7 +133,7 @@ class RequestedTrip extends Component {
     const { expanded } = this.state
     const { fetchdetailsTrip, trip } = this.props
 
-    const reserve = await fetchdetailsTrip(12345, trip.trip_id) // this.props.user.token
+    const reserve = await fetchdetailsTrip(this.props.user.token, trip.trip_id)
 
     if (reserve.error) {
       this.setState({ loading: false })
@@ -181,15 +185,15 @@ class RequestedTrip extends Component {
   render() {
     const { expanded } = this.state
     const { classes, trip } = this.props
-    const { trip_status } = trip // trip_times, driver, trip_route
-    const date = ParseDate('2019-10-23T05:40:00.000Z') // trip_times.etd
-    const time = ParseHour('2019-10-23T05:40:00.000Z') // trip_times.etd
+    const { reservation_status, driver, trip_route, etd_info } = trip
+    const date = ParseDate(etd_info.etd)
+    const time = ParseHour(etd_info.etd)
     return (
       <Card className={classes.card}>
         <Chip
-          className={this.setColorChip(trip_status)}
+          className={this.setColorChip(reservation_status)}
           size="small"
-          label={this.setLabelChip(trip_status)}
+          label={this.setLabelChip(reservation_status)}
         />
         <CardHeader
           className={classes.avatar}
@@ -198,17 +202,17 @@ class RequestedTrip extends Component {
               B
             </Avatar>
           }
-          title={'Nicolas'} // driver.driver_name
+          title={driver.driver_name}
         />
         <CardContent className={classes.cardContent}>
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-              {'trip_route.start.name'}
+              {trip_route.start.name}
             </Typography>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-              {'trip_route.end.name'}
+              {trip_route.end.name}
             </Typography>
           </div>
           <div className={classes.marginCard}>
@@ -231,7 +235,8 @@ class RequestedTrip extends Component {
           >
             VER VIAJE
           </Button>
-          {(trip_status !== 'declined' || trip_status !== 'cancelled') && (
+          {(reservation_status === 'accepted' ||
+            reservation_status === 'pending') && (
             <Button variant="outlined" className={classes.buttonCancel}>
               CANCELAR
             </Button>
@@ -253,6 +258,7 @@ RequestedTrip.propTypes = {
   classes: PropTypes.object.isRequired,
   trip: PropTypes.object.isRequired,
   tripDetails: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({

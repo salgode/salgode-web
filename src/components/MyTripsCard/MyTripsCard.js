@@ -51,8 +51,8 @@ class MyTripsCard extends Component {
   render() {
     const { classes, trip } = this.props
 
-    const date = ParseDate(trip.trip_times.etd)
-    const time = ParseHour(trip.trip_times.etd)
+    const date = ParseDate(trip.etd_info.etd)
+    const time = ParseHour(trip.etd_info.etd)
 
     return (
       <Card className={classes.card}>
