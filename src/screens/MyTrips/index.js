@@ -7,8 +7,6 @@ import { fetchFutureTrips } from '../../redux/actions/trips'
 import './style.sass'
 import { MyTripsCard } from '../../components/MyTripsCard/index'
 
-// Store
-
 // Components
 import { CircularProgress } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
@@ -30,8 +28,7 @@ class MyTrips extends Component {
 
   async getTrips() {
     this.setState({ loading: true })
-    // console.log(this.props.user.token)
-    const response = await this.props.fetchFutureTrips(12345) // this.props.user.token
+    const response = await this.props.fetchFutureTrips(this.props.user.token)
 
     if (response.error) {
       this.setState({ loading: false })

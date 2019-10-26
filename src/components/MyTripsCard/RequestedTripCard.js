@@ -129,7 +129,7 @@ class RequestedTrip extends Component {
     const { expanded } = this.state
     const { fetchdetailsTrip, trip } = this.props
 
-    const reserve = await fetchdetailsTrip(12345, trip.trip_id) // this.props.user.token
+    const reserve = await fetchdetailsTrip(this.props.user.token, trip.trip_id)
 
     if (reserve.error) {
       this.setState({ loading: false })
@@ -253,6 +253,7 @@ RequestedTrip.propTypes = {
   classes: PropTypes.object.isRequired,
   trip: PropTypes.object.isRequired,
   tripDetails: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({

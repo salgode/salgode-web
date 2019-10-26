@@ -27,7 +27,7 @@ class FindTripScreen extends Component {
 
   async getTrips() {
     this.setState({ loading: true })
-    const response = await this.props.fetchAllFutureTrips(12345) // this.props.user.token
+    const response = await this.props.fetchAllFutureTrips(this.props.user.token)
 
     if (response.error) {
       this.setState({ loading: false })
@@ -88,6 +88,7 @@ FindTripScreen.propTypes = {
   fetchAllFutureTrips: PropTypes.func.isRequired,
   allFutureTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   reserveTrip: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({

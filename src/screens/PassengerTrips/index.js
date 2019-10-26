@@ -13,6 +13,7 @@ class PassengerTrips extends Component {
     super(props)
     this.state = {
       loading: false,
+      trips: [],
     }
   }
   componentDidMount() {
@@ -21,12 +22,10 @@ class PassengerTrips extends Component {
 
   async getPassengerTrips() {
     this.setState({ loading: true })
-    const { getPassengerTripsComponent } = this.props
-    await getPassengerTripsComponent()
-    const { passengerTrips } = this.props
-    const { error } = passengerTrips
+    const { getPassengerTripsComponent, user } = this.props
+    const response = await getPassengerTripsComponent(user.token)
 
-    if (error) {
+    if (response.error) {
       this.setState({ loading: false })
       alert(
         'Error obteniendo viajes',
@@ -34,20 +33,18 @@ class PassengerTrips extends Component {
       )
     }
 
-    this.setState({ loading: false })
+    this.setState({ trips: this.props.passengerTrips.tripList, loading: false })
   }
 
   render() {
-    const { passengerTrips } = this.props
-    const { loading } = this.state
-    const { tripList } = passengerTrips
+    const { loading, trips } = this.state
     if (loading) {
       return <div>{loading && <CircularProgress />}</div>
     }
     return (
       <div>
         <Grid container spacing={2} justify="center" alignItems="center">
-          {tripList.map((trip, index) => {
+          {trips.map((trip, index) => {
             return (
               <Grid item md={4} key={index}>
                 <PassengerTripCard trip={trip} />
@@ -63,18 +60,17 @@ class PassengerTrips extends Component {
 PassengerTrips.propTypes = {
   passengerTrips: PropTypes.object.isRequired,
   getPassengerTripsComponent: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
-  getPassengerTripsComponent: () => dispatch(getPassengerTripsAction()),
+  getPassengerTripsComponent: token => dispatch(getPassengerTripsAction(token)),
 })
 
-const mapStateToProps = state => {
-  const { passengerTrips } = state
-  return {
-    passengerTrips,
-  }
-}
+const mapStateToProps = state => ({
+  user: state.user,
+  passengerTrips: state.passengerTrips,
+})
 
 export default connect(
   mapStateToProps,
