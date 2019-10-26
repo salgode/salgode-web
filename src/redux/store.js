@@ -1,22 +1,26 @@
 import { applyMiddleware, combineReducers, createStore, compose } from 'redux'
 import axiosMiddleware from 'redux-axios-middleware'
+import thunk from 'redux-thunk'
+import { reducer as formReducer } from 'redux-form'
 import axios from 'axios'
+
+// Reducers
 import userReducer from './reducers/user'
 import futureTripReducer from './reducers/trips'
 import allFutureTripReducer from './reducers/allTrips'
-import { userModel } from './models/user'
-import { futureTripsModel } from './models/trips'
 import createTripReducer from './reducers/createTrip'
 import spotsReducer from './reducers/spots'
+import slotsReducer from './reducers/slots'
+import updateUserReducer from './reducers/updateUser'
+import vehiclesReducer from './reducers/vehicles'
+import passengerTripsReducer from './reducers/passengerTrips'
+
+// Models
 import { createTripModel } from './models/createTrip'
 import { spotsModel } from './models/spots'
-import slotsReducer from './reducers/slots'
-import { reducer as formReducer } from 'redux-form'
-import updateUserReducer from './reducers/updateUser'
-import thunk from 'redux-thunk'
-import vehiclesReducer from './reducers/vehicles'
+import { futureTripsModel } from './models/trips'
+import { userModel } from './models/user'
 import { vehiclesModel } from './models/vehicles'
-import passengerTripsReducer from './reducers/passengerTrips'
 
 export const client = axios.create({
   baseURL: 'https://playground-api.salgode.com',
@@ -48,6 +52,7 @@ export const store = createStore(
     createTrip: createTripModel,
     spots: spotsModel,
     futureTrips: futureTripsModel,
+    vehicles: vehiclesModel,
   },
   composeEnhancer(applyMiddleware(...middlewares))
 )
