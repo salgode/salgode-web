@@ -9,10 +9,9 @@ const UpdateUser = () => {
   const [initialValues, setInitialValues] = useState({})
 
   useEffect(() => {
-    const { name, email, lastName, phone } = getObject(USER_DATA)
+    const { name, lastName, phone } = getObject(USER_DATA)
     const data = {
       name: name,
-      email: email,
       lastName: lastName,
       phone: phone,
     }

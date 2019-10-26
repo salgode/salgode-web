@@ -30,28 +30,25 @@ export const updateUserThunk = selfieLink => {
   return async (dispatch, getState) => {
     dispatch(startingUpdateUser())
     try {
-      const { name, email, lastName, phone } = getState().form.updateUser.values
+      const { name, lastName, phone } = getState().form.updateUser.values
       const { userId, token } = getObject(USER_DATA)
 
       const data = {
         user_id: userId,
         first_name: name,
         last_name: lastName,
-        email: email,
         phone: phone,
       }
 
       if (selfieLink) {
         data.selfieLink = selfieLink
       }
-      console.log(selfieLink)
+
       const res = await axiosClient.put(`/user`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      // borrar
-      console.log(res)
       if (res.status === 200 && res.data.success) {
         dispatch(successUpdateUser())
       }

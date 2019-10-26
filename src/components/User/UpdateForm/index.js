@@ -84,16 +84,6 @@ const UpdateForm = () => {
       <div className="field">
         <div className="control">
           <Field
-            name="email"
-            component={renderTextField}
-            type="text"
-            label="Email"
-          />
-        </div>
-      </div>
-      <div className="field">
-        <div className="control">
-          <Field
             name="phone"
             component={renderTextField}
             type="text"
