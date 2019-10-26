@@ -28,7 +28,7 @@ class CreateTripScreen extends Component {
   }
 
   componentDidMount = () => {
-    this.props.getAllSpots()
+    this.props.getAllSpots(this.props.user.token)
   }
 
   handleDatePicked = date => {
@@ -99,6 +99,7 @@ CreateTripScreen.propTypes = {
   getAllSpots: PropTypes.func.isRequired,
   setStartStop: PropTypes.func.isRequired,
   setEndStop: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = ({ user, createTrip, spots }) => {

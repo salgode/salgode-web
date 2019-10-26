@@ -14,6 +14,7 @@ import {
   RequestedTrip,
   UpdateUser,
   AddStops,
+  PassengerTrips,
 } from './screens'
 
 import routes from './routes.js'
@@ -53,7 +54,12 @@ const App = () => {
                 path={routes.requestedTrip}
                 component={RequestedTrip}
               />
-              <Route exact path={routes.addStops} component={AddStops} />
+              <PrivateRoute
+                exact
+                path={routes.passengerTrips}
+                component={PassengerTrips}
+              />
+              <PrivateRoute exact path={routes.addStops} component={AddStops} />
               <Route component={NotFound} />
             </Switch>
           </Container>

@@ -33,7 +33,7 @@ class AddStopsScreen extends Component {
 
   componentDidMount = () => {
     if (!this.props.spots.length) {
-      this.props.getAllSpots() // TODO unnecesary call if comming from createTrip screen
+      this.props.getAllSpots(this.props.user.token) // TODO unnecesary call if comming from createTrip screen
     }
   }
 
@@ -121,6 +121,7 @@ AddStopsScreen.propTypes = {
   createTrip: PropTypes.func.isRequired,
   getAllSpots: PropTypes.func.isRequired,
   history: PropTypes.object,
+  user: PropTypes.object,
 }
 
 const mapStateToProps = ({ user, createTrip, spots }) => {

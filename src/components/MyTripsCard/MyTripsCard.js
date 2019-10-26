@@ -23,6 +23,7 @@ const styles = theme => ({
     marginTop: '20px',
     minWidth: 300,
     minHeight: 220,
+    display: 'flex',
   },
   [theme.breakpoints.down('sm')]: {
     card: {
@@ -50,31 +51,35 @@ class MyTripsCard extends Component {
   render() {
     const { classes, trip } = this.props
 
-    const date = ParseDate(trip.trip_times.etd)
-    const time = ParseHour(trip.trip_times.etd)
+    const date = ParseDate(trip.etd_info.etd)
+    const time = ParseHour(trip.etd_info.etd)
 
     return (
       <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="body2" component="p">
-            <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-            {trip.trip_route.start.name}
-          </Typography>
-          <Typography className="relative" color="textSecondary">
+        <CardContent className="card-content">
+          <div className="stops">
+            <Typography variant="body2" component="p">
+              <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
+              {trip.trip_route.start.name}
+            </Typography>
+            <Typography variant="body2" component="p">
+              <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
+              {trip.trip_route.end.name}
+            </Typography>
+          </div>
+          <div className="date-time">
+            <Typography variant="body1" component="p">
+              <FontAwesomeIcon icon={faCalendarAlt} className="calendar-icon" />
+              {date}
+            </Typography>
+            <Typography variant="body1" component="p">
+              <FontAwesomeIcon icon={faClock} className="calendar-icon" />
+              {time}
+            </Typography>
+          </div>
+          <Typography className="available-seats" color="textSecondary">
             {trip.available_seats}
             <FontAwesomeIcon icon={faUsers} className="relative" />
-          </Typography>
-          <Typography variant="body2" component="p">
-            <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-            {trip.trip_route.end.name}
-          </Typography>
-          <Typography variant="body2" component="p">
-            <FontAwesomeIcon icon={faCalendarAlt} className="calendar-icon" />
-            {date}
-          </Typography>
-          <Typography variant="body2" component="p">
-            <FontAwesomeIcon icon={faClock} className="calendar-icon" />
-            {time}
           </Typography>
         </CardContent>
       </Card>

@@ -2,15 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { fetchFutureTrips } from '../../redux/actions/trips'
-import { RequestedTripCard } from '../../components/MyTripsCard/index'
-
 // Store
+import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
+import { RequestedTripCard } from '../../components/MyTripsCard/index'
 
 // Components
 import { CircularProgress } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
-// const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
 class RequestedTrip extends Component {
   constructor(props) {
@@ -25,8 +23,8 @@ class RequestedTrip extends Component {
   }
 
   componentDidMount() {
-    this.getTrips(1234)
-    // this.getTrips2()
+    // this.getTrips()
+    this.getTrips2()
   }
 
   async fetchTrips() {
@@ -123,7 +121,9 @@ class RequestedTrip extends Component {
   }
 
   async getTrips2() {
-    const response = await this.props.fetchFutureTrips(12345) // this.props.user.token
+    this.setState({ loading: true })
+
+    const response = await this.props.fetchRequestedTrips(this.props.user.token)
 
     if (response.error) {
       alert(
@@ -132,7 +132,7 @@ class RequestedTrip extends Component {
       )
     }
 
-    this.setState({ trips: this.props.trips })
+    this.setState({ trips: this.props.requestedTrips.trips, loading: false })
   }
 
   render() {
@@ -142,7 +142,6 @@ class RequestedTrip extends Component {
         {loading && <CircularProgress />}
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
-            // Return the element. Also pass key
             return (
               <Grid item md={4} key={i}>
                 <RequestedTripCard trip={trip} />
@@ -157,12 +156,12 @@ class RequestedTrip extends Component {
 
 RequestedTrip.propTypes = {
   isRequestedTrips: PropTypes.bool,
-  fetchFutureTrips: PropTypes.func.isRequired,
+  fetchRequestedTrips: PropTypes.func.isRequired,
   user: PropTypes.shape({
     token: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
   }).isRequired,
-  trips: PropTypes.array,
+  requestedTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
 
 RequestedTrip.defaultProps = {
@@ -170,11 +169,12 @@ RequestedTrip.defaultProps = {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchFutureTrips: token => dispatch(fetchFutureTrips(token)),
+  fetchRequestedTrips: token => dispatch(fetchRequestedTrips(token)),
 })
 
 const mapStateToProps = state => ({
   user: state.user,
+  requestedTrips: state.requestedTrips,
 })
 
 export default connect(
