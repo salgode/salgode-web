@@ -1,24 +1,47 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+
 import { getPassengerTripsAction } from '../../redux/actions/passengerTrips'
+import PassengerTripCard from '../../components/PassengerTrips/index'
+
 import { CircularProgress } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
-import PassengerTripCard from '../../components/PassengerTrips/index'
 
 class PassengerTrips extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      loading: false,
+    }
   }
   componentDidMount() {
-    const { getPassengerTripsComponent } = this.props
-    getPassengerTripsComponent()
+    this.getPassengerTrips()
   }
+
+  async getPassengerTrips() {
+    this.setState({ loading: true })
+    const { getPassengerTripsComponent } = this.props
+    await getPassengerTripsComponent()
+    const { passengerTrips } = this.props
+    const { error } = passengerTrips
+
+    if (error) {
+      this.setState({ loading: false })
+      alert(
+        'Error obteniendo viajes',
+        'Hubo un problema obteniendo los viajes. Por favor intentalo de nuevo.'
+      )
+    }
+
+    this.setState({ loading: false })
+  }
+
   render() {
     const { passengerTrips } = this.props
-    const { tripList, loading, error } = passengerTrips
-    if (error === true) {
-      console.log('ha ocurrido un error')
-    } else if (loading) {
+    const { loading } = this.state
+    const { tripList } = passengerTrips
+    if (loading) {
       return <div>{loading && <CircularProgress />}</div>
     }
     return (
@@ -28,7 +51,6 @@ class PassengerTrips extends Component {
             return (
               <Grid item md={4} key={index}>
                 <PassengerTripCard trip={trip} />
-                <p key={index}>{trip['trip_id']}</p>
               </Grid>
             )
           })}
@@ -36,6 +58,11 @@ class PassengerTrips extends Component {
       </div>
     )
   }
+}
+
+PassengerTrips.propTypes = {
+  passengerTrips: PropTypes.object.isRequired,
+  getPassengerTripsComponent: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({

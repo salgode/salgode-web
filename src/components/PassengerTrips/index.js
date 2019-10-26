@@ -1,17 +1,23 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+
+import { ParseDate, ParseHour } from '../../components/Parse/index'
+import './index.sass'
 
 import Card from '@material-ui/core/Card'
-
-import Chip from '@material-ui/core/Chip'
+import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
-
+import Chip from '@material-ui/core/Chip'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
-import './index.sass'
-import { CardContent } from '@material-ui/core'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircle, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 const styles = theme => ({
   card: {
@@ -42,24 +48,8 @@ const styles = theme => ({
     margin: '0px 0px 0px 39px',
     padding: '0px',
   },
-  avatar: {
-    marginLeft: '3%',
-  },
   marginCard: {
     marginBottom: '3%',
-  },
-  buttonContainer: {
-    padding: '20px',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  buttonSuccess: {
-    color: '#064acb',
-    borderColor: '#064acb',
-  },
-  buttonCancel: {
-    color: 'red',
-    borderColor: 'red',
   },
   primary: {
     backgroundColor: 'green',
@@ -84,33 +74,82 @@ class PassengerTripCard extends Component {
     this.state = {}
   }
 
-  render() {
-    const {
-      classes: { card, cardContent },
-      trip,
-    } = this.props
-    const driver = {
-      name: trip['driver']['driver_name'],
+  setColorChip = status => {
+    const { classes } = this.props
+    if (status === 'open') return classes.primary
+    if (status === 'completed') return classes.primary
+    if (status === 'in_progress') return classes.secondary
+    if (status === 'cancelled') return classes.danger
+  }
+
+  setLabelChip = status => {
+    if (status === 'open') return 'Abierto'
+    if (status === 'completed') return 'Completado'
+    if (status === 'in_progress') return 'En proceso'
+    if (status === 'cancelled') return 'Cancelado'
+  }
+
+  renderSwitchStop(key, last) {
+    switch (key) {
+      case 0:
+        return <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
+      case last:
+        return <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
+      default:
+        return (
+          <FontAwesomeIcon
+            icon={faCircleNotch}
+            className="middle-circle-icon"
+          />
+        )
     }
-    const steps = trip['trip_route_points']
+  }
+
+  render() {
+    const { classes, trip } = this.props
+    const { trip_status, driver, trip_route_points, trip_times } = trip
+    const date = ParseDate(trip_times.etd)
+    const time = ParseHour(trip_times.etd)
     return (
-      <Card className={card}>
-        <Chip className={'primary'} size="small" label={status} />
+      <Card className={classes.card}>
+        <Chip
+          className={this.setColorChip(trip_status)}
+          size="small"
+          label={this.setLabelChip(trip_status)}
+        />
         <CardHeader title={driver.name} />
-        <CardContent className={cardContent}>
-          <Stepper>
-            {steps.map(point => {
+        <CardContent className={classes.cardContent}>
+          <List dense={true}>
+            {trip_route_points.map((point, i, arr) => {
               return (
-                <Step key={point['name']}>
-                  <StepLabel>{point['name']}</StepLabel>
-                </Step>
+                <ListItem key={i}>
+                  <ListItemIcon>
+                    {this.renderSwitchStop(i, arr.length - 1)}
+                  </ListItemIcon>
+                  <ListItemText primary={point.name} />
+                </ListItem>
               )
             })}
-          </Stepper>
+          </List>
+          <div className={classes.marginCard}>
+            <Typography variant="body2" component="p">
+              <FontAwesomeIcon icon={faCalendarAlt} className="calendar-icon" />
+              {date}
+            </Typography>
+            <Typography variant="body2" component="p">
+              <FontAwesomeIcon icon={faClock} className="calendar-icon" />
+              {time}
+            </Typography>
+          </div>
         </CardContent>
       </Card>
     )
   }
+}
+
+PassengerTripCard.propTypes = {
+  classes: PropTypes.object.isRequired,
+  trip: PropTypes.object.isRequired,
 }
 
 export default withStyles(styles)(PassengerTripCard)

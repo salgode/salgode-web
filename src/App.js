@@ -54,12 +54,12 @@ const App = () => {
                 path={routes.requestedTrip}
                 component={RequestedTrip}
               />
-              <Route
+              <PrivateRoute
                 exact
                 path={routes.passengerTrips}
                 component={PassengerTrips}
               />
-              <Route exact path={routes.addStops} component={AddStops} />
+              <PrivateRoute exact path={routes.addStops} component={AddStops} />
               <Route component={NotFound} />
             </Switch>
           </Container>
