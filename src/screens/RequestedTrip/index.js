@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { fetchFutureTrips } from '../../redux/actions/trips'
+import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
 import { RequestedTripCard } from '../../components/MyTripsCard/index'
 
 // Store
@@ -123,7 +123,9 @@ class RequestedTrip extends Component {
   }
 
   async getTrips2() {
-    const response = await this.props.fetchFutureTrips(12345) // this.props.user.token
+    this.setState({ loading: true })
+
+    const response = await this.props.fetchRequestedTrips(12345) // this.props.user.token
 
     if (response.error) {
       alert(
@@ -132,7 +134,8 @@ class RequestedTrip extends Component {
       )
     }
 
-    this.setState({ trips: this.props.trips })
+    this.setState({ trips: this.props.requestedTrips.trips, loading: false })
+    // this.setState({ trips: this.props.trips })
   }
 
   render() {
@@ -157,12 +160,12 @@ class RequestedTrip extends Component {
 
 RequestedTrip.propTypes = {
   isRequestedTrips: PropTypes.bool,
-  fetchFutureTrips: PropTypes.func.isRequired,
+  fetchRequestedTrips: PropTypes.func.isRequired,
   user: PropTypes.shape({
     token: PropTypes.string.isRequired,
     userId: PropTypes.string.isRequired,
   }).isRequired,
-  trips: PropTypes.array,
+  requestedTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
 
 RequestedTrip.defaultProps = {
@@ -170,11 +173,12 @@ RequestedTrip.defaultProps = {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchFutureTrips: token => dispatch(fetchFutureTrips(token)),
+  fetchRequestedTrips: token => dispatch(fetchRequestedTrips(token)),
 })
 
 const mapStateToProps = state => ({
   user: state.user,
+  requestedTrips: state.requestedTrips,
 })
 
 export default connect(

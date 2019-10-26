@@ -9,7 +9,7 @@ export function fetchRequestedTrips(authToken) {
     type: actions.TRIPS_FETCH_REQUESTED,
     payload: {
       request: {
-        url: `driver/trips`,
+        url: `passenger/reservations`,
         method: 'get',
         headers: {
           Authorization: `Bearer ${authToken}`,
