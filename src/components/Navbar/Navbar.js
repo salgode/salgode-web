@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import './Navbar.sass'
 import { resetStorage } from '../../utils/storeData'
+import routes from '../../routes.js'
 
 import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
@@ -35,9 +36,9 @@ import {
   faCarAlt,
   faPlusCircle,
   faUser,
-  faUserFriends,
+  faWalking,
 } from '@fortawesome/free-solid-svg-icons'
-import { faAddressBook } from '@fortawesome/free-regular-svg-icons'
+import { faAddressBook, faListAlt } from '@fortawesome/free-regular-svg-icons'
 
 import { Link } from 'react-router-dom'
 
@@ -170,6 +171,7 @@ function logout() {
 function DrawerRender(open, setOpen, close) {
   const classes = useStyles()
   const [openDrop, setOpenDrop] = React.useState(false)
+  const [openDropPass, setOpenDropPass] = React.useState(false)
   const [selectedIndex, setSelectedIndex] = React.useState(0)
 
   const handleDrawerClose = () => {
@@ -178,6 +180,10 @@ function DrawerRender(open, setOpen, close) {
 
   const handleClick = () => {
     setOpenDrop(!openDrop)
+  }
+
+  const handleClick2 = () => {
+    setOpenDropPass(!openDropPass)
   }
 
   const handleListItemClick = (event, index) => {
@@ -207,28 +213,54 @@ function DrawerRender(open, setOpen, close) {
             selected={selectedIndex === 0}
             onClick={event => handleListItemClick(event, 0)}
             component={Link}
-            to="/find-trip"
+            to={routes.requestTrip}
           >
             <ListItemIcon>
               <FontAwesomeIcon icon={faUser} style={{ fontSize: 'medium' }} />
             </ListItemIcon>
             <ListItemText primary="Pedir Viaje" />
           </ListItem>
-          <ListItem
-            button
-            selected={selectedIndex === 1}
-            onClick={event => handleListItemClick(event, 1)}
-            component={Link}
-            to="/requested-trip"
-          >
+          <ListItem button onClick={handleClick2}>
             <ListItemIcon>
-              <FontAwesomeIcon
-                icon={faUserFriends}
-                style={{ fontSize: 'medium' }}
-              />
+              <FontAwesomeIcon icon={faWalking} size="lg" />
             </ListItemIcon>
-            <ListItemText primary="Pedidos" />
+            <ListItemText primary="Pasajero" />
+            {openDropPass ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
+          <Collapse in={openDropPass} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                component={Link}
+                to={routes.requestedTrip}
+                className={classes.nested}
+                selected={selectedIndex === 1}
+                onClick={event => handleListItemClick(event, 1)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon
+                    icon={faListAlt}
+                    style={{ fontSize: 'medium' }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary="Estado Reservas" />
+              </ListItem>
+              <ListItem
+                button
+                component={Link}
+                to={routes.passengerTrips}
+                className={classes.nested}
+                selected={selectedIndex === 2}
+                onClick={event => handleListItemClick(event, 2)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faCarAlt} size="lg" />
+                </ListItemIcon>
+                <ListItemText primary="Mis Viajes" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <Divider />
           <ListItem button onClick={handleClick}>
             <ListItemIcon>
               <FontAwesomeIcon icon={faCarAlt} size="lg" />
@@ -241,7 +273,7 @@ function DrawerRender(open, setOpen, close) {
               <ListItem
                 button
                 component={Link}
-                to="/create-trip"
+                to={routes.createTrip}
                 className={classes.nested}
                 selected={selectedIndex === 2}
                 onClick={event => handleListItemClick(event, 2)}
@@ -257,7 +289,7 @@ function DrawerRender(open, setOpen, close) {
               <ListItem
                 button
                 component={Link}
-                to="/my-trips"
+                to={routes.myTrips}
                 className={classes.nested}
                 selected={selectedIndex === 3}
                 onClick={event => handleListItemClick(event, 3)}
@@ -273,7 +305,7 @@ function DrawerRender(open, setOpen, close) {
           <ListItem
             button
             component={Link}
-            to="/profile"
+            to={routes.profile}
             selected={selectedIndex === 4}
             onClick={event => handleListItemClick(event, 4)}
           >
@@ -283,7 +315,12 @@ function DrawerRender(open, setOpen, close) {
             <ListItemText primary="Mi Perfil" />
           </ListItem>
           <Divider />
-          <ListItem button component={Link} to="/" onClick={() => logout()}>
+          <ListItem
+            button
+            component={Link}
+            to={routes.signIn}
+            onClick={() => logout()}
+          >
             <ListItemIcon>
               <InputIcon />
             </ListItemIcon>
