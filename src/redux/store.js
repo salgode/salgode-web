@@ -14,6 +14,7 @@ import slotsReducer from './reducers/slots'
 import updateUserReducer from './reducers/updateUser'
 import vehiclesReducer from './reducers/vehicles'
 import passengerTripsReducer from './reducers/passengerTrips'
+import requestedTripsReducer from './reducers/requestedTrip'
 
 // Models
 import { createTripModel } from './models/createTrip'
@@ -43,6 +44,7 @@ const reducer = combineReducers({
   loading: false,
   vehicles: vehiclesReducer,
   passengerTrips: passengerTripsReducer,
+  requestedTrips: requestedTripsReducer,
 })
 
 export const store = createStore(

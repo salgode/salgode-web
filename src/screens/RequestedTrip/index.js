@@ -2,15 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
+// Store
 import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
 import { RequestedTripCard } from '../../components/MyTripsCard/index'
-
-// Store
 
 // Components
 import { CircularProgress } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
-// const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
 class RequestedTrip extends Component {
   constructor(props) {
@@ -25,8 +23,8 @@ class RequestedTrip extends Component {
   }
 
   componentDidMount() {
-    this.getTrips()
-    // this.getTrips2()
+    // this.getTrips()
+    this.getTrips2()
   }
 
   async fetchTrips() {
