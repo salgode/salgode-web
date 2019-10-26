@@ -7,13 +7,16 @@ import { resetStorage } from '../../utils/storeData'
 import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Collapse from '@material-ui/core/Collapse'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 import Fab from '@material-ui/core/Fab'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import IconButton from '@material-ui/core/IconButton'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -28,7 +31,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCarAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCarAlt,
+  faPlusCircle,
+  faUser,
+  faUserFriends,
+} from '@fortawesome/free-solid-svg-icons'
+import { faAddressBook } from '@fortawesome/free-regular-svg-icons'
 
 import { Link } from 'react-router-dom'
 
@@ -74,6 +83,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
   },
   hide: {
     display: 'none',
@@ -155,69 +167,131 @@ function logout() {
   resetStorage()
 }
 
-function DrawerRender(open, setOpen) {
+function DrawerRender(open, setOpen, close) {
   const classes = useStyles()
+  const [openDrop, setOpenDrop] = React.useState(false)
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
 
   const handleDrawerClose = () => {
-    setOpen(false)
+    open && !close ? (close = true) : setOpen(false)
+  }
+
+  const handleClick = () => {
+    setOpenDrop(!openDrop)
+  }
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index)
   }
 
   return (
-    <Drawer
-      className={classes.drawer}
-      variant="persistent"
-      anchor="right"
-      open={open}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronRightIcon />
-        </IconButton>
-      </div>
-      <Divider />
-      <List>
-        <ListItem button component={Link} to="/find-trip">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faCarAlt} />
-          </ListItemIcon>
-          <ListItemText primary="Pedir Viaje" />
-        </ListItem>
-        <ListItem button component={Link} to="/my-trips">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faCarAlt} />
-          </ListItemIcon>
-          <ListItemText primary="Mis Viajes" />
-        </ListItem>
-        <ListItem button component={Link} to="/requested-trip">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faCarAlt} />
-          </ListItemIcon>
-          <ListItemText primary="Pedidos" />
-        </ListItem>
-        <ListItem button component={Link} to="/create-trip">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faPlusCircle} />
-          </ListItemIcon>
-          <ListItemText primary="Crear Viaje" />
-        </ListItem>
-        <ListItem button component={Link} to="/profile">
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Perfil" />
-        </ListItem>
+    <ClickAwayListener onClickAway={handleDrawerClose}>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="right"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
         <Divider />
-        <ListItem button component={Link} to="/" onClick={() => logout()}>
-          <ListItemIcon>
-            <InputIcon />
-          </ListItemIcon>
-          <ListItemText primary="Log Out" />
-        </ListItem>
-      </List>
-    </Drawer>
+        <List>
+          <ListItem
+            button
+            selected={selectedIndex === 0}
+            onClick={event => handleListItemClick(event, 0)}
+            component={Link}
+            to="/find-trip"
+          >
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faUser} style={{ fontSize: 'medium' }} />
+            </ListItemIcon>
+            <ListItemText primary="Pedir Viaje" />
+          </ListItem>
+          <ListItem
+            button
+            selected={selectedIndex === 1}
+            onClick={event => handleListItemClick(event, 1)}
+            component={Link}
+            to="/requested-trip"
+          >
+            <ListItemIcon>
+              <FontAwesomeIcon
+                icon={faUserFriends}
+                style={{ fontSize: 'medium' }}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Pedidos" />
+          </ListItem>
+          <ListItem button onClick={handleClick}>
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faCarAlt} size="lg" />
+            </ListItemIcon>
+            <ListItemText primary="Conductor" />
+            {openDrop ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openDrop} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                component={Link}
+                to="/create-trip"
+                className={classes.nested}
+                selected={selectedIndex === 2}
+                onClick={event => handleListItemClick(event, 2)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon
+                    icon={faPlusCircle}
+                    style={{ fontSize: 'medium' }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary="Crear Viaje" />
+              </ListItem>
+              <ListItem
+                button
+                component={Link}
+                to="/my-trips"
+                className={classes.nested}
+                selected={selectedIndex === 3}
+                onClick={event => handleListItemClick(event, 3)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faCarAlt} size="lg" />
+                </ListItemIcon>
+                <ListItemText primary="Mis Viajes" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <Divider />
+          <ListItem
+            button
+            component={Link}
+            to="/profile"
+            selected={selectedIndex === 4}
+            onClick={event => handleListItemClick(event, 4)}
+          >
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faAddressBook} size="lg" />
+            </ListItemIcon>
+            <ListItemText primary="Mi Perfil" />
+          </ListItem>
+          <Divider />
+          <ListItem button component={Link} to="/" onClick={() => logout()}>
+            <ListItemIcon>
+              <InputIcon />
+            </ListItemIcon>
+            <ListItemText primary="Log Out" />
+          </ListItem>
+        </List>
+      </Drawer>
+    </ClickAwayListener>
   )
 }
 
@@ -227,6 +301,7 @@ export default function Navbar(props) {
   const handleDrawerOpen = () => {
     setOpen(true)
   }
+  const close = false
 
   return (
     <React.Fragment>
@@ -256,7 +331,7 @@ export default function Navbar(props) {
         </AppBar>
       </ElevationScroll>
       <Toolbar id="back-to-top-anchor" />
-      {DrawerRender(open, setOpen)}
+      {DrawerRender(open, setOpen, close)}
       <ScrollTop {...props}>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
