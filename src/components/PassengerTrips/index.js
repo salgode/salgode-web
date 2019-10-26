@@ -107,9 +107,9 @@ class PassengerTripCard extends Component {
 
   render() {
     const { classes, trip } = this.props
-    const { trip_status, driver, trip_route_points, trip_times } = trip
-    const date = ParseDate(trip_times.etd)
-    const time = ParseHour(trip_times.etd)
+    const { trip_status, driver, trip_route_points, etd_info } = trip
+    const date = ParseDate(etd_info.etd)
+    const time = ParseHour(etd_info.etd)
     return (
       <Card className={classes.card}>
         <Chip
