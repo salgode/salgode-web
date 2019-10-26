@@ -8,13 +8,15 @@ import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Collapse from '@material-ui/core/Collapse'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
+import ExpandLess from '@material-ui/icons/ExpandLess'
+import ExpandMore from '@material-ui/icons/ExpandMore'
 import Fab from '@material-ui/core/Fab'
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import IconButton from '@material-ui/core/IconButton'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -29,7 +31,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import useScrollTrigger from '@material-ui/core/useScrollTrigger'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCarAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCarAlt,
+  faPlusCircle,
+  faUser,
+  faUserFriends,
+} from '@fortawesome/free-solid-svg-icons'
+import { faAddressBook } from '@fortawesome/free-regular-svg-icons'
 
 import { Link } from 'react-router-dom'
 
@@ -75,6 +83,9 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
   },
   hide: {
     display: 'none',
@@ -158,9 +169,19 @@ function logout() {
 
 function DrawerRender(open, setOpen, close) {
   const classes = useStyles()
+  const [openDrop, setOpenDrop] = React.useState(false)
+  const [selectedIndex, setSelectedIndex] = React.useState(0)
 
   const handleDrawerClose = () => {
     open && !close ? (close = true) : setOpen(false)
+  }
+
+  const handleClick = () => {
+    setOpenDrop(!openDrop)
+  }
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index)
   }
 
   return (
@@ -181,35 +202,85 @@ function DrawerRender(open, setOpen, close) {
         </div>
         <Divider />
         <List>
-          <ListItem button component={Link} to="/find-trip">
+          <ListItem
+            button
+            selected={selectedIndex === 0}
+            onClick={event => handleListItemClick(event, 0)}
+            component={Link}
+            to="/find-trip"
+          >
             <ListItemIcon>
-              <FontAwesomeIcon icon={faCarAlt} />
+              <FontAwesomeIcon icon={faUser} style={{ fontSize: 'medium' }} />
             </ListItemIcon>
             <ListItemText primary="Pedir Viaje" />
           </ListItem>
-          <ListItem button component={Link} to="/my-trips">
+          <ListItem
+            button
+            selected={selectedIndex === 1}
+            onClick={event => handleListItemClick(event, 1)}
+            component={Link}
+            to="/requested-trip"
+          >
             <ListItemIcon>
-              <FontAwesomeIcon icon={faCarAlt} />
-            </ListItemIcon>
-            <ListItemText primary="Mis Viajes" />
-          </ListItem>
-          <ListItem button component={Link} to="/requested-trip">
-            <ListItemIcon>
-              <FontAwesomeIcon icon={faCarAlt} />
+              <FontAwesomeIcon
+                icon={faUserFriends}
+                style={{ fontSize: 'medium' }}
+              />
             </ListItemIcon>
             <ListItemText primary="Pedidos" />
           </ListItem>
-          <ListItem button component={Link} to="/create-trip">
+          <ListItem button onClick={handleClick}>
             <ListItemIcon>
-              <FontAwesomeIcon icon={faPlusCircle} />
+              <FontAwesomeIcon icon={faCarAlt} size="lg" />
             </ListItemIcon>
-            <ListItemText primary="Crear Viaje" />
+            <ListItemText primary="Conductor" />
+            {openDrop ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
-          <ListItem button component={Link} to="/profile">
+          <Collapse in={openDrop} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem
+                button
+                component={Link}
+                to="/create-trip"
+                className={classes.nested}
+                selected={selectedIndex === 2}
+                onClick={event => handleListItemClick(event, 2)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon
+                    icon={faPlusCircle}
+                    style={{ fontSize: 'medium' }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary="Crear Viaje" />
+              </ListItem>
+              <ListItem
+                button
+                component={Link}
+                to="/my-trips"
+                className={classes.nested}
+                selected={selectedIndex === 3}
+                onClick={event => handleListItemClick(event, 3)}
+              >
+                <ListItemIcon>
+                  <FontAwesomeIcon icon={faCarAlt} size="lg" />
+                </ListItemIcon>
+                <ListItemText primary="Mis Viajes" />
+              </ListItem>
+            </List>
+          </Collapse>
+          <Divider />
+          <ListItem
+            button
+            component={Link}
+            to="/profile"
+            selected={selectedIndex === 4}
+            onClick={event => handleListItemClick(event, 4)}
+          >
             <ListItemIcon>
-              <InboxIcon />
+              <FontAwesomeIcon icon={faAddressBook} size="lg" />
             </ListItemIcon>
-            <ListItemText primary="Perfil" />
+            <ListItemText primary="Mi Perfil" />
           </ListItem>
           <Divider />
           <ListItem button component={Link} to="/" onClick={() => logout()}>
