@@ -7,6 +7,7 @@ import { resetStorage } from '../../utils/storeData'
 import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Divider from '@material-ui/core/Divider'
 import Drawer from '@material-ui/core/Drawer'
@@ -155,69 +156,71 @@ function logout() {
   resetStorage()
 }
 
-function DrawerRender(open, setOpen) {
+function DrawerRender(open, setOpen, close) {
   const classes = useStyles()
 
   const handleDrawerClose = () => {
-    setOpen(false)
+    open && !close ? (close = true) : setOpen(false)
   }
 
   return (
-    <Drawer
-      className={classes.drawer}
-      variant="persistent"
-      anchor="right"
-      open={open}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      <div className={classes.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronRightIcon />
-        </IconButton>
-      </div>
-      <Divider />
-      <List>
-        <ListItem button component={Link} to="/find-trip">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faCarAlt} />
-          </ListItemIcon>
-          <ListItemText primary="Pedir Viaje" />
-        </ListItem>
-        <ListItem button component={Link} to="/my-trips">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faCarAlt} />
-          </ListItemIcon>
-          <ListItemText primary="Mis Viajes" />
-        </ListItem>
-        <ListItem button component={Link} to="/requested-trip">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faCarAlt} />
-          </ListItemIcon>
-          <ListItemText primary="Pedidos" />
-        </ListItem>
-        <ListItem button component={Link} to="/create-trip">
-          <ListItemIcon>
-            <FontAwesomeIcon icon={faPlusCircle} />
-          </ListItemIcon>
-          <ListItemText primary="Crear Viaje" />
-        </ListItem>
-        <ListItem button component={Link} to="/profile">
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Perfil" />
-        </ListItem>
+    <ClickAwayListener onClickAway={handleDrawerClose}>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="right"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronRightIcon />
+          </IconButton>
+        </div>
         <Divider />
-        <ListItem button component={Link} to="/" onClick={() => logout()}>
-          <ListItemIcon>
-            <InputIcon />
-          </ListItemIcon>
-          <ListItemText primary="Log Out" />
-        </ListItem>
-      </List>
-    </Drawer>
+        <List>
+          <ListItem button component={Link} to="/find-trip">
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faCarAlt} />
+            </ListItemIcon>
+            <ListItemText primary="Pedir Viaje" />
+          </ListItem>
+          <ListItem button component={Link} to="/my-trips">
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faCarAlt} />
+            </ListItemIcon>
+            <ListItemText primary="Mis Viajes" />
+          </ListItem>
+          <ListItem button component={Link} to="/requested-trip">
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faCarAlt} />
+            </ListItemIcon>
+            <ListItemText primary="Pedidos" />
+          </ListItem>
+          <ListItem button component={Link} to="/create-trip">
+            <ListItemIcon>
+              <FontAwesomeIcon icon={faPlusCircle} />
+            </ListItemIcon>
+            <ListItemText primary="Crear Viaje" />
+          </ListItem>
+          <ListItem button component={Link} to="/profile">
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="Perfil" />
+          </ListItem>
+          <Divider />
+          <ListItem button component={Link} to="/" onClick={() => logout()}>
+            <ListItemIcon>
+              <InputIcon />
+            </ListItemIcon>
+            <ListItemText primary="Log Out" />
+          </ListItem>
+        </List>
+      </Drawer>
+    </ClickAwayListener>
   )
 }
 
@@ -227,6 +230,7 @@ export default function Navbar(props) {
   const handleDrawerOpen = () => {
     setOpen(true)
   }
+  const close = false
 
   return (
     <React.Fragment>
@@ -256,7 +260,7 @@ export default function Navbar(props) {
         </AppBar>
       </ElevationScroll>
       <Toolbar id="back-to-top-anchor" />
-      {DrawerRender(open, setOpen)}
+      {DrawerRender(open, setOpen, close)}
       <ScrollTop {...props}>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
