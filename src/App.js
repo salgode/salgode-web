@@ -14,6 +14,7 @@ import {
   RequestedTrip,
   UpdateUser,
   AddStops,
+  PassengerTrips,
 } from './screens'
 
 import routes from './routes.js'
