@@ -8,4 +8,5 @@ export default {
   signUp: '/sign-up',
   addStops: '/add-stops',
   requestedTrip: '/requested-trip',
+  passengerTrips: '/passenger-trips',
 }

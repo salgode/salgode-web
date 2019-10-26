@@ -14,6 +14,8 @@ import slotsReducer from './reducers/slots'
 import { reducer as formReducer } from 'redux-form'
 import updateUserReducer from './reducers/updateUser'
 import thunk from 'redux-thunk'
+import vehiclesReducer from './reducers/vehicles'
+import { vehiclesModel } from './models/vehicles'
 import passengerTripsReducer from './reducers/passengerTrips'
 
 export const client = axios.create({
@@ -35,6 +37,7 @@ const reducer = combineReducers({
   form: formReducer,
   updateUser: updateUserReducer,
   loading: false,
+  vehicles: vehiclesReducer,
   passengerTrips: passengerTripsReducer,
 })
 

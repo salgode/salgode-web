@@ -54,6 +54,11 @@ const App = () => {
                 path={routes.requestedTrip}
                 component={RequestedTrip}
               />
+              <Route
+                exact
+                path={routes.passengerTrips}
+                component={PassengerTrips}
+              />
               <Route exact path={routes.addStops} component={AddStops} />
               <Route component={NotFound} />
             </Switch>
