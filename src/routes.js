@@ -7,5 +7,6 @@ export default {
   updateUser: '/profile/edit',
   signUp: '/sign-up',
   addStops: '/add-stops',
-  requestedTrip: 'requested-trip',
+  requestedTrip: '/requested-trip',
+  passengerTrips: '/passenger-trips',
 }

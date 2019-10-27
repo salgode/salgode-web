@@ -2,33 +2,28 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-// Store
-import { fetchFutureTrips } from '../../redux/actions/trips'
-import './style.sass'
-import { MyTripsCard } from '../../components/MyTripsCard/index'
+import { getPassengerTripsAction } from '../../redux/actions/passengerTrips'
+import PassengerTripCard from '../../components/PassengerTrips/index'
 
-// Components
 import { CircularProgress } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 
-class MyTrips extends Component {
+class PassengerTrips extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       loading: false,
       trips: [],
     }
-    this.getTrips = this.getTrips.bind(this)
   }
-
   componentDidMount() {
-    this.getTrips()
+    this.getPassengerTrips()
   }
 
-  async getTrips() {
+  async getPassengerTrips() {
     this.setState({ loading: true })
-    const response = await this.props.fetchFutureTrips(this.props.user.token)
+    const { getPassengerTripsComponent, user } = this.props
+    const response = await getPassengerTripsComponent(user.token)
 
     if (response.error) {
       this.setState({ loading: false })
@@ -38,20 +33,21 @@ class MyTrips extends Component {
       )
     }
 
-    this.setState({ trips: this.props.futureTrips.trips, loading: false })
+    this.setState({ trips: this.props.passengerTrips.tripList, loading: false })
   }
 
   render() {
     const { loading, trips } = this.state
+    if (loading) {
+      return <div>{loading && <CircularProgress />}</div>
+    }
     return (
       <div>
-        {loading && <CircularProgress />}
         <Grid container spacing={2} justify="center" alignItems="center">
-          {trips.map((trip, i) => {
-            // Return the element. Also pass key
+          {trips.map((trip, index) => {
             return (
-              <Grid item md={4} key={i}>
-                <MyTripsCard trip={trip} />
+              <Grid item md={4} key={index}>
+                <PassengerTripCard trip={trip} />
               </Grid>
             )
           })}
@@ -61,25 +57,22 @@ class MyTrips extends Component {
   }
 }
 
-MyTrips.propTypes = {
-  fetchFutureTrips: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    token: PropTypes.string,
-    userId: PropTypes.string,
-  }).isRequired,
-  futureTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+PassengerTrips.propTypes = {
+  passengerTrips: PropTypes.object.isRequired,
+  getPassengerTripsComponent: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchFutureTrips: token => dispatch(fetchFutureTrips(token)),
+  getPassengerTripsComponent: token => dispatch(getPassengerTripsAction(token)),
 })
 
 const mapStateToProps = state => ({
   user: state.user,
-  futureTrips: state.futureTrips,
+  passengerTrips: state.passengerTrips,
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MyTrips)
+)(PassengerTrips)

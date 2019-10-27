@@ -4,25 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateUserThunk } from '../../../redux/actions/updateUser'
 import TextField from '@material-ui/core/TextField'
 import { Typography } from '@material-ui/core'
-import PropTypes from 'prop-types'
 import uploadFile from '../../../utils/uploadFile'
 
-const testInfo = {
-  user: {
-    firstName: 'John',
-    email: 'email@email.com',
-    lastName: 'Doe',
-    phone: 56900000000,
-  },
-  car: {
-    plate: 'HS9201',
-    color: 'White',
-    brand: 'Toyota',
-    model: 'Yaris',
-  },
-}
-
-const UpdateForm = ({ user_id }) => {
+const UpdateForm = () => {
   const uploadAvatarInput = useRef()
 
   const [isLoading, setIsLoading] = useState(true)
@@ -40,17 +24,14 @@ const UpdateForm = ({ user_id }) => {
 
   const updateUser = e => {
     e.preventDefault()
-
-    uploadFile(uploadAvatarInput).then(() => {
-      /*
-       chage to res =>
-      */
-      // esta es la id que se almacena como avatar
-      // console.log(res.image_id)
-      // esta es la url de la imagen
-      // console.log(res.image_urls.fetch)
-      dispatch(updateUserThunk(user_id))
-    })
+    if (uploadAvatarInput.current.files.length !== 0) {
+      uploadFile(uploadAvatarInput).then(res => {
+        const selfieLink = res.image_urls.fetch
+        dispatch(updateUserThunk(selfieLink))
+      })
+    } else {
+      dispatch(updateUserThunk())
+    }
   }
 
   const tengoAuto = () => {
@@ -103,16 +84,6 @@ const UpdateForm = ({ user_id }) => {
       <div className="field">
         <div className="control">
           <Field
-            name="email"
-            component={renderTextField}
-            type="text"
-            label="Email"
-          />
-        </div>
-      </div>
-      <div className="field">
-        <div className="control">
-          <Field
             name="phone"
             component={renderTextField}
             type="text"
@@ -122,7 +93,7 @@ const UpdateForm = ({ user_id }) => {
       </div>
 
       <div className="field">
-        <label htmlFor="Avatar">Avatar</label>
+        <label htmlFor="Avatar">Selfie</label>
         <div className="control">
           <input ref={uploadAvatarInput} id="file-upload-avatar" type="file" />
         </div>
@@ -219,18 +190,4 @@ const UpdateForm = ({ user_id }) => {
 
 export default reduxForm({
   form: 'updateUser',
-  initialValues: {
-    name: testInfo.user.firstName,
-    email: testInfo.user.email,
-    lastName: testInfo.user.lastName,
-    phone: testInfo.user.phone,
-    plate: testInfo.car.plate,
-    color: testInfo.car.color,
-    brand: testInfo.car.brand,
-    model: testInfo.car.model,
-  },
 })(UpdateForm)
-
-UpdateForm.propTypes = {
-  user_id: PropTypes.string.isRequired,
-}

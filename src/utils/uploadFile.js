@@ -2,16 +2,12 @@ import axios from 'axios'
 
 const uploadFile = async ref => {
   const file = ref.current.files[0]
-
   const fileParts = file.name.split('.')
   const fileName = fileParts[0]
   const fileType = fileParts[1]
-  //let typeAllowed = ['jpg', 'jpeg', 'png', 'gif'];
-
   try {
-    // Luego debemos cambiar la url a la de produccion
     const res = await axios.post(
-      `https://1gcqbk02ib.execute-api.us-east-1.amazonaws.com/playground/upload/image`,
+      `https://staging-api.salgode.com/upload/image`,
       {
         file_name: fileName + '.' + fileType.toLowerCase(),
         file_type: fileType,
@@ -34,5 +30,4 @@ const uploadFile = async ref => {
     return { err: error }
   }
 }
-
 export default uploadFile
