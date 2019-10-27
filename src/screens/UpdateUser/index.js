@@ -9,12 +9,14 @@ const UpdateUser = () => {
   const [initialValues, setInitialValues] = useState({})
 
   useEffect(() => {
+    const alldata = getObject(USER_DATA)
     const { name, lastName, phone } = getObject(USER_DATA)
     const data = {
       name: name,
       lastName: lastName,
       phone: phone,
     }
+    console.log(alldata)
     setInitialValues(data)
     setIsLoading(false)
   }, [])
