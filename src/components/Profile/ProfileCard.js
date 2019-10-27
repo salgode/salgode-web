@@ -14,18 +14,19 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-import { withStyles, makeStyles } from '@material-ui/core/styles'
 
+/*
 const useStyles = makeStyles({
-  card: {
-    minWidth: 275,
-  },
-  bigAvatar: {
-    margin: 10,
-    width: 60,
-    height: 60,
-  },
-})
+	card: {
+		minWidth: 275
+	},
+	bigAvatar: {
+		margin: 10,
+		width: 60,
+		height: 60
+	}
+});
+*/
 
 class ProfileCard extends Component {
   constructor(props) {
@@ -42,14 +43,12 @@ class ProfileCard extends Component {
   }
 
   render() {
-    const { classes, user } = this.props
+    const { user } = this.props
     const { expanded1, expanded2 } = this.state
     return (
-      <Card className={classes.card}>
+      <Card className="card">
         <CardHeader
-          avatar={
-            <Avatar className={classes.bigAvatar} src={user.selfieLink} />
-          }
+          avatar={<Avatar className="bigAvatar" src={user.selfieLink} />}
           title={user.name + ' ' + user.lastName}
           subheader="Usuario"
         />
@@ -124,9 +123,8 @@ class ProfileCard extends Component {
 }
 
 ProfileCard.propTypes = {
-  classes: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
   vehiculos: PropTypes.array.isRequired,
 }
 
-export default withStyles(useStyles)(ProfileCard)
+export default ProfileCard
