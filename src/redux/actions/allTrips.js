@@ -22,13 +22,16 @@ export function fetchAllFutureTrips(authToken) {
   }
 }
 
-export function reserveTrip(trip_id, reserved_seats, start, end) {
+export function reserveTrip(authToken, trip_id, reserved_seats, start, end) {
   return {
     type: actions.RESERVE_TRIP,
     payload: {
       request: {
         url: `passenger/reservations`,
         method: 'post',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
         data: {
           trip_id,
           reserved_seats,
