@@ -6,7 +6,7 @@ import { updateUserThunk } from '../../../redux/actions/updateUser'
 import TextField from '@material-ui/core/TextField'
 import { Typography } from '@material-ui/core'
 import uploadFile from '../../../utils/uploadFile'
-import routes from './routes.js'
+import routes from '../../../routes.js'
 
 const UpdateForm = () => {
   const uploadAvatar = useRef()
