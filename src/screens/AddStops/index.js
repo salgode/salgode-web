@@ -61,6 +61,7 @@ class AddStopsScreen extends Component {
   async submitTrip() {
     const { startStop, endStop, middleStops, startTime, history } = this.props
     const { payload } = await this.props.createTrip(
+      this.props.user.token,
       [startStop, ...middleStops, endStop],
       startTime
     )

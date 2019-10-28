@@ -7,7 +7,9 @@ import { Typography } from '@material-ui/core'
 import uploadFile from '../../../utils/uploadFile'
 
 const UpdateForm = () => {
-  const uploadAvatarInput = useRef()
+  const uploadAvatar = useRef()
+  const uploadDniFront = useRef()
+  const uploadDniBack = useRef()
 
   const [isLoading, setIsLoading] = useState(true)
   const [hasCar, setHasCar] = useState(false)
@@ -22,16 +24,33 @@ const UpdateForm = () => {
 
   if (isLoading) return 'Loading..'
 
-  const updateUser = e => {
-    e.preventDefault()
-    if (uploadAvatarInput.current.files.length !== 0) {
-      uploadFile(uploadAvatarInput).then(res => {
-        const selfieLink = res.image_urls.fetch
-        dispatch(updateUserThunk(selfieLink))
+  const uploadAllImages = async () => {
+    const images = {}
+
+    if (uploadAvatar.current.files.length !== 0) {
+      await uploadFile(uploadAvatar).then(res => {
+        images.avatar = res.image_urls.fetch
       })
-    } else {
-      dispatch(updateUserThunk())
     }
+    if (uploadDniFront.current.files.length !== 0) {
+      await uploadFile(uploadDniFront).then(res => {
+        images.dniFront = res.image_urls.fetch
+      })
+    }
+    if (uploadDniBack.current.files.length !== 0) {
+      await uploadFile(uploadDniBack).then(res => {
+        images.dniBack = res.image_urls.fetch
+      })
+    }
+
+    return images
+  }
+
+  const updateUser = async e => {
+    e.preventDefault()
+    uploadAllImages().then(res => {
+      dispatch(updateUserThunk(res))
+    })
   }
 
   const tengoAuto = () => {
@@ -95,10 +114,21 @@ const UpdateForm = () => {
       <div className="field">
         <label htmlFor="Avatar">Selfie</label>
         <div className="control">
-          <input ref={uploadAvatarInput} id="file-upload-avatar" type="file" />
+          <input ref={uploadAvatar} id="file-upload-avatar" type="file" />
         </div>
       </div>
-
+      <div className="field">
+        <label htmlFor="Avatar">Cedula frontal</label>
+        <div className="control">
+          <input ref={uploadDniFront} id="file-upload-avatar" type="file" />
+        </div>
+      </div>
+      <div className="field">
+        <label htmlFor="Avatar">Cedula posterior</label>
+        <div className="control">
+          <input ref={uploadDniBack} id="file-upload-avatar" type="file" />
+        </div>
+      </div>
       <div className="field">
         <label className="checkbox">
           <input type="checkbox" onClick={() => tengoAuto()} />

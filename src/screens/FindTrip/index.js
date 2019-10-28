@@ -54,7 +54,10 @@ class FindTripScreen extends Component {
     this.setState({ loading: true })
     const { reserveTrip } = this.props
 
-    const reserve = await reserveTrip(this.preFilterPayload(payload))
+    const reserve = await reserveTrip(
+      this.props.user.token,
+      this.preFilterPayload(payload)
+    )
 
     if (reserve.error || !reserve.payload.data.success === 'true') {
       this.setState({ loading: false })
@@ -93,9 +96,10 @@ FindTripScreen.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   fetchAllFutureTrips: token => dispatch(fetchAllFutureTrips(token)),
-  reserveTrip: payload =>
+  reserveTrip: (token, payload) =>
     dispatch(
       reserveTrip(
+        token,
         payload.trip_id,
         payload.reserved_seats,
         payload.start,
