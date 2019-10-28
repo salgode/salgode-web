@@ -10,5 +10,5 @@ export default {
   addStops: '/add-stops',
   requestedTrip: '/requested-trip',
   passengerTrips: '/passenger-trips',
-  tripReservations: '/trip-reservations',
+  myTripDetails: '/my-trips/:id',
 }

@@ -7,6 +7,8 @@ import axios from 'axios'
 // Reducers
 import userReducer from './reducers/user'
 import futureTripReducer from './reducers/trips'
+import tripDetailsReducer from './reducers/tripDetails'
+import tripManifestReducer from './reducers/tripManifest'
 import allFutureTripReducer from './reducers/allTrips'
 import createTripReducer from './reducers/createTrip'
 import spotsReducer from './reducers/spots'
@@ -36,6 +38,8 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const reducer = combineReducers({
   user: userReducer,
   futureTrips: futureTripReducer,
+  tripDetails: tripDetailsReducer,
+  tripManifest: tripManifestReducer,
   allFutureTrips: allFutureTripReducer,
   createTrip: createTripReducer,
   spots: spotsReducer,
