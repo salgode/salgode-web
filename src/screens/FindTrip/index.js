@@ -4,11 +4,25 @@ import PropTypes from 'prop-types'
 
 import { Container } from '@material-ui/core'
 import { CircularProgress } from '@material-ui/core'
-
+import Select, { components } from 'react-select'
+import { withStyles } from '@material-ui/core/styles'
 import { FindTripsCard } from './../../components/MyTripsCard/index'
+
 import './style.sass'
 
-import { fetchAllFutureTrips, reserveTrip } from '../../redux/actions/allTrips'
+// action creators
+import {
+  fetchAllFutureTrips,
+  reserveTrip,
+  findTripsByPlace,
+} from '../../redux/actions/findTrips'
+import { getAllSpots } from '../../redux/actions/spots'
+
+const styles = () => ({
+  select: {
+    marginTop: '20px',
+  },
+})
 
 class FindTripScreen extends Component {
   constructor(props) {
@@ -19,16 +33,31 @@ class FindTripScreen extends Component {
     }
     this.getTrips = this.getTrips.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    this.getSpots = this.getSpots.bind(this)
   }
 
   componentDidMount() {
+    this.getSpots()
     this.getTrips()
   }
 
-  async getTrips() {
+  async getSpots() {
     this.setState({ loading: true })
-    const response = await this.props.fetchAllFutureTrips(this.props.user.token)
+    const response = await this.props.getAllSpots(this.props.user.token)
+    if (response.error) {
+      alert('Error obteniendo paradas')
+    }
+  }
 
+  async getTrips(spot) {
+    this.setState({ loading: true })
+    const { token } = this.props.user
+    let response
+    if (spot) {
+      response = await this.props.findTripsByPlace(token, spot.place_id)
+    } else {
+      response = await this.props.fetchAllFutureTrips(token)
+    }
     if (response.error) {
       this.setState({ loading: false })
       alert(
@@ -37,7 +66,7 @@ class FindTripScreen extends Component {
       )
     }
 
-    this.setState({ trips: this.props.allFutureTrips.trips, loading: false })
+    this.setState({ loading: false })
   }
 
   preFilterPayload(payload) {
@@ -70,16 +99,42 @@ class FindTripScreen extends Component {
   }
 
   render() {
-    const { trips, loading } = this.state
+    const { loading } = this.state
+    const { classes, trips } = this.props
+    const spots = this.props.spots.map(spot => ({
+      label: `${spot.name}, ${spot.address}`,
+      value: spot,
+    }))
+
+    const Placeholder = props => <components.Placeholder {...props} />
+
     return (
       <div className="find-trip">
         <Container>
           {loading ? (
             <CircularProgress />
           ) : (
-            trips.map((trip, i) => (
-              <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
-            ))
+            <div>
+              <Select
+                components={{ Placeholder }}
+                placeholder={'#Desde'}
+                className={classes.select}
+                isSearchable={true}
+                options={spots}
+                onChange={option => this.getTrips(option.value)}
+                styles={{
+                  placeholder: base => ({
+                    ...base,
+                    fontSize: '1em',
+                    color: 'black',
+                    fontWeight: 800,
+                  }),
+                }}
+              />
+              {trips.map((trip, i) => (
+                <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
+              ))}
+            </div>
           )}
         </Container>
       </div>
@@ -92,6 +147,11 @@ FindTripScreen.propTypes = {
   allFutureTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   reserveTrip: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
+  spots: PropTypes.array.isRequired,
+  getAllSpots: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  trips: PropTypes.array.isRequired,
+  findTripsByPlace: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -106,14 +166,19 @@ const mapDispatchToProps = dispatch => ({
         payload.end
       )
     ),
+  getAllSpots: token => dispatch(getAllSpots(token)),
+  findTripsByPlace: token => dispatch(findTripsByPlace(token)),
 })
 
 const mapStateToProps = state => ({
   user: state.user,
-  allFutureTrips: state.allFutureTrips,
+  spots: state.spots.spots,
+  trips: state.findTrips.trips,
 })
+
+const styledComponent = withStyles(styles)(FindTripScreen)
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FindTripScreen)
+)(styledComponent)
