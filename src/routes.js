@@ -1,5 +1,6 @@
 export default {
   signIn: '/',
+  recover: '/recover',
   requestTrip: '/find-trip',
   myTrips: '/my-trips',
   createTrip: '/create-trip',
