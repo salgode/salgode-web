@@ -15,6 +15,7 @@ import updateUserReducer from './reducers/updateUser'
 import vehiclesReducer from './reducers/vehicles'
 import passengerTripsReducer from './reducers/passengerTrips'
 import requestedTripsReducer from './reducers/requestedTrip'
+import tripReservationsReducer from './reducers/tripReservations'
 
 // Models
 import { createTripModel } from './models/createTrip'
@@ -45,6 +46,7 @@ const reducer = combineReducers({
   vehicles: vehiclesReducer,
   passengerTrips: passengerTripsReducer,
   requestedTrips: requestedTripsReducer,
+  tripReservations: tripReservationsReducer,
 })
 
 export const store = createStore(
