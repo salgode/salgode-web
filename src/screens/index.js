@@ -9,4 +9,5 @@ export { default as UpdateUser } from './UpdateUser/index'
 export { default as AddStops } from './AddStops/index'
 export { default as PassengerTrips } from './PassengerTrips'
 
+export { default as TripProgress } from './TripProgress/index'
 export { default as NotFound } from './NotFound'
