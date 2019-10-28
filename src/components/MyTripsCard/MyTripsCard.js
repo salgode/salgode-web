@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ParseDate, ParseHour } from '../../components/Parse/index'
 
 // Components
@@ -9,8 +9,9 @@ import { faCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 import Card from '@material-ui/core/Card'
-// import CardActions from '@material-ui/core/CardActions'
+import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -38,6 +39,15 @@ const styles = theme => ({
   },
   pos: {
     marginBottom: 12,
+  },
+  buttonContainer: {
+    padding: '20px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  buttonSuccess: {
+    color: '#064acb',
+    borderColor: '#064acb',
   },
 })
 
@@ -82,6 +92,17 @@ class MyTripsCard extends Component {
             <FontAwesomeIcon icon={faUsers} className="relative" />
           </Typography>
         </CardContent>
+        <CardActions className={classes.buttonContainer}>
+          <Button
+            variant="outlined"
+            className={classes.buttonSuccess}
+            color="primary"
+            component={Link}
+            to={'/my-trips/' + trip.trip_id}
+          >
+            Ver Viaje
+          </Button>
+        </CardActions>
       </Card>
     )
   }
