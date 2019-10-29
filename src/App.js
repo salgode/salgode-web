@@ -67,7 +67,6 @@ const App = () => {
               />
               <PrivateRoute exact path={routes.addStops} component={AddStops} />
               <PrivateRoute
-                exact
                 path={routes.currentTrip}
                 component={TripProgress}
               />
