@@ -19,7 +19,7 @@ import {
 } from './screens'
 
 import routes from './routes.js'
-import Navbar from './components/Navbar/Navbar'
+import NavbarWrapper from './components/Navbar/Navbar'
 import PrivateRoute from './components/Routes/PrivateRoute'
 import Container from '@material-ui/core/Container'
 
@@ -28,7 +28,7 @@ const App = () => {
     <div>
       <div className="App">
         <BrowserRouter>
-          <Navbar />
+          <NavbarWrapper />
           <Container className="appContainer">
             <Switch>
               <Route exact path={routes.signIn} component={SignIn} />

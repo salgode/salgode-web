@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import './Navbar.sass'
 import { resetStorage } from '../../utils/storeData'
 import routes from '../../routes.js'
+import { logoutUser } from '../../redux/actions/user'
 
 import AppBar from '@material-ui/core/AppBar'
 import Box from '@material-ui/core/Box'
@@ -164,11 +166,7 @@ ScrollTop.propTypes = {
   window: PropTypes.func,
 }
 
-function logout() {
-  resetStorage()
-}
-
-function DrawerRender(open, setOpen, close) {
+function DrawerRender(open, setOpen, close, logout) {
   const classes = useStyles()
   const [openDrop, setOpenDrop] = React.useState(false)
   const [openDropPass, setOpenDropPass] = React.useState(false)
@@ -332,7 +330,7 @@ function DrawerRender(open, setOpen, close) {
   )
 }
 
-export default function Navbar(props) {
+function Navbar(props) {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const handleDrawerOpen = () => {
@@ -363,6 +361,7 @@ export default function Navbar(props) {
               onClick={handleDrawerOpen}
               color="inherit"
               aria-label="menu"
+              style={{ display: props.display }}
             >
               <MenuIcon className="icon-color" />
             </IconButton>
@@ -370,7 +369,7 @@ export default function Navbar(props) {
         </AppBar>
       </ElevationScroll>
       <Toolbar id="back-to-top-anchor" />
-      {DrawerRender(open, setOpen, close)}
+      {DrawerRender(open, setOpen, close, props.logoutHandler)}
       <ScrollTop {...props}>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
@@ -379,3 +378,42 @@ export default function Navbar(props) {
     </React.Fragment>
   )
 }
+
+export class NavbarWrapper extends Component {
+  constructor(props) {
+    super(props)
+    this.logoutHandler = this.logoutHandler.bind(this)
+  }
+  logoutHandler() {
+    this.props.logoutUser()
+    resetStorage()
+  }
+
+  render() {
+    const { user } = this.props
+    const display = user.token ? 'block' : 'none'
+    return <Navbar logoutHandler={this.logoutHandler} display={display} />
+  }
+}
+NavbarWrapper.propTypes = {
+  user: PropTypes.object.isRequired,
+  logoutUser: PropTypes.func.isRequired,
+}
+
+Navbar.propTypes = {
+  display: PropTypes.string.isRequired,
+  logoutHandler: PropTypes.func.isRequired,
+}
+
+const mapStateToProps = state => ({
+  user: state.user,
+})
+
+const mapDispatchToProps = {
+  logoutUser: logoutUser,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavbarWrapper)
