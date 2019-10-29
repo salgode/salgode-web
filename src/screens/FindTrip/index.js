@@ -111,26 +111,26 @@ class FindTripScreen extends Component {
     return (
       <div className="find-trip">
         <Container>
+          <Select
+            components={{ Placeholder }}
+            placeholder={'#Desde'}
+            className={classes.select}
+            isSearchable={true}
+            options={spots}
+            onChange={option => this.getTrips(option.value)}
+            styles={{
+              placeholder: base => ({
+                ...base,
+                fontSize: '1em',
+                color: 'black',
+                fontWeight: 800,
+              }),
+            }}
+          />
           {loading ? (
             <CircularProgress />
           ) : (
             <div>
-              <Select
-                components={{ Placeholder }}
-                placeholder={'#Desde'}
-                className={classes.select}
-                isSearchable={true}
-                options={spots}
-                onChange={option => this.getTrips(option.value)}
-                styles={{
-                  placeholder: base => ({
-                    ...base,
-                    fontSize: '1em',
-                    color: 'black',
-                    fontWeight: 800,
-                  }),
-                }}
-              />
               {trips.map((trip, i) => (
                 <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
               ))}
