@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { ParseDate, ParseHour } from '../index'
 import './index.sass'
 import { requestedTripsDetails } from '../../redux/actions/tripDetails'
+import { cancelPassengerReservation } from '../../redux/actions/requestedTrip'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
@@ -100,6 +101,7 @@ class RequestedTrip extends Component {
       points: [],
     }
     this.detailTripSubmit = this.detailTripSubmit.bind(this)
+    this.cancelReservationSubmit = this.cancelReservationSubmit.bind(this)
   }
 
   setColorChip = status => {
@@ -144,6 +146,21 @@ class RequestedTrip extends Component {
     }
     const points = reserve.payload.data.trip_route_points
     this.setState({ expanded: !expanded, loading: false, points: points })
+  }
+
+  async cancelReservationSubmit() {
+    this.setState({ loading: true })
+    const { cancelTrip, trip } = this.props
+
+    const reserve = await cancelTrip(this.props.user.token, trip.trip_id)
+    if (reserve.error && !reserve.payload.data.success) {
+      this.setState({ loading: false })
+      return alert(
+        'Error obteniendo el detalle',
+        'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
+      )
+    }
+    this.setState({ loading: false })
   }
 
   renderSwitchStop(key, last) {
@@ -237,7 +254,11 @@ class RequestedTrip extends Component {
           </Button>
           {(reservation_status === 'accepted' ||
             reservation_status === 'pending') && (
-            <Button variant="outlined" className={classes.buttonCancel}>
+            <Button
+              variant="outlined"
+              className={classes.buttonCancel}
+              onClick={this.cancelReservationSubmit}
+            >
               CANCELAR
             </Button>
           )}
@@ -255,6 +276,7 @@ class RequestedTrip extends Component {
 
 RequestedTrip.propTypes = {
   fetchdetailsTrip: PropTypes.func.isRequired,
+  cancelTrip: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   trip: PropTypes.object.isRequired,
   tripDetails: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
@@ -263,6 +285,7 @@ RequestedTrip.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   fetchdetailsTrip: (token, id) => dispatch(requestedTripsDetails(token, id)),
+  cancelTrip: (token, id) => dispatch(cancelPassengerReservation(token, id)),
 })
 
 const mapStateToProps = state => ({
