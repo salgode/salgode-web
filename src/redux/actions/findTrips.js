@@ -5,6 +5,9 @@ export const actions = {
   RESERVE_TRIP: 'RESERVE_TRIP/FETCH',
   RESERVE_TRIP_SUCCESS: 'RESERVE_TRIP/FETCH_SUCCESS',
   RESERVE_TRIP_FAIL: 'RESERVE_TRIP/FETCH_FAIL',
+  FIND_TRIPS_BY_PLACE: 'FIND_TRIPS_BY_PLACE',
+  FIND_TRIPS_BY_PLACE_SUCCESS: 'FIND_TRIPS_BY_PLACE_SUCCESS',
+  FIND_TRIPS_BY_PLACE_FAIL: 'FIND_TRIPS_BY_PLACE_FAIL',
 }
 
 export function fetchAllFutureTrips(authToken) {
@@ -39,6 +42,21 @@ export function reserveTrip(authToken, trip_id, reserved_seats, start, end) {
             start,
             end,
           },
+        },
+      },
+    },
+  }
+}
+
+export function findTripsByPlace(authToken) {
+  return {
+    type: actions.FIND_TRIPS_BY_PLACE,
+    payload: {
+      request: {
+        url: `trips/search/intersects/${authToken}`,
+        method: 'get',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },

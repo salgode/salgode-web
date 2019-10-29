@@ -9,7 +9,7 @@ import userReducer from './reducers/user'
 import futureTripReducer from './reducers/trips'
 import tripDetailsReducer from './reducers/tripDetails'
 import tripManifestReducer from './reducers/tripManifest'
-import allFutureTripReducer from './reducers/allTrips'
+import findTripsReducer from './reducers/findTrips'
 import createTripReducer from './reducers/createTrip'
 import spotsReducer from './reducers/spots'
 import slotsReducer from './reducers/slots'
@@ -25,6 +25,9 @@ import { spotsModel } from './models/spots'
 import { futureTripsModel } from './models/trips'
 import { userModel } from './models/user'
 import { vehiclesModel } from './models/vehicles'
+import { findTripsModel } from './models/findTrips'
+import currentTripReducer from './reducers/currentTrip'
+import { currentTripModel } from './models/currentTrip'
 
 export const client = axios.create({
   baseURL: 'https://playground-api.salgode.com',
@@ -40,17 +43,18 @@ const reducer = combineReducers({
   futureTrips: futureTripReducer,
   tripDetails: tripDetailsReducer,
   tripManifest: tripManifestReducer,
-  allFutureTrips: allFutureTripReducer,
   createTrip: createTripReducer,
   spots: spotsReducer,
   slots: slotsReducer,
   form: formReducer,
   updateUser: updateUserReducer,
+  currentTrip: currentTripReducer,
   loading: false,
   vehicles: vehiclesReducer,
   passengerTrips: passengerTripsReducer,
   requestedTrips: requestedTripsReducer,
   tripReservations: tripReservationsReducer,
+  findTrips: findTripsReducer,
 })
 
 export const store = createStore(
@@ -61,6 +65,8 @@ export const store = createStore(
     spots: spotsModel,
     futureTrips: futureTripsModel,
     vehicles: vehiclesModel,
+    findTrips: findTripsModel,
+    currentTrip: currentTripModel,
   },
   composeEnhancer(applyMiddleware(...middlewares))
 )

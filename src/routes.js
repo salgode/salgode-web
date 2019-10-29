@@ -11,4 +11,5 @@ export default {
   requestedTrip: '/requested-trip',
   passengerTrips: '/passenger-trips',
   myTripDetails: '/my-trips/:id',
+  currentTrip: '/progress',
 }
