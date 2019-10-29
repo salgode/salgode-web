@@ -30,23 +30,23 @@ class CurrentTripScreen extends Component {
   }
 
   componentDidMount() {
-    const { trip } = this.props
-    this.props.getManifest(trip.trip_id)
+    const { match, user } = this.props
+    this.props.getManifest(user.token, match.params.id)
   }
 
   handleClickForward() {
-    const { trip, next_stop_idx, arrived } = this.props
+    const { trip, next_stop_idx, arrived, user } = this.props
     const { trip_id } = trip
     if (next_stop_idx === 0) {
-      this.props.startJourney()
-      this.props.nextStop(trip_id)
+      this.props.startJourney(user.token, trip_id)
+      this.props.nextStop(user.token, trip_id)
     } else if (next_stop_idx === trip.route_points.length - 1) {
-      this.props.completeJourney(trip_id)
+      this.props.completeJourney(user.token, trip_id)
       this.props.history.push(routes.myTrips)
     } else if (arrived) {
-      this.props.nextStop(trip_id)
+      this.props.nextStop(user.token, trip_id)
     } else {
-      this.props.nextStopArrived(trip_id)
+      this.props.nextStopArrived(user.token, trip_id)
     }
   }
 
@@ -114,10 +114,15 @@ CurrentTripScreen.propTypes = {
   getManifest: PropTypes.func.isRequired,
   passengers_by_stop: PropTypes.object,
   history: PropTypes.object.isRequired,
+  user: PropTypes.shape({
+    token: PropTypes.string,
+  }).isRequired,
+  match: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = ({ currentTrip }) => {
+const mapStateToProps = ({ user, currentTrip }) => {
   return {
+    user: user,
     trip: currentTrip.trip,
     arrived: currentTrip.arrived,
     next_stop_idx: currentTrip.next_stop_idx,

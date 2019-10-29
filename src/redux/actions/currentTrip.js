@@ -16,7 +16,7 @@ export const actions = {
   GET_MANIFEST_FAIL: 'GET_MANIFEST_FAIL',
 }
 
-export function startJourney(trip_id) {
+export function startJourney(authToken, trip_id) {
   return {
     type: actions.START_JOURNEY,
     payload: {
@@ -24,14 +24,14 @@ export function startJourney(trip_id) {
         url: `/driver/trips/${trip_id}/journey/start`,
         method: 'post',
         headers: {
-          Authorization: 'Bearer 12345',
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },
   }
 }
 
-export function completeJourney(trip_id) {
+export function completeJourney(authToken, trip_id) {
   return {
     type: actions.COMPLETE_JOURNEY,
     payload: {
@@ -39,14 +39,14 @@ export function completeJourney(trip_id) {
         url: `/driver/trips/${trip_id}/journey/complete`,
         method: 'post',
         headers: {
-          Authorization: 'Bearer 12345',
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },
   }
 }
 
-export function nextStop(trip_id) {
+export function nextStop(authToken, trip_id) {
   return {
     type: actions.NEXT_STOP,
     payload: {
@@ -54,14 +54,14 @@ export function nextStop(trip_id) {
         url: `/driver/trips/${trip_id}/journey/next`,
         method: 'post',
         headers: {
-          Authorization: 'Bearer 12345',
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },
   }
 }
 
-export function nextStopArrived(trip_id) {
+export function nextStopArrived(authToken, trip_id) {
   return {
     type: actions.NEXT_STOP_ARRIVED,
     payload: {
@@ -69,14 +69,14 @@ export function nextStopArrived(trip_id) {
         url: `/driver/trips/${trip_id}/journey/next/arrived`,
         method: 'post',
         headers: {
-          Authorization: 'Bearer 12345',
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },
   }
 }
 
-export function getManifest(trip_id) {
+export function getManifest(authToken, trip_id) {
   return {
     type: actions.GET_MANIFEST,
     payload: {
@@ -84,7 +84,7 @@ export function getManifest(trip_id) {
         url: `/driver/trips/${trip_id}/manifest`,
         method: 'get',
         headers: {
-          Authorization: 'Bearer 12345',
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },
