@@ -48,7 +48,6 @@ class MyTrips extends Component {
         {loading && <CircularProgress />}
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
-            // Return the element. Also pass key
             return (
               <Grid item md={4} key={i}>
                 <MyTripsCard trip={trip} />

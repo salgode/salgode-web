@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
+import routes from '../../routes.js'
 
 // Store
 import { connect } from 'react-redux'
@@ -37,7 +38,7 @@ class SignInScreen extends React.Component {
     this.setState({ loading: false })
     setObject(USER_DATA, user.payload.data)
     setObject(TOKEN, user.payload.data.token)
-    history.push('/find-trip')
+    history.push(routes.requestTrip)
   }
 
   render() {

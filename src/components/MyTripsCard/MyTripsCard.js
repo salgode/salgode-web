@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ParseDate, ParseHour } from '../../components/Parse/index'
 
 // Components
@@ -9,8 +9,10 @@ import { faCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 import Card from '@material-ui/core/Card'
-// import CardActions from '@material-ui/core/CardActions'
+import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
+// import CardHeader from '@material-ui/core/CardHeader'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -22,8 +24,7 @@ const styles = theme => ({
     marginLeft: '10%',
     marginTop: '20px',
     minWidth: 300,
-    minHeight: 220,
-    display: 'flex',
+    minHeight: 150,
   },
   [theme.breakpoints.down('sm')]: {
     card: {
@@ -36,8 +37,45 @@ const styles = theme => ({
   title: {
     fontSize: 14,
   },
-  pos: {
-    marginBottom: 12,
+  cardContent: {
+    margin: '20px 10px 0px 20px',
+    padding: '0px',
+  },
+  buttonContainer: {
+    padding: '15px',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  buttonSuccess: {
+    color: '#064acb',
+    borderColor: '#064acb',
+  },
+  buttonCancel: {
+    color: 'red',
+    borderColor: 'red',
+  },
+  seatsContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  seats: {
+    marginRight: '20px',
+    marginTop: '5px',
+  },
+  primary: {
+    backgroundColor: 'green',
+    color: 'white',
+    margin: '12px 12px 0px',
+  },
+  secondary: {
+    backgroundColor: '#ec9b3b',
+    color: 'white',
+    margin: '12px 12px 0px',
+  },
+  danger: {
+    backgroundColor: 'red',
+    color: 'white',
+    margin: '12px 12px 0px',
   },
 })
 
@@ -56,32 +94,50 @@ class MyTripsCard extends Component {
 
     return (
       <Card className={classes.card}>
-        <CardContent className="card-content">
-          <div className="stops">
-            <Typography variant="body2" component="p">
+        <CardContent className={classes.cardContent}>
+          <div className={classes.marginCard}>
+            <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
               {trip.trip_route.start.name}
             </Typography>
-            <Typography variant="body2" component="p">
+            <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
               {trip.trip_route.end.name}
             </Typography>
           </div>
-          <div className="date-time">
-            <Typography variant="body1" component="p">
-              <FontAwesomeIcon icon={faCalendarAlt} className="calendar-icon" />
-              {date}
-            </Typography>
-            <Typography variant="body1" component="p">
-              <FontAwesomeIcon icon={faClock} className="calendar-icon" />
-              {time}
-            </Typography>
+          <div className={classes.seatsContainer}>
+            <div className={classes.marginCard}>
+              <Typography variant="body2" component="p">
+                <FontAwesomeIcon
+                  icon={faCalendarAlt}
+                  className="calendar-icon"
+                />
+                {date}
+              </Typography>
+              <Typography variant="body2" component="p">
+                <FontAwesomeIcon icon={faClock} className="calendar-icon" />
+                {time}
+              </Typography>
+            </div>
+            <div className={classes.seats}>
+              <Typography>
+                {trip.available_seats}
+                <FontAwesomeIcon icon={faUsers} />
+              </Typography>
+            </div>
           </div>
-          <Typography className="available-seats" color="textSecondary">
-            {trip.available_seats}
-            <FontAwesomeIcon icon={faUsers} className="relative" />
-          </Typography>
         </CardContent>
+        <CardActions className={classes.buttonContainer}>
+          <Button
+            variant="outlined"
+            className={classes.buttonSuccess}
+            color="primary"
+            component={Link}
+            to={'/my-trips/' + trip.trip_id}
+          >
+            VER VIAJE
+          </Button>
+        </CardActions>
       </Card>
     )
   }

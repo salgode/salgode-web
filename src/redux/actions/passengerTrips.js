@@ -1,4 +1,3 @@
-// import { client as axiosClient } from '../store'
 export const actions = {
   GET_PASSENGER_TRIPS: 'PASSENGER_TRIPS/FETCH',
   GET_PASSENGER_TRIPS_SUCCESS: 'PASSENGER_TRIPS/FETCH_SUCCESS',

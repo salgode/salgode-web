@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 import './index.sass'
+import routes from '../../../routes.js'
 
 const styles = theme => ({
   '@global': {
@@ -144,12 +145,12 @@ class SignInForm extends React.Component {
             </Button>
             <Grid container spacing={1}>
               <Grid item xs={12} sm={6}>
-                <Link to="/recover" variant="body2">
+                <Link to={routes.recover} variant="body2">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </Grid>
               <Grid item xs={12} sm={6} className={classes.alignRight}>
-                <Link to="/sign-up" variant="body2">
+                <Link to={routes.signUp} variant="body2">
                   {'¿No tienes una cuenta? Registrate'}
                 </Link>
               </Grid>

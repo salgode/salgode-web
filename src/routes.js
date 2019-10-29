@@ -1,5 +1,6 @@
 export default {
   signIn: '/',
+  recover: '/recover',
   requestTrip: '/find-trip',
   myTrips: '/my-trips',
   createTrip: '/create-trip',
@@ -9,5 +10,6 @@ export default {
   addStops: '/add-stops',
   requestedTrip: '/requested-trip',
   passengerTrips: '/passenger-trips',
+  myTripDetails: '/my-trips/:id',
   currentTrip: '/progress',
 }

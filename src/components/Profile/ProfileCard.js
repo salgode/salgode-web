@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import routes from '../../routes.js'
 
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
@@ -113,7 +114,7 @@ class ProfileCard extends Component {
           </CardContent>
         </Collapse>
         <CardActions>
-          <Link to="/profile/edit">
+          <Link to={routes.updateUser}>
             <Button size="small">Editar Perfil</Button>
           </Link>
         </CardActions>

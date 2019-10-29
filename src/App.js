@@ -15,6 +15,7 @@ import {
   UpdateUser,
   AddStops,
   PassengerTrips,
+  MyTripDetails,
   TripProgress,
 } from './screens'
 
@@ -39,6 +40,10 @@ const App = () => {
                 component={RequestTrip}
               />
               <PrivateRoute exact path={routes.myTrips} component={MyTrips} />
+              <PrivateRoute
+                path={routes.myTripDetails}
+                component={MyTripDetails}
+              />
               <PrivateRoute
                 exact
                 path={routes.createTrip}

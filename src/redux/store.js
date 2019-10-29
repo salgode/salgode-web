@@ -7,6 +7,8 @@ import axios from 'axios'
 // Reducers
 import userReducer from './reducers/user'
 import futureTripReducer from './reducers/trips'
+import tripDetailsReducer from './reducers/tripDetails'
+import tripManifestReducer from './reducers/tripManifest'
 import findTripsReducer from './reducers/findTrips'
 import createTripReducer from './reducers/createTrip'
 import spotsReducer from './reducers/spots'
@@ -15,6 +17,7 @@ import updateUserReducer from './reducers/updateUser'
 import vehiclesReducer from './reducers/vehicles'
 import passengerTripsReducer from './reducers/passengerTrips'
 import requestedTripsReducer from './reducers/requestedTrip'
+import tripReservationsReducer from './reducers/tripReservations'
 
 // Models
 import { createTripModel } from './models/createTrip'
@@ -38,6 +41,8 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const reducer = combineReducers({
   user: userReducer,
   futureTrips: futureTripReducer,
+  tripDetails: tripDetailsReducer,
+  tripManifest: tripManifestReducer,
   createTrip: createTripReducer,
   spots: spotsReducer,
   slots: slotsReducer,
@@ -48,6 +53,7 @@ const reducer = combineReducers({
   vehicles: vehiclesReducer,
   passengerTrips: passengerTripsReducer,
   requestedTrips: requestedTripsReducer,
+  tripReservations: tripReservationsReducer,
   findTrips: findTripsReducer,
 })
 
