@@ -1,12 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Avatar from '@material-ui/core/Avatar'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
-import Typography from '@material-ui/core/Typography'
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  withStyles,
+} from '@material-ui/core'
 
-export default class WaitingPassengers extends Component {
+const style = () => ({
+  subtitle: {
+    padding: '12px 12px',
+    fontSize: 20,
+    fontWeight: 200,
+  },
+})
+class WaitingPassengers extends Component {
   renderPassengers() {
     return this.props.passengers.map((passenger, index) => {
       return (
@@ -26,10 +36,20 @@ export default class WaitingPassengers extends Component {
     })
   }
   render() {
-    return <div>{this.renderPassengers()}</div>
+    const { classes, label } = this.props
+    return (
+      <div>
+        <h3 className={classes.subtitle}>{label}</h3>
+        {this.renderPassengers()}
+      </div>
+    )
   }
 }
 
 WaitingPassengers.propTypes = {
-  passengers: PropTypes.array,
+  passengers: PropTypes.array.isRequired,
+  classes: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired,
 }
+
+export default withStyles(style)(WaitingPassengers)

@@ -45,6 +45,4 @@ export const currentTripModel = {
   next_stop_idx: 0,
   arrived: false,
   loading: false,
-  passengers_by_stop: {},
-  passengers_down: {},
 }

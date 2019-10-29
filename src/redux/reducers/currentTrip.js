@@ -45,7 +45,6 @@ export default function currentTripReducer(state = {}, action) {
           action.payload.data,
           state.trip
         ),
-        passengers_down: get_passengers_down(action.payload.data, state.trip),
       }
     case currentTripActions.GET_MANIFEST_FAIL:
       return { ...state, loading: false, error: 'Error on getting manifest' }
@@ -54,30 +53,18 @@ export default function currentTripReducer(state = {}, action) {
   }
 }
 
-function get_passengers_down(manifest, trip) {
-  const idx_to_passengers = {}
-  const point_to_idx = {}
-  trip.route_points.forEach((point, i) => {
-    idx_to_passengers[i] = []
-    point_to_idx[point] = i
-  })
-  manifest.passengers.forEach(passenger => {
-    const idx = point_to_idx[passenger.route.end]
-    idx_to_passengers[idx].push(passenger)
-  })
-  return idx_to_passengers
-}
-
 function get_passengers_by_stop(manifest, trip) {
   const idx_to_passengers = {}
   const point_to_idx = {}
   trip.route_points.forEach((point, i) => {
-    idx_to_passengers[i] = []
+    idx_to_passengers[i] = { up: [], down: [] }
     point_to_idx[point] = i
   })
   manifest.passengers.forEach(passenger => {
-    const idx = point_to_idx[passenger.route.start]
-    idx_to_passengers[idx].push(passenger)
+    const idx_up = point_to_idx[passenger.route.start]
+    const idx_down = point_to_idx[passenger.route.end]
+    idx_to_passengers[idx_up]['up'].push(passenger)
+    idx_to_passengers[idx_down]['down'].push(passenger)
   })
   return idx_to_passengers
 }

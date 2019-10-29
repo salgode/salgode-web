@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { withStyles, Fab } from '@material-ui/core'
+import { withStyles } from '@material-ui/core'
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 
 const style = () => ({
   title: {
@@ -24,17 +25,19 @@ const style = () => ({
 
 class ProgressStepper extends Component {
   render() {
-    const { pointName, starting, ending, classes } = this.props
+    const { pointName, ending, starting, classes } = this.props
     return (
       <>
         <div className={classes.stepper}>
-          {starting ? (
-            <Fab color="secondary"></Fab>
-          ) : (
-            <Fab color="default"></Fab>
-          )}
+          <FiberManualRecordIcon
+            color={starting ? 'primary' : 'inherit'}
+            fontSize="large"
+          />
           <div className={classes.line} />
-          {ending ? <Fab color="primary"></Fab> : <Fab color="default"></Fab>}
+          <FiberManualRecordIcon
+            color={ending ? 'secondary' : 'inherit'}
+            fontSize="large"
+          />
         </div>
         <h1 className={classes.title}>{pointName}</h1>
       </>
