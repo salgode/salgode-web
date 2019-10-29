@@ -352,9 +352,11 @@ export default function Navbar(props) {
         >
           <Toolbar>
             <Box className={classes.navbarOffset} />
-            <Typography variant="h5" className={classes.appName}>
-              SalgoDe
-            </Typography>
+            <Link to={routes.requestTrip} className={classes.appName}>
+              <Typography variant="h5" className={classes.appName}>
+                SalgoDe
+              </Typography>
+            </Link>
             <IconButton
               edge="end"
               className={clsx(classes.menuButton, open && classes.hide)}
