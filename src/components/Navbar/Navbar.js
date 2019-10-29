@@ -275,8 +275,8 @@ function DrawerRender(open, setOpen, close) {
                 component={Link}
                 to={routes.createTrip}
                 className={classes.nested}
-                selected={selectedIndex === 2}
-                onClick={event => handleListItemClick(event, 2)}
+                selected={selectedIndex === 3}
+                onClick={event => handleListItemClick(event, 3)}
               >
                 <ListItemIcon>
                   <FontAwesomeIcon
@@ -291,8 +291,8 @@ function DrawerRender(open, setOpen, close) {
                 component={Link}
                 to={routes.myTrips}
                 className={classes.nested}
-                selected={selectedIndex === 3}
-                onClick={event => handleListItemClick(event, 3)}
+                selected={selectedIndex === 4}
+                onClick={event => handleListItemClick(event, 4)}
               >
                 <ListItemIcon>
                   <FontAwesomeIcon icon={faCarAlt} size="lg" />
@@ -306,8 +306,8 @@ function DrawerRender(open, setOpen, close) {
             button
             component={Link}
             to={routes.profile}
-            selected={selectedIndex === 4}
-            onClick={event => handleListItemClick(event, 4)}
+            selected={selectedIndex === 5}
+            onClick={event => handleListItemClick(event, 5)}
           >
             <ListItemIcon>
               <FontAwesomeIcon icon={faAddressBook} size="lg" />
