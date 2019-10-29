@@ -23,6 +23,8 @@ import { futureTripsModel } from './models/trips'
 import { userModel } from './models/user'
 import { vehiclesModel } from './models/vehicles'
 import { findTripsModel } from './models/findTrips'
+import currentTripReducer from './reducers/currentTrip'
+import { currentTripModel } from './models/currentTrip'
 
 export const client = axios.create({
   baseURL: 'https://playground-api.salgode.com',
@@ -41,6 +43,7 @@ const reducer = combineReducers({
   slots: slotsReducer,
   form: formReducer,
   updateUser: updateUserReducer,
+  currentTrip: currentTripReducer,
   loading: false,
   vehicles: vehiclesReducer,
   passengerTrips: passengerTripsReducer,
@@ -57,6 +60,7 @@ export const store = createStore(
     futureTrips: futureTripsModel,
     vehicles: vehiclesModel,
     findTrips: findTripsModel,
+    currentTrip: currentTripModel,
   },
   composeEnhancer(applyMiddleware(...middlewares))
 )
