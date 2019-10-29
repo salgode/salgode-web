@@ -12,6 +12,16 @@ export default function requestedTripsReducer(state = {}, action) {
         loading: false,
         error: 'Error while fetching trips',
       }
+    case tripActions.CANCEL_RESERVATION:
+      return { ...state, loading: true }
+    case tripActions.CANCEL_RESERVATION_SUCCESS:
+      return { ...state, loading: false, trips: action.payload.data }
+    case tripActions.CANCEL_RESERVATION_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: 'Error while cancel reservation',
+      }
     default:
       return state
   }
