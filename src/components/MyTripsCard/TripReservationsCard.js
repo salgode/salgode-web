@@ -3,14 +3,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 // Components
-import { ParseDate, ParseHour } from '../index'
 import './index.sass'
-import { requestedTripsDetails } from '../../redux/actions/tripDetails'
-import { cancelPassengerReservation } from '../../redux/actions/requestedTrip'
+import { acceptReservation } from '../../redux/actions/acceptReservation'
+import { declinedReservation } from '../../redux/actions/declinedReservation'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
-import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
+import { faCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
 
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
@@ -19,11 +17,6 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
 import Chip from '@material-ui/core/Chip'
-import Collapse from '@material-ui/core/Collapse'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -92,16 +85,14 @@ const styles = theme => ({
   },
 })
 
-class RequestedTrip extends Component {
+class TripReservationsCard extends Component {
   constructor(props) {
     super(props)
     this.state = {
       loading: false,
-      expanded: false,
-      points: [],
     }
-    this.detailTripSubmit = this.detailTripSubmit.bind(this)
-    this.cancelReservationSubmit = this.cancelReservationSubmit.bind(this)
+    this.acceptReservationSubmit = this.acceptReservationSubmit.bind(this)
+    this.declinedReservationSubmit = this.declinedReservationSubmit.bind(this)
   }
 
   setColorChip = status => {
@@ -123,37 +114,20 @@ class RequestedTrip extends Component {
     if (status === 'accepted') return 'Aceptado'
     if (status === 'completed') return 'Completado'
     if (status === 'declined') return 'Rechazado'
-    if (status === 'cancelled') {
-      return 'Cancelado'
-    } else {
-      return 'Pendiente'
-    }
+    if (status === 'cancelled') return 'Cancelado'
+    if (status === 'pending') return 'Pendiente'
   }
 
-  async detailTripSubmit() {
+  async acceptReservationSubmit() {
     this.setState({ loading: true })
-    const { expanded } = this.state
-    const { fetchdetailsTrip, trip } = this.props
-
-    const reserve = await fetchdetailsTrip(this.props.user.token, trip.trip_id)
+    const { acceptReservationSubmit, trip } = this.props
+    const reserve = await acceptReservationSubmit(
+      this.props.user.token,
+      trip.trip_id,
+      trip.reservation_id
+    )
 
     if (reserve.error) {
-      this.setState({ loading: false })
-      return alert(
-        'Error obteniendo el detalle',
-        'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
-      )
-    }
-    const points = reserve.payload.data.trip_route_points
-    this.setState({ expanded: !expanded, loading: false, points: points })
-  }
-
-  async cancelReservationSubmit() {
-    this.setState({ loading: true })
-    const { cancelTrip, trip } = this.props
-
-    const reserve = await cancelTrip(this.props.user.token, trip.trip_id)
-    if (reserve.error && !reserve.payload.data.success) {
       this.setState({ loading: false })
       return alert(
         'Error obteniendo el detalle',
@@ -163,48 +137,33 @@ class RequestedTrip extends Component {
     this.setState({ loading: false })
   }
 
-  renderSwitchStop(key, last) {
-    switch (key) {
-      case 0:
-        return <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-      case last:
-        return <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-      default:
-        return (
-          <FontAwesomeIcon
-            icon={faCircleNotch}
-            className="middle-circle-icon"
-          />
-        )
-    }
-  }
+  async declinedReservationSubmit() {
+    this.setState({ loading: true })
+    const { declinedReservationSubmit, trip } = this.props
+    const reserve = await declinedReservationSubmit(
+      this.props.user.token,
+      trip.trip_id,
+      trip.reservation_id
+    )
 
-  renderCollapseDetail() {
-    const { expanded, points } = this.state
-    if (expanded) {
-      return (
-        <List dense={true}>
-          {points.map((point, i, arr) => (
-            <ListItem key={i}>
-              <ListItemIcon>
-                {this.renderSwitchStop(i, arr.length - 1)}
-              </ListItemIcon>
-              <ListItemText primary={point.name} />
-            </ListItem>
-          ))}
-        </List>
+    if (reserve.error) {
+      this.setState({ loading: false })
+      return alert(
+        'Error obteniendo el detalle',
+        'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
       )
-    } else {
-      return <div></div>
     }
+    this.setState({ loading: false })
   }
 
   render() {
-    const { expanded } = this.state
     const { classes, trip } = this.props
-    const { reservation_status, driver, trip_route, etd_info } = trip
-    const date = ParseDate(etd_info.etd)
-    const time = ParseHour(etd_info.etd)
+    const {
+      reservation_status,
+      passenger,
+      reservation_route,
+      reserved_seats,
+    } = trip
     return (
       <Card className={classes.card}>
         <Chip
@@ -219,81 +178,73 @@ class RequestedTrip extends Component {
               B
             </Avatar>
           }
-          title={driver.driver_name}
+          title={passenger.first_name + ' ' + passenger.last_name}
         />
         <CardContent className={classes.cardContent}>
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-              {trip_route.start.name}
+              {reservation_route.start.name}
             </Typography>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-              {trip_route.end.name}
+              {reservation_route.end.name}
             </Typography>
           </div>
           <div className={classes.marginCard}>
             <Typography variant="body2" component="p">
-              <FontAwesomeIcon icon={faCalendarAlt} className="calendar-icon" />
-              {date}
-            </Typography>
-            <Typography variant="body2" component="p">
-              <FontAwesomeIcon icon={faClock} className="calendar-icon" />
-              {time}
+              <FontAwesomeIcon icon={faUsers} className="calendar-icon" />
+              {reserved_seats}
             </Typography>
           </div>
         </CardContent>
         <CardActions className={classes.buttonContainer}>
-          <Button
-            variant="outlined"
-            className={classes.buttonSuccess}
-            color="primary"
-            onClick={this.detailTripSubmit}
-          >
-            VER VIAJE
-          </Button>
+          {reservation_status === 'pending' && (
+            <Button
+              variant="outlined"
+              className={classes.buttonSuccess}
+              color="primary"
+              onClick={this.acceptReservationSubmit}
+            >
+              Aceptar
+            </Button>
+          )}
           {(reservation_status === 'accepted' ||
             reservation_status === 'pending') && (
             <Button
               variant="outlined"
               className={classes.buttonCancel}
-              onClick={this.cancelReservationSubmit}
+              onClick={this.declinedReservationSubmit}
             >
               CANCELAR
             </Button>
           )}
         </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography>Paradas</Typography>
-            {this.renderCollapseDetail()}
-          </CardContent>
-        </Collapse>
       </Card>
     )
   }
 }
 
-RequestedTrip.propTypes = {
-  fetchdetailsTrip: PropTypes.func.isRequired,
-  cancelTrip: PropTypes.func.isRequired,
+TripReservationsCard.propTypes = {
+  acceptReservationSubmit: PropTypes.func.isRequired,
+  declinedReservationSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   trip: PropTypes.object.isRequired,
-  tripDetails: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchdetailsTrip: (token, id) => dispatch(requestedTripsDetails(token, id)),
-  cancelTrip: (token, id) => dispatch(cancelPassengerReservation(token, id)),
+  acceptReservationSubmit: (token, trip_id, reservation_id) =>
+    dispatch(acceptReservation(token, reservation_id)),
+  declinedReservationSubmit: (token, trip_id, reservation_id) =>
+    dispatch(declinedReservation(token, reservation_id)),
 })
 
 const mapStateToProps = state => ({
   user: state.user,
-  tripDetails: state.tripDetails,
 })
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(RequestedTrip))
+)(withStyles(styles)(TripReservationsCard))

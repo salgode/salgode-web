@@ -15,10 +15,12 @@ import {
   UpdateUser,
   AddStops,
   PassengerTrips,
+  MyTripDetails,
+  TripProgress,
 } from './screens'
 
 import routes from './routes.js'
-import Navbar from './components/Navbar/Navbar'
+import NavbarWrapper from './components/Navbar/Navbar'
 import PrivateRoute from './components/Routes/PrivateRoute'
 import Container from '@material-ui/core/Container'
 
@@ -27,7 +29,7 @@ const App = () => {
     <div>
       <div className="App">
         <BrowserRouter>
-          <Navbar />
+          <NavbarWrapper />
           <Container className="appContainer">
             <Switch>
               <Route exact path={routes.signIn} component={SignIn} />
@@ -38,6 +40,10 @@ const App = () => {
                 component={RequestTrip}
               />
               <PrivateRoute exact path={routes.myTrips} component={MyTrips} />
+              <PrivateRoute
+                path={routes.myTripDetails}
+                component={MyTripDetails}
+              />
               <PrivateRoute
                 exact
                 path={routes.createTrip}
@@ -60,6 +66,10 @@ const App = () => {
                 component={PassengerTrips}
               />
               <PrivateRoute exact path={routes.addStops} component={AddStops} />
+              <PrivateRoute
+                path={routes.currentTrip}
+                component={TripProgress}
+              />
               <Route component={NotFound} />
             </Switch>
           </Container>

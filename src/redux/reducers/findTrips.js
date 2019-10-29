@@ -1,6 +1,6 @@
-import { actions as tripActions } from '../actions/allTrips'
+import { actions as tripActions } from '../actions/findTrips'
 
-export default function allFutureTripsReducer(state = {}, action) {
+export default function findTripsReducer(state = {}, action) {
   switch (action.type) {
     case tripActions.ALL_TRIPS_FETCH_FUTURE_TRIPS:
       return { ...state, loading: true }
@@ -22,6 +22,12 @@ export default function allFutureTripsReducer(state = {}, action) {
         loading: false,
         error: 'Error reservando el viaje',
       }
+    case tripActions.FIND_TRIPS_BY_PLACE:
+      return { ...state, loading: true }
+    case tripActions.FIND_TRIPS_BY_PLACE_SUCCESS:
+      return { ...state, loading: false, trips: action.payload.data }
+    case tripActions.FIND_TRIPS_BY_PLACE_FAIL:
+      return { ...state, loading: false, error: 'Error while fetching trips' }
     default:
       return state
   }

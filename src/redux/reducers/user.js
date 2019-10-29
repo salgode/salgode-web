@@ -31,6 +31,8 @@ export default function userReducer(state = {}, action) {
         loading: false,
         error: 'Error while signup user',
       }
+    case userActions.USER_LOGOUT:
+      return {}
     default:
       return state
   }

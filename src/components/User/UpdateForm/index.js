@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { Redirect } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUserThunk } from '../../../redux/actions/updateUser'
 import TextField from '@material-ui/core/TextField'
 import { Typography } from '@material-ui/core'
 import uploadFile from '../../../utils/uploadFile'
+import routes from '../../../routes.js'
 
 const UpdateForm = () => {
   const uploadAvatar = useRef()
@@ -198,9 +200,12 @@ const UpdateForm = () => {
           )}
 
           {updateUserState.success && (
-            <h1 className="subtitle has-text-primary">
-              Perfil actualizado con exito !
-            </h1>
+            <div>
+              {/* <h1 className="subtitle has-text-primary">
+                Perfil actualizado con exito !
+              </h1> */}
+              <Redirect to={routes.profile} />
+            </div>
           )}
 
           {/*

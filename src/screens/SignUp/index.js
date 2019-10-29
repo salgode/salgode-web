@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
-
-import cookies from 'js-cookie'
+import routes from '../../routes.js'
+import { setObject, USER_DATA, TOKEN } from '../../utils/storeData'
 
 // Store
 import { connect } from 'react-redux'
@@ -26,7 +26,7 @@ class SignUpScreen extends React.Component {
   }
 
   async onSubmit(payload) {
-    const { signUp } = this.props
+    const { signUp, history } = this.props
 
     this.setState({ loading: true })
 
@@ -37,8 +37,9 @@ class SignUpScreen extends React.Component {
     if (user.error || !user.payload.data.email || !user.payload.data.user_id)
       return alert(MESSAGE)
 
-    cookies.set('@userToken', user.payload.data.bearer_token)
-    cookies.set('@userId', user.payload.data.user_id)
+    setObject(USER_DATA, user.payload.data)
+    setObject(TOKEN, user.payload.data.token)
+    history.push(routes.requestTrip)
   }
 
   render() {
@@ -56,6 +57,7 @@ class SignUpScreen extends React.Component {
 
 SignUpScreen.propTypes = {
   signUp: PropTypes.func.isRequired,
+  history: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
