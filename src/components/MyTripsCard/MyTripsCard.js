@@ -133,6 +133,15 @@ class MyTripsCard extends Component {
             className={classes.buttonSuccess}
             color="primary"
             component={Link}
+            to={'/progress/' + trip.trip_id}
+          >
+            INICIAR VIAJE
+          </Button>
+          <Button
+            variant="outlined"
+            className={classes.buttonSuccess}
+            color="primary"
+            component={Link}
             to={'/my-trips/' + trip.trip_id}
           >
             VER VIAJE
