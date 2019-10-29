@@ -52,7 +52,6 @@ class MyTripDetails extends Component {
         'Hubo un problema obteniendo los viajes. Por favor intentalo de nuevo.'
       )
     }
-    console.log(this.props.tripReservations.trips)
     this.setState({
       reservations: this.props.tripReservations.trips,
     })
@@ -74,8 +73,6 @@ class MyTripDetails extends Component {
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
       )
     }
-    console.log(reserve)
-    console.log(this.props.tripDetails)
     this.setState({ trip: reserve.payload.data })
   }
 
@@ -95,9 +92,6 @@ class MyTripDetails extends Component {
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
       )
     }
-    console.log(reserve)
-    console.log(this.props.tripDetails)
-    console.log(reserve.payload.data)
     this.setState({ manifest: reserve.payload.data })
   }
 
@@ -122,9 +116,6 @@ class MyTripDetails extends Component {
 
   renderPassengers() {
     const { manifest } = this.state
-    console.log(manifest)
-    console.log('manifest')
-    console.log(Object.keys(manifest))
     if (Object.keys(manifest).length > 0) {
       return manifest.passengers.map((passenger, i) => {
         return (
