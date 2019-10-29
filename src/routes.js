@@ -9,4 +9,5 @@ export default {
   addStops: '/add-stops',
   requestedTrip: '/requested-trip',
   passengerTrips: '/passenger-trips',
+  currentTrip: '/progress',
 }
