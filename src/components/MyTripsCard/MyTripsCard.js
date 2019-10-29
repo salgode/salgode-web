@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ParseDate, ParseHour } from '../../components/Parse/index'
 
 // Components
@@ -132,7 +132,8 @@ class MyTripsCard extends Component {
             variant="outlined"
             className={classes.buttonSuccess}
             color="primary"
-            onClick={this.detailTripSubmit}
+            component={Link}
+            to={'/my-trips/' + trip.trip_id}
           >
             VER VIAJE
           </Button>
