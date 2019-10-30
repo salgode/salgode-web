@@ -6,11 +6,12 @@ import routes from '../../routes.js'
 // Store
 import { connect } from 'react-redux'
 import { loginUser } from '../../redux/actions/user'
-import { setObject, USER_DATA, TOKEN } from '../../utils/storeData'
+import { getObject, setObject, USER_DATA, TOKEN } from '../../utils/storeData'
 
 // Components
 import { SignInForm } from '../../components/index'
 import Loading from '../../components/Loading/Loading'
+import { Redirect } from 'react-router-dom'
 
 const MESSAGE =
   'Hubo un problema iniciando sesión. Por favor intentalo de nuevo.'
@@ -45,6 +46,9 @@ class SignInScreen extends React.Component {
   }
 
   render() {
+    if (getObject(USER_DATA).token != null) {
+      return <Redirect to={routes.requestTrip} />
+    }
     const { loading } = this.state
     return (
       <div className="sign-in">
