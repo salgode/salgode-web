@@ -8,7 +8,7 @@ import './style.sass'
 import { MyTripsCard } from '../../components/MyTripsCard/index'
 
 // Components
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 import Grid from '@material-ui/core/Grid'
 
 class MyTrips extends Component {
@@ -45,7 +45,7 @@ class MyTrips extends Component {
     const { loading, trips } = this.state
     return (
       <div>
-        {loading && <CircularProgress />}
+        {loading && <Loading />}
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
             return (

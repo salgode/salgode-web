@@ -10,7 +10,7 @@ import { setObject, USER_DATA, TOKEN } from '../../utils/storeData'
 
 // Components
 import { SignInForm } from '../../components/index'
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 
 const MESSAGE =
   'Hubo un problema iniciando sesión. Por favor intentalo de nuevo.'
@@ -33,7 +33,10 @@ class SignInScreen extends React.Component {
 
     const user = await signIn(payload)
 
-    if (user.error || !user.payload.data.email) return alert(MESSAGE)
+    if (user.error || !user.payload.data.email) {
+      this.setState({ loading: false })
+      return alert(MESSAGE)
+    }
 
     this.setState({ loading: false })
     setObject(USER_DATA, user.payload.data)
@@ -47,7 +50,7 @@ class SignInScreen extends React.Component {
       <div className="sign-in">
         <SignInForm onSubmit={this.onSubmit} />
 
-        {loading && <CircularProgress />}
+        {loading && <Loading />}
       </div>
     )
   }

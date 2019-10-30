@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { getPassengerTripsAction } from '../../redux/actions/passengerTrips'
 import PassengerTripCard from '../../components/PassengerTrips/index'
 
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 import Grid from '@material-ui/core/Grid'
 
 class PassengerTrips extends Component {
@@ -39,7 +39,7 @@ class PassengerTrips extends Component {
   render() {
     const { loading, trips } = this.state
     if (loading) {
-      return <div>{loading && <CircularProgress />}</div>
+      return <div>{loading && <Loading />}</div>
     }
     return (
       <div>

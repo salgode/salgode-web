@@ -30,7 +30,7 @@ import currentTripReducer from './reducers/currentTrip'
 import { currentTripModel } from './models/currentTrip'
 
 export const client = axios.create({
-  baseURL: 'https://playground-api.salgode.com',
+  baseURL: 'https://api.salgode.com/',
   responseType: 'json',
   requestType: 'json',
 })

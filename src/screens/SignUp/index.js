@@ -10,7 +10,7 @@ import { signupUser } from '../../redux/actions/user'
 
 // Components
 import { SignUpForm } from '../../components/index'
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 
 const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
@@ -34,8 +34,10 @@ class SignUpScreen extends React.Component {
 
     this.setState({ loading: false })
 
-    if (user.error || !user.payload.data.email || !user.payload.data.user_id)
+    if (user.error || !user.payload.data.email || !user.payload.data.user_id) {
+      this.setState({ loading: false })
       return alert(MESSAGE)
+    }
 
     setObject(USER_DATA, user.payload.data)
     setObject(TOKEN, user.payload.data.token)
@@ -49,7 +51,7 @@ class SignUpScreen extends React.Component {
       <div className="sign-up">
         <SignUpForm onSubmit={this.onSubmit} />
 
-        {loading && <CircularProgress />}
+        {loading && <Loading />}
       </div>
     )
   }
