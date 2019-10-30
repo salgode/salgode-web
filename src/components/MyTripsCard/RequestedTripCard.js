@@ -205,6 +205,7 @@ class RequestedTrip extends Component {
     const { reservation_status, driver, trip_route, etd_info } = trip
     const date = ParseDate(etd_info.etd)
     const time = ParseHour(etd_info.etd)
+    console.log(trip_route.start.place_name)
     return (
       <Card className={classes.card}>
         <Chip
@@ -225,11 +226,11 @@ class RequestedTrip extends Component {
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-              {trip_route.start.name}
+              {trip_route.start.place_name}
             </Typography>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-              {trip_route.end.name}
+              {trip_route.end.place_name}
             </Typography>
           </div>
           <div className={classes.marginCard}>
