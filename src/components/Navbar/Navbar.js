@@ -391,7 +391,7 @@ export class NavbarWrapper extends Component {
 
   render() {
     const { user } = this.props
-    const display = user.token ? 'block' : 'none'
+    const display = user != null && user.token ? 'block' : 'none'
     return <Navbar logoutHandler={this.logoutHandler} display={display} />
   }
 }
