@@ -139,13 +139,13 @@ class MyTripDetails extends Component {
         <div>{this.renderDetails()}</div>
         <div className="cards">
           <div className="card-detail">
-            <Typography variant="h6" component="h2">
+            <Typography variant="h6" component="h2" align="center">
               Pasajeros
             </Typography>
             {this.renderPassengers()}
           </div>
           <div className="card-reservation">
-            <Typography variant="h6" component="h2">
+            <Typography variant="h6" component="h2" align="center">
               Solicitudes
             </Typography>
             {this.renderReservations(reservations)}
