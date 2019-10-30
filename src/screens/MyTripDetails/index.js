@@ -11,7 +11,7 @@ import { TripDetailsCard } from '../../components/MyTripsCard/index'
 import { TripManifestCard } from '../../components/MyTripsCard/index'
 
 // Components
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -92,7 +92,7 @@ class MyTripDetails extends Component {
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
       )
     }
-    this.setState({ manifest: reserve.payload.data })
+    this.setState({ manifest: reserve.payload.data, loading: false })
   }
 
   renderDetails() {
@@ -131,7 +131,7 @@ class MyTripDetails extends Component {
 
   render() {
     const { loading, reservations } = this.state
-    if (loading) return <CircularProgress />
+    if (loading) return <Loading />
     return (
       <div>
         {this.renderDetails()}

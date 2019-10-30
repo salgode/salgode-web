@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import UpdateUserForm from '../../components/User/UpdateForm'
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 import { getObject, USER_DATA } from '../../utils/storeData'
 
 const UpdateUser = () => {
@@ -21,7 +21,7 @@ const UpdateUser = () => {
     setIsLoading(false)
   }, [])
 
-  if (isLoading) return <CircularProgress />
+  if (isLoading) return <Loading />
 
   return (
     <div className="columns has-margin-top-40">

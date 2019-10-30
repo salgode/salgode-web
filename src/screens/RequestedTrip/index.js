@@ -7,7 +7,7 @@ import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
 import { RequestedTripCard } from '../../components/MyTripsCard/index'
 
 // Components
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 import Grid from '@material-ui/core/Grid'
 
 class RequestedTrip extends Component {
@@ -44,7 +44,7 @@ class RequestedTrip extends Component {
     const { loading, trips } = this.state
     return (
       <div>
-        {loading && <CircularProgress />}
+        {loading && <Loading />}
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
             return (

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { Container } from '@material-ui/core'
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 import Select, { components } from 'react-select'
 import { withStyles } from '@material-ui/core/styles'
 import { FindTripsCard } from './../../components/MyTripsCard/index'
@@ -128,7 +128,7 @@ class FindTripScreen extends Component {
             }}
           />
           {loading ? (
-            <CircularProgress />
+            <Loading />
           ) : (
             <div>
               {trips.map((trip, i) => (
