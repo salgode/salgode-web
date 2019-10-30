@@ -349,7 +349,10 @@ function Navbar(props) {
           })}
         >
           <Toolbar>
-            <Box className={classes.navbarOffset} />
+            <Box
+              className={classes.navbarOffset}
+              style={{ display: props.display }}
+            />
             <Link to={routes.requestTrip} className={classes.appName}>
               <Typography variant="h5" className={classes.appName}>
                 SalgoDe
