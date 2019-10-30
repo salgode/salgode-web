@@ -137,17 +137,19 @@ class MyTripDetails extends Component {
     return (
       <div className="card-container">
         <div>{this.renderDetails()}</div>
-        <div className="card-detail">
-          <Typography variant="h6" component="h2">
-            Pasajeros
-          </Typography>
-          {this.renderPassengers()}
-        </div>
-        <div className="card-reservation">
-          <Typography variant="h6" component="h2">
-            Solicitudes
-          </Typography>
-          {this.renderReservations(reservations)}
+        <div className="cards">
+          <div className="card-detail">
+            <Typography variant="h6" component="h2">
+              Pasajeros
+            </Typography>
+            {this.renderPassengers()}
+          </div>
+          <div className="card-reservation">
+            <Typography variant="h6" component="h2">
+              Solicitudes
+            </Typography>
+            {this.renderReservations(reservations)}
+          </div>
         </div>
       </div>
     )

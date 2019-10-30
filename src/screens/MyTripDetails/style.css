@@ -1,14 +1,20 @@
-.card-container {
-  display: 'flex';
+.cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: '10px';
 }
 
 .card-reservation {
-  width: 49%;
-  display: inline-block;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 50%;
 }
 
 .card-detail {
-  width: 49%;
-  display: inline-block;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  width: 50%;
 }
+
 
