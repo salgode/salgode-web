@@ -5,11 +5,11 @@ import Avatar from '@material-ui/core/Avatar'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
-import { Grid } from '@material-ui/core'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemText from '@material-ui/core/ListItemText'
+import Typography from '@material-ui/core/Typography'
+// import List from '@material-ui/core/List'
+// import ListItem from '@material-ui/core/ListItem'
+// import ListItemIcon from '@material-ui/core/ListItemIcon'
+// import ListItemText from '@material-ui/core/ListItemText'
 import { withStyles } from '@material-ui/core/styles'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -23,7 +23,7 @@ const styles = theme => ({
     marginLeft: '10%',
     marginTop: '20px',
     minWidth: 300,
-    minHeight: 250,
+    minHeight: 150,
   },
   [theme.breakpoints.down('sm')]: {
     card: {
@@ -32,6 +32,12 @@ const styles = theme => ({
       minWidth: 300,
       minHeight: 220,
     },
+  },
+  marginCard: {
+    padding: 0,
+  },
+  margin: {
+    marginTop: '2%',
   },
   cardContent: {
     margin: '0px 0px 0px 39px',
@@ -115,6 +121,7 @@ class TripManifestCard extends Component {
     return (
       <Card className={classes.card}>
         <CardHeader
+          className={classes.avatar}
           avatar={
             <Avatar
               aria-label="recipe"
@@ -125,39 +132,24 @@ class TripManifestCard extends Component {
           title={passenger_name}
         />
         <CardContent className={classes.cardContent}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={7}>
-              <List dense={true}>
-                <ListItem>
-                  <ListItemIcon>
-                    <FontAwesomeIcon
-                      icon={faCircle}
-                      className="start-circle-icon"
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary={departurePoint} />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <FontAwesomeIcon
-                      icon={faCircle}
-                      className="end-circle-icon"
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary={arrivalPoint} />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <FontAwesomeIcon
-                      icon={faCircle}
-                      className="end-circle-icon"
-                    />
-                  </ListItemIcon>
-                  <ListItemText primary={passenger_phone} />
-                </ListItem>
-              </List>
-            </Grid>
-          </Grid>
+          <div className={classes.marginCard}>
+            <Typography variant="body2" component="p">
+              <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
+              {departurePoint}
+            </Typography>
+            <Typography variant="body2" component="p">
+              <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
+              {arrivalPoint}
+            </Typography>
+            <Typography
+              variant="body2"
+              component="p"
+              className={classes.margin}
+            >
+              <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
+              {passenger_phone}
+            </Typography>
+          </div>
         </CardContent>
       </Card>
     )

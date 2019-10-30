@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { tripReservations } from '../../redux/actions/tripReservations'
 import { requestedTripsDetails } from '../../redux/actions/tripDetails'
 import { tripManifest } from '../../redux/actions/tripManifest'
+// import Container from '@material-ui/core/Container'
 import { TripReservationsCard } from '../../components/MyTripsCard/index'
 import { TripDetailsCard } from '../../components/MyTripsCard/index'
 import { TripManifestCard } from '../../components/MyTripsCard/index'
@@ -14,7 +15,8 @@ import { TripManifestCard } from '../../components/MyTripsCard/index'
 import Loading from '../../components/Loading/Loading'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import './style.css'
+// import Typography from '@material-ui/core/Typography'
 
 class MyTripDetails extends Component {
   constructor(props) {
@@ -133,20 +135,13 @@ class MyTripDetails extends Component {
     const { loading, reservations } = this.state
     if (loading) return <Loading />
     return (
-      <div>
-        {this.renderDetails()}
-        <Typography component="h2" variant="h5">
-          Registrarse
-        </Typography>
+      <div className="card-container">
+        <div>{this.renderDetails()}</div>
         <Divider />
-        <Grid container spacing={2} justify="center" alignItems="center">
-          <Grid item md={4} xs={12}>
-            {this.renderPassengers()}
-          </Grid>
-          <Grid item md={6} ks={12}>
-            {this.renderReservations(reservations)}
-          </Grid>
-        </Grid>
+        <div className="card-detail">{this.renderPassengers()}</div>
+        <div className="card-reservation">
+          {this.renderReservations(reservations)}
+        </div>
       </div>
     )
   }
