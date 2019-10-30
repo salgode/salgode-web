@@ -16,7 +16,7 @@ import Loading from '../../components/Loading/Loading'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import './style.css'
-// import Typography from '@material-ui/core/Typography'
+import Typography from '@material-ui/core/Typography'
 
 class MyTripDetails extends Component {
   constructor(props) {
@@ -137,9 +137,16 @@ class MyTripDetails extends Component {
     return (
       <div className="card-container">
         <div>{this.renderDetails()}</div>
-        <Divider />
-        <div className="card-detail">{this.renderPassengers()}</div>
+        <div className="card-detail">
+          <Typography variant="h6" component="h2">
+            Pasajeros
+          </Typography>
+          {this.renderPassengers()}
+        </div>
         <div className="card-reservation">
+          <Typography variant="h6" component="h2">
+            Solicitudes
+          </Typography>
           {this.renderReservations(reservations)}
         </div>
       </div>

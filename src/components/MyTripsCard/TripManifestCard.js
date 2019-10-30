@@ -22,7 +22,7 @@ const styles = theme => ({
     marginRight: '10%',
     marginLeft: '10%',
     marginTop: '20px',
-    minWidth: 300,
+    minWidth: 250,
     minHeight: 150,
   },
   [theme.breakpoints.down('sm')]: {
@@ -40,7 +40,7 @@ const styles = theme => ({
     marginTop: '2%',
   },
   cardContent: {
-    margin: '0px 0px 0px 39px',
+    margin: '0px 0px 0px 20px',
     padding: '0px',
   },
   button: {
