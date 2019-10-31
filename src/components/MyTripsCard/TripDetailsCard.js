@@ -127,8 +127,8 @@ class TripDetailsCard extends Component {
     const { expanded } = this.state
     const { classes } = this.props
 
-    const departurePoint = trip_route.start.name
-    const arrivalPoint = trip_route.end.name
+    const departurePoint = trip_route.start.place_name
+    const arrivalPoint = trip_route.end.place_name
 
     const date = ParseDate(etd_info.etd)
     const time = ParseHour(etd_info.etd)
@@ -203,7 +203,7 @@ class TripDetailsCard extends Component {
                   <ListItemIcon>
                     {this.renderSwitchStop(i, arr.length - 1)}
                   </ListItemIcon>
-                  <ListItemText primary={point.name} />
+                  <ListItemText primary={point.place_name} />
                 </ListItem>
               ))}
             </List>

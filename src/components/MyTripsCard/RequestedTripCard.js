@@ -205,7 +205,6 @@ class RequestedTrip extends Component {
     const { reservation_status, driver, trip_route, etd_info } = trip
     const date = ParseDate(etd_info.etd)
     const time = ParseHour(etd_info.etd)
-    console.log(trip_route.start.place_name)
     return (
       <Card className={classes.card}>
         <Chip

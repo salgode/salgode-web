@@ -43,7 +43,7 @@ class PassengerTrips extends Component {
     }
     return (
       <div>
-        <Grid container spacing={2} justify="center" alignItems="center">
+        <Grid container spacing={2} justify="center">
           {trips.map((trip, index) => {
             return (
               <Grid item md={4} key={index}>
