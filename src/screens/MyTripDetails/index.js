@@ -13,9 +13,8 @@ import { TripManifestCard } from '../../components/MyTripsCard/index'
 
 // Components
 import Loading from '../../components/Loading/Loading'
-import Divider from '@material-ui/core/Divider'
-import Grid from '@material-ui/core/Grid'
 import './style.css'
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
 class MyTripDetails extends Component {
