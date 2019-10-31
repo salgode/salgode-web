@@ -6,10 +6,6 @@ import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-// import List from '@material-ui/core/List'
-// import ListItem from '@material-ui/core/ListItem'
-// import ListItemIcon from '@material-ui/core/ListItemIcon'
-// import ListItemText from '@material-ui/core/ListItemText'
 import { withStyles } from '@material-ui/core/styles'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -58,7 +54,6 @@ const styles = theme => ({
     paddingTop: '56.25%', // 16:9
   },
   content: {
-    // backgroundColor: 'red',
     paddingTop: '0px',
     paddingBottom: '0px',
   },
