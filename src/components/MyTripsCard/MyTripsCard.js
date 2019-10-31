@@ -98,11 +98,11 @@ class MyTripsCard extends Component {
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-              {trip.trip_route.start.name}
+              {trip.trip_route.start.place_name}
             </Typography>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-              {trip.trip_route.end.name}
+              {trip.trip_route.end.place_name}
             </Typography>
           </div>
           <div className={classes.seatsContainer}>

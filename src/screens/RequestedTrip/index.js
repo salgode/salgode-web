@@ -67,6 +67,7 @@ RequestedTrip.propTypes = {
     userId: PropTypes.string.isRequired,
   }).isRequired,
   requestedTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  trips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
 
 const mapDispatchToProps = dispatch => ({
