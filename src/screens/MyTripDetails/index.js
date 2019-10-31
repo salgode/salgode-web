@@ -111,8 +111,6 @@ class MyTripDetails extends Component {
           </Grid>
         )
       })
-    } else {
-      return 'Not found'
     }
   }
 
@@ -126,8 +124,6 @@ class MyTripDetails extends Component {
           </Grid>
         )
       })
-    } else {
-      return 'Not found'
     }
   }
 
@@ -138,18 +134,20 @@ class MyTripDetails extends Component {
       <div className="card-container">
         <div>{this.renderDetails()}</div>
         <div className="cards">
-          <div className="card-detail">
-            <Typography variant="h6" component="h2" align="center">
-              Pasajeros
-            </Typography>
-            {this.renderPassengers()}
-          </div>
-          <div className="card-reservation">
-            <Typography variant="h6" component="h2" align="center">
-              Solicitudes
-            </Typography>
-            {this.renderReservations(reservations)}
-          </div>
+          <Grid container spacing={2} justify="center">
+            <Grid item md={4}>
+              <Typography variant="h6" component="h2" align="center">
+                Pasajeros
+              </Typography>
+              {this.renderPassengers()}
+            </Grid>
+            <Grid item md={4}>
+              <Typography variant="h6" component="h2" align="center">
+                Solicitudes
+              </Typography>
+              {this.renderReservations(reservations)}
+            </Grid>
+          </Grid>
         </div>
       </div>
     )
