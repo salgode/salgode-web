@@ -12,7 +12,7 @@ import { TripManifestCard } from '../../components/MyTripsCard/index'
 
 // Components
 import Loading from '../../components/Loading/Loading'
-import Divider from '@material-ui/core/Divider'
+import './style.css'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
@@ -109,8 +109,6 @@ class MyTripDetails extends Component {
           </Grid>
         )
       })
-    } else {
-      return 'Not found'
     }
   }
 
@@ -124,8 +122,6 @@ class MyTripDetails extends Component {
           </Grid>
         )
       })
-    } else {
-      return 'Not found'
     }
   }
 
@@ -133,20 +129,24 @@ class MyTripDetails extends Component {
     const { loading, reservations } = this.state
     if (loading) return <Loading />
     return (
-      <div>
-        {this.renderDetails()}
-        <Typography component="h2" variant="h5">
-          Registrarse
-        </Typography>
-        <Divider />
-        <Grid container spacing={2} justify="center" alignItems="center">
-          <Grid item md={4} xs={12}>
-            {this.renderPassengers()}
+      <div className="card-container">
+        <div>{this.renderDetails()}</div>
+        <div className="cards">
+          <Grid container spacing={2} justify="center">
+            <Grid item md={4}>
+              <Typography variant="h6" component="h2" align="center">
+                Pasajeros
+              </Typography>
+              {this.renderPassengers()}
+            </Grid>
+            <Grid item md={4}>
+              <Typography variant="h6" component="h2" align="center">
+                Solicitudes
+              </Typography>
+              {this.renderReservations(reservations)}
+            </Grid>
           </Grid>
-          <Grid item md={6} ks={12}>
-            {this.renderReservations(reservations)}
-          </Grid>
-        </Grid>
+        </div>
       </div>
     )
   }
