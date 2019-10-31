@@ -188,6 +188,11 @@ function DrawerRender(open, setOpen, close, logout) {
     setSelectedIndex(index)
   }
 
+  const handleLogout = () => {
+    logout()
+    handleDrawerClose()
+  }
+
   return (
     <ClickAwayListener onClickAway={handleDrawerClose}>
       <Drawer
@@ -317,7 +322,7 @@ function DrawerRender(open, setOpen, close, logout) {
             button
             component={Link}
             to={routes.signIn}
-            onClick={() => logout()}
+            onClick={() => handleLogout()}
           >
             <ListItemIcon>
               <InputIcon />

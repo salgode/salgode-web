@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
 import routes from '../../routes.js'
-import { setObject, USER_DATA, TOKEN } from '../../utils/storeData'
+import { getObject, setObject, USER_DATA, TOKEN } from '../../utils/storeData'
 
 // Store
 import { connect } from 'react-redux'
@@ -11,6 +11,7 @@ import { signupUser } from '../../redux/actions/user'
 // Components
 import { SignUpForm } from '../../components/index'
 import Loading from '../../components/Loading/Loading'
+import { Redirect } from 'react-router-dom'
 
 const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
@@ -46,7 +47,9 @@ class SignUpScreen extends React.Component {
 
   render() {
     const { loading } = this.state
-
+    if (getObject(USER_DATA).token != null) {
+      return <Redirect to={routes.requestTrip} />
+    }
     return (
       <div className="sign-up">
         <SignUpForm onSubmit={this.onSubmit} />
