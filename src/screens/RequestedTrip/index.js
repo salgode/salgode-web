@@ -41,7 +41,8 @@ class RequestedTrip extends Component {
   }
 
   render() {
-    const { loading, trips } = this.state
+    const { loading } = this.state
+    const { trips } = this.props
     return (
       <div>
         {loading && <Loading />}
@@ -75,6 +76,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   user: state.user,
   requestedTrips: state.requestedTrips,
+  trips: state.findTrips.trips,
 })
 
 export default connect(
