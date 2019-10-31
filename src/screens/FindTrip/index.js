@@ -167,7 +167,8 @@ const mapDispatchToProps = dispatch => ({
       )
     ),
   getAllSpots: token => dispatch(getAllSpots(token)),
-  findTripsByPlace: token => dispatch(findTripsByPlace(token)),
+  findTripsByPlace: (token, place_id) =>
+    dispatch(findTripsByPlace(token, place_id)),
 })
 
 const mapStateToProps = state => ({
