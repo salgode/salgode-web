@@ -11,6 +11,9 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
+// utils
+import { formatPhone } from '../../../utils'
+
 const styles = theme => ({
   '@global': {
     body: {
@@ -96,8 +99,8 @@ class SignUpForm extends React.Component {
   }
 
   onChangePhoneNumber({ target: { value: phoneNumber } }) {
-    const validity = phoneNumber.match(/(\+56)?\d{9}/)
-
+    phoneNumber = phoneNumber.replace(/ /g, '')
+    const validity = phoneNumber.match(/^[+]?\d{11}$/)
     this.setState(oldState => ({
       phoneNumber,
       validity: { ...oldState.validity, phoneNumber: !!validity },
@@ -136,19 +139,15 @@ class SignUpForm extends React.Component {
     if (e.key === 'Enter' && this.getValidity()) {
       e.preventDefault()
       const { onSubmit } = this.props
-      const {
-        name,
-        lastName,
-        email,
-        phoneNumber,
-        password,
-        passwordRepeat,
-      } = this.state
+      const { name, lastName, email, password, passwordRepeat } = this.state
+      let phoneNumber = this.state.phoneNumber
+      if (!phoneNumber.includes('+')) phoneNumber = '+' + phoneNumber
+      const formatedPhone = formatPhone(phoneNumber)
       onSubmit({
         name,
         lastName,
         email,
-        phone: phoneNumber,
+        phone: formatedPhone,
         password,
         passwordRepeat,
       })
@@ -157,15 +156,12 @@ class SignUpForm extends React.Component {
 
   render() {
     const { onSubmit } = this.props
-    const {
-      name,
-      lastName,
-      email,
-      phoneNumber,
-      password,
-      passwordRepeat,
-    } = this.state
+    const { name, lastName, email, password, passwordRepeat } = this.state
+    let phoneNumber = this.state.phoneNumber
+    if (!phoneNumber.includes('+') && this.state.validity.phoneNumber)
+      phoneNumber = '+' + phoneNumber
 
+    const formatedPhone = formatPhone(phoneNumber)
     const { classes } = this.props
 
     return (
@@ -229,7 +225,7 @@ class SignUpForm extends React.Component {
                   fullWidth
                   label="Número de Teléfono"
                   type="tel"
-                  value={phoneNumber}
+                  value={formatedPhone}
                   onChange={this.onChangePhoneNumber}
                   onKeyPress={this.handleEnter}
                 />
@@ -275,7 +271,7 @@ class SignUpForm extends React.Component {
                   name,
                   lastName,
                   email,
-                  phone: phoneNumber,
+                  phone: formatedPhone,
                   password,
                   passwordRepeat,
                 })
