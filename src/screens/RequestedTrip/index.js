@@ -27,7 +27,6 @@ class RequestedTrip extends Component {
 
   async getTrips() {
     this.setState({ loading: true })
-
     const response = await this.props.fetchRequestedTrips(this.props.user.token)
 
     if (response.error) {
@@ -41,8 +40,7 @@ class RequestedTrip extends Component {
   }
 
   render() {
-    const { loading } = this.state
-    const { trips } = this.props
+    const { loading, trips } = this.state
     return (
       <div>
         {loading && <Loading />}
