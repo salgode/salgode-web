@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Select from 'react-select'
+import { Link } from 'react-router-dom'
+
 import { loginUser } from '../../redux/actions/user'
 import { Grid, Button, Typography } from '@material-ui/core'
-import DateFnsUtils from '@date-io/date-fns'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import PropTypes from 'prop-types'
+import DateFnsUtils from '@date-io/date-fns'
+
 import {
   setStartStop,
   setEndStop,
@@ -14,10 +18,9 @@ import {
 } from '../../redux/actions/createtrip'
 import { getAllSpots } from '../../redux/actions/spots'
 import { spotsFilter } from '../../utils/spotsFilter'
-import Select from 'react-select'
-import { Link } from 'react-router-dom'
 
 import routes from '../../routes'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 import './style.sass'
 
@@ -45,43 +48,50 @@ class CreateTripScreen extends Component {
         value: spot,
       })
     )
+    const breadcrumb = {
+      Conductor: '/',
+      'Crear Viaje': '/',
+    }
 
     return (
-      <Grid container direction="column" justify="center" alignItems="center">
-        <Typography>Desde:</Typography>
-        <Select
-          className="search"
-          isSearchable={true}
-          options={filteredSlots}
-          onChange={option => this.props.setStartStop(option.value)}
-        />
-
-        <Typography>Hasta:</Typography>
-        <Select
-          className="search"
-          isSearchable={true}
-          options={filteredSlots}
-          onChange={option => this.props.setEndStop(option.value)}
-        />
-
-        <Typography>Hora/Fecha de Salida:</Typography>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <DateTimePicker
-            value={this.pickedDate}
-            onChange={this.handleDatePicked}
+      <div>
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Typography>Desde:</Typography>
+          <Select
+            className="search"
+            isSearchable={true}
+            options={filteredSlots}
+            onChange={option => this.props.setStartStop(option.value)}
           />
-        </MuiPickersUtilsProvider>
 
-        <Button
-          variant="contained"
-          color="primary"
-          component="span"
-          disabled={disabled}
-          className="submit"
-        >
-          <Link to={routes.addStops}>Siguiente</Link>
-        </Button>
-      </Grid>
+          <Typography>Hasta:</Typography>
+          <Select
+            className="search"
+            isSearchable={true}
+            options={filteredSlots}
+            onChange={option => this.props.setEndStop(option.value)}
+          />
+
+          <Typography>Hora/Fecha de Salida:</Typography>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <DateTimePicker
+              value={this.pickedDate}
+              onChange={this.handleDatePicked}
+            />
+          </MuiPickersUtilsProvider>
+
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            disabled={disabled}
+            className="submit"
+          >
+            <Link to={routes.addStops}>Siguiente</Link>
+          </Button>
+        </Grid>
+      </div>
     )
   }
 }

@@ -9,6 +9,7 @@ import { tripManifest } from '../../redux/actions/tripManifest'
 import { TripReservationsCard } from '../../components/MyTripsCard/index'
 import { TripDetailsCard } from '../../components/MyTripsCard/index'
 import { TripManifestCard } from '../../components/MyTripsCard/index'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 // Components
 import Loading from '../../components/Loading/Loading'
@@ -128,8 +129,14 @@ class MyTripDetails extends Component {
   render() {
     const { loading, reservations } = this.state
     if (loading) return <Loading />
+    const breadcrumb = {
+      Conductor: '/',
+      'Mis Viajes': 'myTrips',
+      Detalle: '/',
+    }
     return (
       <div className="card-container">
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
         <div>{this.renderDetails()}</div>
         <div className="cards">
           <Grid container spacing={2} justify="center">
