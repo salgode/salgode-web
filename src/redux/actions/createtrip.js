@@ -84,7 +84,6 @@ export function createTrip(authToken, route_points, etd, spaceCar, carID) {
   const route_points_ids = route_points.map(spot => {
     return spot.id
   })
-  console.log(etd)
   return {
     type: actions.CREATE_TRIP,
     payload: {

@@ -91,8 +91,6 @@ class AddStopsScreen extends Component {
       value: spot,
     }))
     const middleStopsComponents = middleStops.map(this.createMiddleStop)
-    console.log(this.props.spaceCar)
-    console.log(this.props.carUsed)
 
     return (
       <Grid container justify="flex-start" alignItems="center">
