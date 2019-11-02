@@ -4,10 +4,12 @@ import PropTypes from 'prop-types'
 
 // Store
 import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
-import { RequestedTripCard } from '../../components/MyTripsCard/index'
 
 // Components
+import { RequestedTripCard } from '../../components/MyTripsCard/index'
 import Loading from '../../components/Loading/Loading'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
+
 import Grid from '@material-ui/core/Grid'
 
 class RequestedTrip extends Component {
@@ -41,9 +43,15 @@ class RequestedTrip extends Component {
 
   render() {
     const { loading, trips } = this.state
+    if (loading) return <Loading />
+
+    const breadcrumb = {
+      Pasajero: '/',
+      Reservas: '/',
+    }
     return (
       <div>
-        {loading && <Loading />}
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Grid container spacing={2} justify="center" alignItems="center">
           {trips.map((trip, i) => {
             return (

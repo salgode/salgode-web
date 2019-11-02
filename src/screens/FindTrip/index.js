@@ -98,6 +98,14 @@ class FindTripScreen extends Component {
     this.setState({ loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips) {
+      return trips.map((trip, i) => {
+        return <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
+      })
+    }
+  }
+
   render() {
     const { loading } = this.state
     const { classes, trips } = this.props
@@ -137,15 +145,7 @@ class FindTripScreen extends Component {
               }),
             }}
           />
-          {loading ? (
-            <Loading />
-          ) : (
-            <div>
-              {trips.map((trip, i) => (
-                <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
-              ))}
-            </div>
-          )}
+          {loading ? <Loading /> : <div>{this.renderTrips(trips)}</div>}
         </Container>
       </div>
     )

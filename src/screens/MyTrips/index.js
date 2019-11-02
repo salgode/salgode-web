@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { fetchFutureTrips } from '../../redux/actions/trips'
 import './style.sass'
 import { MyTripsCard } from '../../components/MyTripsCard/index'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 // Components
 import Loading from '../../components/Loading/Loading'
@@ -41,19 +42,30 @@ class MyTrips extends Component {
     this.setState({ trips: this.props.futureTrips.trips, loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips) {
+      return trips.map((trip, i) => {
+        return (
+          <Grid item md={4} key={i}>
+            <MyTripsCard trip={trip} />
+          </Grid>
+        )
+      })
+    }
+  }
+
   render() {
     const { loading, trips } = this.state
+    if (loading) return <Loading />
+    const breadcrumb = {
+      Conductor: '/',
+      'Mis Viajes': '/',
+    }
     return (
       <div>
-        {loading && <Loading />}
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Grid container spacing={2} justify="center" alignItems="center">
-          {trips.map((trip, i) => {
-            return (
-              <Grid item md={4} key={i}>
-                <MyTripsCard trip={trip} />
-              </Grid>
-            )
-          })}
+          {this.renderTrips(trips)}
         </Grid>
       </div>
     )

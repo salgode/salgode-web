@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 
 import { getPassengerTripsAction } from '../../redux/actions/passengerTrips'
 import PassengerTripCard from '../../components/PassengerTrips/index'
-
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 import Loading from '../../components/Loading/Loading'
+
 import Grid from '@material-ui/core/Grid'
 
 class PassengerTrips extends Component {
@@ -36,21 +37,31 @@ class PassengerTrips extends Component {
     this.setState({ trips: this.props.passengerTrips.tripList, loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips) {
+      return trips.map((trip, i) => {
+        return (
+          <Grid item md={4} key={i}>
+            <PassengerTripCard trip={trip} />
+          </Grid>
+        )
+      })
+    }
+  }
+
   render() {
     const { loading, trips } = this.state
-    if (loading) {
-      return <div>{loading && <Loading />}</div>
+    if (loading) return <Loading />
+
+    const breadcrumb = {
+      Pasajero: '/',
+      'Mis Viajes': '/',
     }
     return (
       <div>
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Grid container spacing={2} justify="center">
-          {trips.map((trip, index) => {
-            return (
-              <Grid item md={4} key={index}>
-                <PassengerTripCard trip={trip} />
-              </Grid>
-            )
-          })}
+          {this.renderTrips(trips)}
         </Grid>
       </div>
     )
