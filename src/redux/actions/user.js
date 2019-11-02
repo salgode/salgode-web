@@ -83,7 +83,7 @@ export function fetchUser(authToken) {
         url: `/user`,
         method: 'get',
         headers: {
-          Authorization: authToken,
+          Authorization: `Bearer ${authToken}`,
         },
       },
     },

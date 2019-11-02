@@ -1,228 +1,221 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { Redirect } from 'react-router-dom'
-import { Field, reduxForm } from 'redux-form'
-import { useDispatch, useSelector } from 'react-redux'
-import { updateUserThunk } from '../../../redux/actions/updateUser'
-import TextField from '@material-ui/core/TextField'
-import { Typography } from '@material-ui/core'
+/* eslint-disable no-unused-vars */
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { updateUser } from '../../../redux/actions/updateUser'
+import { fetchUser } from '../../../redux/actions/user'
+import { fetchUserVehicles } from '../../../redux/actions/vehicles'
+import { Typography, Grid, TextField, Button } from '@material-ui/core'
 import uploadFile from '../../../utils/uploadFile'
 import routes from '../../../routes.js'
 
-const UpdateForm = () => {
-  const uploadAvatar = useRef()
-  const uploadDniFront = useRef()
-  const uploadDniBack = useRef()
-
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasCar, setHasCar] = useState(false)
-
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    setIsLoading(false)
-  }, [])
-
-  const updateUserState = useSelector(state => state.updateUser)
-
-  if (isLoading) return 'Loading..'
-
-  const uploadAllImages = async () => {
-    const images = {}
-
-    if (uploadAvatar.current.files.length !== 0) {
-      await uploadFile(uploadAvatar).then(res => {
-        images.avatar = res.image_urls.fetch
-      })
+class UpdateForm extends Component {
+  constructor(props) {
+    super(props)
+    const { name, lastName, phone } = props.user
+    this.state = {
+      name,
+      lastName,
+      phone,
+      validity: {
+        name: true,
+        lastName: true,
+        phone: true,
+      },
     }
-    if (uploadDniFront.current.files.length !== 0) {
-      await uploadFile(uploadDniFront).then(res => {
-        images.dniFront = res.image_urls.fetch
-      })
-    }
-    if (uploadDniBack.current.files.length !== 0) {
-      await uploadFile(uploadDniBack).then(res => {
-        images.dniBack = res.image_urls.fetch
-      })
-    }
-
-    return images
+    this.onChangeName = this.onChangeName.bind(this)
+    this.onChangeLastname = this.onChangeLastname.bind(this)
+    this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this)
+    this.uploadAvatar = React.createRef()
+    this.uploadDniFront = React.createRef()
+    this.uploadDniBack = React.createRef()
   }
 
-  const updateUser = async e => {
-    e.preventDefault()
-    uploadAllImages().then(res => {
-      dispatch(updateUserThunk(res))
+  componentDidMount() {
+    const { name, lastName, phone } = this.props.user
+    this.setState({
+      name,
+      lastName,
+      phone,
+      validity: {
+        name: true,
+        lastName: true,
+        phone: true,
+      },
     })
   }
 
-  const tengoAuto = () => {
-    if (hasCar) {
-      setHasCar(false)
-    } else {
-      setHasCar(true)
-    }
+  async onSubmit(data) {
+    const { token } = this.props.user
+    const imgs = await this.uploadAllImages()
+    data.imgs = imgs
+    await this.props.updateUser(token, data)
+    this.props.fetchUser(token)
   }
 
-  // eslint-disable-next-line react/prop-types
-  const renderTextField = ({ input, label, ...custom }) => (
-    <TextField
-      variant="outlined"
-      margin="normal"
-      label={label}
-      fullWidth
-      {...input}
-      {...custom}
-    />
-  )
+  async uploadAllImages() {
+    const images = {}
 
-  return (
-    <form>
-      <Typography component="h1" variant="h4">
-        Datos del usuario
-      </Typography>
-      <div className="field">
-        <div className="control">
-          <Field
-            name="name"
-            component={renderTextField}
-            type="text"
+    if (this.uploadAvatar.current.files.length !== 0) {
+      const res = await uploadFile(this.uploadAvatar)
+      images.avatar = res.image_urls.fetch
+    }
+    if (this.uploadDniFront.current.files.length !== 0) {
+      const res = await uploadFile(this.uploadDniFront)
+      images.dniFront = res.image_urls.fetch
+    }
+    if (this.uploadDniBack.current.files.length !== 0) {
+      const res = await uploadFile(this.uploadDniBack)
+      images.dniBack = res.image_urls.fetch
+    }
+    return images
+  }
+
+  onChangeName({ target: { value: name } }) {
+    this.setState(oldState => ({
+      name,
+      validity: { ...oldState.validity, name: name.length > 2 },
+    }))
+  }
+
+  onChangeLastname({ target: { value: lastName } }) {
+    this.setState(oldState => ({
+      lastName,
+      validity: { ...oldState.validity, lastName: lastName.length > 2 },
+    }))
+  }
+
+  onChangePhoneNumber({ target: { value: phone } }) {
+    phone = phone.replace(/ /g, '')
+    const validity = phone.match(/^[+]?\d{11}$/)
+    this.setState(oldState => ({
+      phone,
+      validity: { ...oldState.validity, phone: !!validity },
+    }))
+  }
+
+  // onChangeName({ target: { value: name } }) {
+  //   this.setState(oldState => ({
+  //     name,
+  //     validity: { ...oldState.validity, name: name.length > 2 },
+  //   }))
+  // }
+
+  render() {
+    const classes = {}
+    const { name, lastName, phone, hasCar } = this.state
+    return (
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography component="h1" variant="h4">
+            Datos del usuario
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
             label="Nombre"
+            autoFocus
+            value={name}
+            onChange={this.onChangeName}
           />
-        </div>
-      </div>
-
-      <div className="field">
-        <div className="control">
-          <Field
-            name="lastName"
-            component={renderTextField}
-            type="text"
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
             label="Apellido"
+            value={lastName}
+            onChange={this.onChangeLastname}
           />
-        </div>
-      </div>
-
-      <div className="field">
-        <div className="control">
-          <Field
-            name="phone"
-            component={renderTextField}
-            type="text"
-            label="Numero telefonico"
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            required
+            fullWidth
+            label="Número de Teléfono"
+            name="phoneNumber"
+            value={phone}
+            onChange={this.onChangePhone}
           />
-        </div>
-      </div>
-
-      <div className="field">
-        <label htmlFor="Avatar">Selfie</label>
-        <div className="control">
-          <input ref={uploadAvatar} id="file-upload-avatar" type="file" />
-        </div>
-      </div>
-      <div className="field">
-        <label htmlFor="Avatar">Cedula frontal</label>
-        <div className="control">
-          <input ref={uploadDniFront} id="file-upload-avatar" type="file" />
-        </div>
-      </div>
-      <div className="field">
-        <label htmlFor="Avatar">Cedula posterior</label>
-        <div className="control">
-          <input ref={uploadDniBack} id="file-upload-avatar" type="file" />
-        </div>
-      </div>
-      <div className="field">
-        <label className="checkbox">
-          <input type="checkbox" onClick={() => tengoAuto()} />
-          Tengo auto
-        </label>
-      </div>
-
-      {hasCar && (
-        <>
+        </Grid>
+        <Grid item xs={4}>
           <div className="field">
+            <label htmlFor="Avatar">Selfie</label>
             <div className="control">
-              <Field
-                name="plate"
-                component={renderTextField}
-                type="text"
-                label="Patente"
+              <input
+                ref={this.uploadAvatar}
+                id="file-upload-avatar"
+                type="file"
               />
             </div>
           </div>
+        </Grid>
+        <Grid item xs={4}>
           <div className="field">
+            <label htmlFor="Avatar">Cedula frontal</label>
             <div className="control">
-              <Field
-                name="color"
-                component={renderTextField}
-                type="text"
-                label="Color"
+              <input
+                ref={this.uploadDniFront}
+                id="file-upload-avatar"
+                type="file"
               />
             </div>
           </div>
+        </Grid>
+        <Grid item xs={4}>
           <div className="field">
+            <label htmlFor="Avatar">Cedula posterior</label>
             <div className="control">
-              <Field
-                name="brand"
-                component={renderTextField}
-                type="text"
-                label="Marca"
+              <input
+                ref={this.uploadDniBack}
+                id="file-upload-avatar"
+                type="file"
               />
             </div>
           </div>
-
-          <div className="field">
-            <div className="control">
-              <Field
-                name="model"
-                component={renderTextField}
-                type="text"
-                label="Modelo"
-              />
-            </div>
-          </div>
-        </>
-      )}
-
-      <button
-        className={`button is-link ${updateUserState.loading && 'is-loading'}`}
-        onClick={e => updateUser(e)}
-      >
-        {updateUserState.loading ? 'Loading' : 'Actualizar'}
-      </button>
-
-      <div className="field has-margin-top-40">
-        <div className="control">
-          {updateUserState.loading && (
-            <h1 className="subtitle has-text-primary">
-              Estamos actualizando tu perfil..
-            </h1>
-          )}
-
-          {updateUserState.success && (
-            <div>
-              {/* <h1 className="subtitle has-text-primary">
-                Perfil actualizado con exito !
-              </h1> */}
-              <Redirect to={routes.profile} />
-            </div>
-          )}
-
-          {/*
-            // No se con que key devuelven el error, posiblemente err, error, o message, pero para que no de error luego lo cambiamos
-            {updateUserState.error && (
-            <h1 className="subtitle has-text-primary">
-              {updateUserState.error}
-            </h1>
-            )}
-
-            */}
-        </div>
-      </div>
-    </form>
-  )
+        </Grid>
+        <Button
+          type="button"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          className={classes.submit}
+          // disabled={!this.getValidity()}
+          onClick={() =>
+            this.onSubmit({
+              name,
+              lastName,
+              phone,
+            })
+          }
+        >
+          Actualizar
+        </Button>
+      </Grid>
+    )
+  }
 }
 
-export default reduxForm({
-  form: 'updateUser',
-})(UpdateForm)
+UpdateForm.propTypes = {
+  user: PropTypes.object.isRequired,
+  updateUser: PropTypes.func.isRequired,
+}
+
+const mapDispatchToProps = dispatch => ({
+  updateUser: (token, data) => dispatch(updateUser(token, data)),
+  fetchUser: token => dispatch(fetchUser(token)),
+})
+
+const mapStateToProps = state => ({
+  user: state.user,
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UpdateForm)
