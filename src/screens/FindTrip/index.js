@@ -111,6 +111,16 @@ class FindTripScreen extends Component {
     return (
       <div className="find-trip">
         <Container>
+          <div style={{ textAlign: 'center' }}>
+            <a
+              target="_blank"
+              href="https://www.google.com/maps/d/u/0/viewer?usp=sharing&mid=16Kt-BFUrWVFqm4nCftaDyt4fK21roimT"
+              rel="noreferrer noopener"
+              className="map-link"
+            >
+              Ver Puntos de Encuentro
+            </a>
+          </div>
           <Select
             components={{ Placeholder }}
             placeholder={'#Desde'}
