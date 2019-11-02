@@ -1,7 +1,7 @@
 function ParseHour(props) {
-  const hours = props.split('T')[1]
-  const hour = hours.split(':')[0]
-  const minutes = hours.split(':')[1]
+  const today = new Date(props)
+  const hour = today.getHours()
+  const minutes = today.getMinutes()
   const hourSet = hour + ':' + minutes
   return hourSet
 }
