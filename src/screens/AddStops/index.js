@@ -59,11 +59,21 @@ class AddStopsScreen extends Component {
   }
 
   async submitTrip() {
-    const { startStop, endStop, middleStops, startTime, history } = this.props
+    const {
+      startStop,
+      endStop,
+      middleStops,
+      startTime,
+      history,
+      spaceCar,
+      carUsed,
+    } = this.props
     const { payload } = await this.props.createTrip(
       this.props.user.token,
       [startStop, ...middleStops, endStop],
-      startTime
+      startTime,
+      spaceCar,
+      carUsed
     )
     if (payload) {
       history.push(routes.myTrips)
@@ -81,13 +91,16 @@ class AddStopsScreen extends Component {
       value: spot,
     }))
     const middleStopsComponents = middleStops.map(this.createMiddleStop)
+    console.log(this.props.spaceCar)
+    console.log(this.props.carUsed)
+
     return (
       <Grid container justify="flex-start" alignItems="center">
         <Grid item xs={12}>
-          <StopCard label="Desde" stopName={startStop.name}></StopCard>
+          <StopCard label="SalgoDe" stopName={startStop.name}></StopCard>
         </Grid>
         <Grid item xs={12}>
-          <StopCard label="Hasta" stopName={endStop.name}></StopCard>
+          <StopCard label="LlegoHasta" stopName={endStop.name}></StopCard>
         </Grid>
         {middleStopsComponents}
         <Grid item xs={10}>
@@ -114,6 +127,8 @@ class AddStopsScreen extends Component {
 AddStopsScreen.propTypes = {
   spots: PropTypes.array.isRequired,
   endStop: PropTypes.object.isRequired,
+  spaceCar: PropTypes.object.isRequired,
+  carUsed: PropTypes.object.isRequired,
   startStop: PropTypes.object.isRequired,
   middleStops: PropTypes.array.isRequired,
   startTime: PropTypes.instanceOf(Date).isRequired,
@@ -133,6 +148,8 @@ const mapStateToProps = ({ user, createTrip, spots }) => {
     middleStops: createTrip.middleStops,
     startTime: createTrip.startTime,
     spots: spots.spots,
+    spaceCar: createTrip.spaceCar,
+    carUsed: createTrip.carUsed,
   }
 }
 

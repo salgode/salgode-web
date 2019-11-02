@@ -1,7 +1,9 @@
 export const actions = {
   SET_START_STOP: 'SET_START_STOP',
+  SET_VEHICULE: 'SET_VEHICULE',
   SET_END_STOP: 'SET_END_STOP',
   SET_START_TIME: 'SET_START_TIME',
+  SET_SPACE_CAR: 'SET_SPACE_CAR',
   CLEAR_CREATE_TRIP_INFO: 'CLEAR_CREATE_TRIP_INFO',
   CLEAR_START_STOP: 'CLEAR_START_STOP',
   CLEAR_END_STOP: 'CLEAR_END_STOP',
@@ -59,12 +61,30 @@ export function setStartTime(time) {
   }
 }
 
+export function setVehicule(vehicule) {
+  return {
+    type: actions.SET_VEHICULE,
+    payload: vehicule,
+  }
+}
+
+export function setSpaceInCar(space) {
+  return {
+    type: actions.SET_SPACE_CAR,
+    payload: space,
+  }
+}
+
 export function clearCreateTripInfo() {
   return { type: actions.CLEAR_CREATE_TRIP_INFO }
 }
 
-export function createTrip(authToken, route_points, etd) {
+export function createTrip(authToken, route_points, etd, spaceCar, carID) {
   // missing car_i and driver_id. Checkoput backend repo to work with
+  const route_points_ids = route_points.map(spot => {
+    return spot.id
+  })
+  console.log(etd)
   return {
     type: actions.CREATE_TRIP,
     payload: {
@@ -75,8 +95,14 @@ export function createTrip(authToken, route_points, etd) {
           Authorization: `Bearer ${authToken}`,
         },
         data: {
-          route_points,
-          etd,
+          vehicle_id: carID,
+          route_points: route_points_ids,
+          available_seats: spaceCar,
+          etd_info: {
+            etd: etd,
+            etd_policy: 'strict',
+            max_wait: 5,
+          },
         },
       },
     },

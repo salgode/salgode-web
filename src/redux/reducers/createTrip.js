@@ -21,6 +21,10 @@ export default function createTripReducer(state = {}, action) {
       return { ...state, endStop: '' }
     case createTripActions.SET_START_TIME:
       return { ...state, startTime: action.payload }
+    case createTripActions.SET_SPACE_CAR:
+      return { ...state, spaceCar: action.payload }
+    case createTripActions.SET_VEHICULE:
+      return { ...state, carUsed: action.payload }
     case createTripActions.CLEAR_CREATE_TRIP_INFO:
       return {
         startStop: '',
