@@ -1,1 +1,4 @@
-export const vehiclesModel = []
+export const vehiclesModel = {
+  vehicles: [],
+  loading: false,
+}

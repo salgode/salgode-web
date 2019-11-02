@@ -2,21 +2,35 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { updateUser } from '../../../redux/actions/updateUser'
-import { fetchUser } from '../../../redux/actions/user'
-import { fetchUserVehicles } from '../../../redux/actions/vehicles'
-import { Typography, Grid, TextField, Button } from '@material-ui/core'
-import uploadFile from '../../../utils/uploadFile'
-import routes from '../../../routes.js'
+import { updateUser } from '../../redux/actions/updateUser'
+import { fetchUser } from '../../redux/actions/user'
+import {
+  fetchUserVehicles,
+  updateUserVehicle,
+} from '../../redux/actions/vehicles'
+import {
+  Typography,
+  Grid,
+  TextField,
+  Button,
+  MenuItem,
+} from '@material-ui/core'
+import uploadFile from '../../utils/uploadFile'
+import routes from '../../routes.js'
 
 class UpdateForm extends Component {
   constructor(props) {
     super(props)
-    const { name, lastName, phone } = props.user
     this.state = {
-      name,
-      lastName,
-      phone,
+      name: '',
+      lastName: '',
+      phone: '',
+      alias: '',
+      brand: '',
+      model: '',
+      color: '',
+      seats: 0,
+      identification: '',
       validity: {
         name: true,
         lastName: true,
@@ -26,6 +40,12 @@ class UpdateForm extends Component {
     this.onChangeName = this.onChangeName.bind(this)
     this.onChangeLastname = this.onChangeLastname.bind(this)
     this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this)
+    this.onChangeAlias = this.onChangeAlias.bind(this)
+    this.onChangeBrand = this.onChangeBrand.bind(this)
+    this.onChangeModel = this.onChangeModel.bind(this)
+    this.onChangeColor = this.onChangeColor.bind(this)
+    this.onChangeIdentification = this.onChangeIdentification.bind(this)
+    this.setVehicle = this.setVehicle.bind(this)
     this.uploadAvatar = React.createRef()
     this.uploadDniFront = React.createRef()
     this.uploadDniBack = React.createRef()
@@ -43,6 +63,27 @@ class UpdateForm extends Component {
         phone: true,
       },
     })
+    this.setVehicle()
+  }
+
+  async setVehicle() {
+    const { vehicles } = this.props.vehicles
+    if (!vehicles.length) {
+      await this.props.fetchUserVehicles(this.props.user.token)
+    }
+    const {
+      alias,
+      vehicle_attributes: { model, color, brand, seats },
+      vehicle_identifications: { identification },
+    } = this.props.vehicles.vehicles[0]
+    this.setState({
+      alias,
+      model,
+      color,
+      brand,
+      seats,
+      identification,
+    })
   }
 
   async onSubmit(data) {
@@ -50,6 +91,8 @@ class UpdateForm extends Component {
     const imgs = await this.uploadAllImages()
     data.imgs = imgs
     await this.props.updateUser(token, data)
+    const vehicle_data = this.getVehicleData()
+    this.props.updateUserVehicle(token, vehicle_data)
     this.props.fetchUser(token)
   }
 
@@ -69,6 +112,18 @@ class UpdateForm extends Component {
       images.dniBack = res.image_urls.fetch
     }
     return images
+  }
+
+  getVehicleData() {
+    const { alias, model, color, brand, seats, identification } = this.state
+    const { vehicle_id } = this.props.vehicles.vehicles[0]
+    const vehicle_data = {
+      vehicle_id,
+      alias,
+      vehicle_attributes: { model, color, brand, seats },
+      vehicle_identifications: { identification },
+    }
+    return vehicle_data
   }
 
   onChangeName({ target: { value: name } }) {
@@ -94,16 +149,40 @@ class UpdateForm extends Component {
     }))
   }
 
-  // onChangeName({ target: { value: name } }) {
-  //   this.setState(oldState => ({
-  //     name,
-  //     validity: { ...oldState.validity, name: name.length > 2 },
-  //   }))
-  // }
+  onChangeAlias({ target: { value: alias } }) {
+    this.setState({ alias })
+  }
+
+  onChangeBrand({ target: { value: brand } }) {
+    this.setState({ brand })
+  }
+  onChangeModel({ target: { value: model } }) {
+    this.setState({ model })
+  }
+  onChangeColor({ target: { value: color } }) {
+    this.setState({ color })
+  }
+  onChangeIdentification({ target: { value: identification } }) {
+    this.setState({ identification })
+  }
+  onChangeSeats({ target: { value: seats } }) {
+    this.setState({ seats })
+  }
 
   render() {
     const classes = {}
-    const { name, lastName, phone, hasCar } = this.state
+    const {
+      name,
+      lastName,
+      phone,
+      hasCar,
+      alias,
+      brand,
+      model,
+      color,
+      identification,
+      seats,
+    } = this.state
     return (
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -179,9 +258,78 @@ class UpdateForm extends Component {
             </div>
           </div>
         </Grid>
+        <Grid item xs={12}>
+          <Typography component="h1" variant="h4">
+            Datos del vehículo
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Alias"
+            autoFocus
+            value={alias}
+            onChange={this.onChangeAlias}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Marca"
+            value={brand}
+            onChange={this.onChangeBrand}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Modelo"
+            value={model}
+            onChange={this.onChangeModel}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Color"
+            value={color}
+            onChange={this.onChangeColor}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Patente"
+            value={identification}
+            onChange={this.onChangeIdentification}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            select
+            variant="outlined"
+            fullWidth
+            label="Asientos"
+            type="number"
+            min={0}
+            max={20}
+            value={seats}
+            onChange={this.onChangeSeats}
+          >
+            {[...Array(20).keys()].map(i => (
+              <MenuItem key={i} value={i}>
+                {i}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
         <Button
           type="button"
-          fullWidth
           variant="contained"
           color="secondary"
           className={classes.submit}
@@ -204,15 +352,22 @@ class UpdateForm extends Component {
 UpdateForm.propTypes = {
   user: PropTypes.object.isRequired,
   updateUser: PropTypes.func.isRequired,
+  vehicles: PropTypes.object.isRequired,
+  fetchUser: PropTypes.func.isRequired,
+  fetchUserVehicles: PropTypes.func.isRequired,
+  updateUserVehicle: PropTypes.func.isRequired,
 }
 
-const mapDispatchToProps = dispatch => ({
-  updateUser: (token, data) => dispatch(updateUser(token, data)),
-  fetchUser: token => dispatch(fetchUser(token)),
-})
+const mapDispatchToProps = {
+  updateUser,
+  fetchUser,
+  fetchUserVehicles,
+  updateUserVehicle,
+}
 
 const mapStateToProps = state => ({
   user: state.user,
+  vehicles: state.vehicles,
 })
 
 export default connect(
