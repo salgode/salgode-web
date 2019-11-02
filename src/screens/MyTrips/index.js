@@ -42,6 +42,18 @@ class MyTrips extends Component {
     this.setState({ trips: this.props.futureTrips.trips, loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips) {
+      return trips.map((trip, i) => {
+        return (
+          <Grid item md={4} key={i}>
+            <MyTripsCard trip={trip} />
+          </Grid>
+        )
+      })
+    }
+  }
+
   render() {
     const { loading, trips } = this.state
     if (loading) return <Loading />
@@ -53,13 +65,7 @@ class MyTrips extends Component {
       <div>
         <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Grid container spacing={2} justify="center" alignItems="center">
-          {trips.map((trip, i) => {
-            return (
-              <Grid item md={4} key={i}>
-                <MyTripsCard trip={trip} />
-              </Grid>
-            )
-          })}
+          {this.renderTrips(trips)}
         </Grid>
       </div>
     )

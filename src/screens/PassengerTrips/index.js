@@ -37,6 +37,18 @@ class PassengerTrips extends Component {
     this.setState({ trips: this.props.passengerTrips.tripList, loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips) {
+      return trips.map((trip, i) => {
+        return (
+          <Grid item md={4} key={i}>
+            <PassengerTripCard trip={trip} />
+          </Grid>
+        )
+      })
+    }
+  }
+
   render() {
     const { loading, trips } = this.state
     if (loading) return <Loading />
@@ -49,13 +61,7 @@ class PassengerTrips extends Component {
       <div>
         <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Grid container spacing={2} justify="center">
-          {trips.map((trip, index) => {
-            return (
-              <Grid item md={4} key={index}>
-                <PassengerTripCard trip={trip} />
-              </Grid>
-            )
-          })}
+          {this.renderTrips(trips)}
         </Grid>
       </div>
     )

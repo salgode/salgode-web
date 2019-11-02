@@ -23,7 +23,10 @@ class SimpleBreadcrumbs extends Component {
           {Object.keys(antecesors).map((k_antecesor, index) => {
             if (antecesors[k_antecesor] === '/') {
               return (
-                <Typography color={index === 0 ? 'inherit' : 'textPrimary'}>
+                <Typography
+                  color={index === 0 ? 'inherit' : 'textPrimary'}
+                  key={index}
+                >
                   {k_antecesor}
                 </Typography>
               )
