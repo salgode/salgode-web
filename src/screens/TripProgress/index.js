@@ -3,8 +3,11 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import routes from '../../routes.js'
 
-// ui components
 import { ProgressStepper, WaitingPassengers } from '../../components'
+import Loading from '../../components/Loading/Loading'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
+
+// ui components
 import { Paper, Button, Typography, withStyles } from '@material-ui/core'
 
 // action creators
@@ -12,9 +15,9 @@ import {
   startJourney,
   completeJourney,
   nextStop,
-  nextStopArrived,
   getManifest,
 } from '../../redux/actions/currentTrip'
+import { requestedTripsDetails } from '../../redux/actions/tripDetails'
 
 const style = () => ({
   buttonContainer: {
@@ -26,61 +29,124 @@ const style = () => ({
 class CurrentTripScreen extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      loading: false,
+      next_stop_idx: 0,
+      trip: [],
+      passengers_by_stop: [],
+    }
     this.handleClickForward = this.handleClickForward.bind(this)
   }
 
   componentDidMount() {
-    const { match, user } = this.props
-    this.props.getManifest(user.token, match.params.id)
+    this.setState({ loading: true })
+    this.getTripDetail()
+    this.setState({ loading: false })
   }
 
-  handleClickForward() {
-    const { trip, next_stop_idx, arrived, user } = this.props
+  async getPassengers() {
+    const { getManifest, match, user } = this.props
+    const reserve = await getManifest(user.token, match.params.id)
+
+    if (reserve.error) {
+      return alert(
+        'Error obteniendo el detalle',
+        'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
+      )
+    }
+    const { trip } = this.state
+    const passengers = this.get_passengers_by_stop(reserve.payload.data, trip)
+    this.setState({ passengers_by_stop: passengers })
+  }
+
+  async getTripDetail() {
+    const { requestedTripsDetails, match } = this.props
+
+    const reserve = await requestedTripsDetails(
+      this.props.user.token,
+      match.params.id
+    )
+
+    if (reserve.error) {
+      return alert(
+        'Error obteniendo el detalle',
+        'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
+      )
+    }
+    this.setState({ trip: reserve.payload.data })
+    this.getPassengers()
+  }
+
+  get_passengers_by_stop(manifest, trip) {
+    const idx_to_passengers = {}
+    const point_to_idx = {}
+    trip.trip_route_points.forEach((point, i) => {
+      idx_to_passengers[i] = { up: [], down: [] }
+      point_to_idx[point] = i
+    })
+    manifest.passengers.forEach(passenger => {
+      const idx_up = point_to_idx[passenger.route.start]
+      const idx_down = point_to_idx[passenger.route.end]
+      idx_to_passengers[idx_up]['up'].push(passenger)
+      idx_to_passengers[idx_down]['down'].push(passenger)
+    })
+    return idx_to_passengers
+  }
+
+  async handleClickForward() {
+    const { user } = this.props
+    const { trip, next_stop_idx } = this.state
     const { trip_id } = trip
     if (next_stop_idx === 0) {
-      this.props.startJourney(user.token, trip_id)
-      this.props.nextStop(user.token, trip_id)
-    } else if (next_stop_idx === trip.route_points.length - 1) {
-      this.props.completeJourney(user.token, trip_id)
-      this.props.history.push(routes.myTrips)
-    } else if (arrived) {
-      this.props.nextStop(user.token, trip_id)
+      await this.props.startJourney(user.token, trip_id)
+      await this.props.nextStop(user.token, trip_id)
+      this.setState({ next_stop_idx: next_stop_idx + 1 })
+    } else if (next_stop_idx === trip.trip_route_points.length - 1) {
+      await this.props.completeJourney(user.token, trip_id)
+      await this.props.history.push(routes.myTrips)
     } else {
-      this.props.nextStopArrived(user.token, trip_id)
+      await this.props.nextStop(user.token, trip_id)
+      this.setState({ next_stop_idx: next_stop_idx + 1 })
     }
   }
 
   buttonMessage() {
-    const { trip, next_stop_idx, arrived } = this.props
+    const { trip, next_stop_idx } = this.state
     if (next_stop_idx === 0) return 'Comenzar Viaje'
-    if (next_stop_idx === trip.route_points.length - 1) return 'Terminar Viaje'
-    if (arrived) return 'Siguiente Parada'
-    return 'Arrivo a Parada'
+    if (next_stop_idx === trip.trip_route_points.length - 1)
+      return 'Terminar Viaje'
+    return 'Siguiente Parada'
   }
 
   render() {
-    const {
-      classes,
-      trip,
-      next_stop_idx,
-      arrived,
-      passengers_by_stop,
-    } = this.props
-    const passengers_up = passengers_by_stop
-      ? passengers_by_stop[next_stop_idx].up
-      : []
-    const passengers_down = passengers_by_stop
-      ? passengers_by_stop[next_stop_idx].down
-      : []
-    const end = next_stop_idx === trip.route_points.length - 1
+    const { classes } = this.props
+    const { trip, loading, passengers_by_stop, next_stop_idx } = this.state
+    if (loading) return <Loading />
+
+    if (trip && trip.length === 0) {
+      return <div />
+    }
+    const passengers_up =
+      !loading && passengers_by_stop.length > 0
+        ? passengers_by_stop[next_stop_idx].up
+        : []
+    const passengers_down =
+      !loading && passengers_by_stop.length > 0
+        ? passengers_by_stop[next_stop_idx].down
+        : []
+    const breadcrumb = {
+      Conductor: '/',
+      'Mis Viajes': 'myTrips',
+      Progreso: '/',
+    }
     return (
       <div>
-        <ProgressStepper
-          pointName={trip.trip_route_points[next_stop_idx].name}
-          starting={next_stop_idx === 0 && !arrived}
-          ending={end}
-        />
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Paper>
+          <ProgressStepper
+            steps={trip.trip_route_points}
+            activeStep={next_stop_idx}
+          />
           {passengers_up.length ? (
             <WaitingPassengers label={'Recoge a:'} passengers={passengers_up} />
           ) : null}
@@ -103,13 +169,12 @@ class CurrentTripScreen extends Component {
 }
 
 CurrentTripScreen.propTypes = {
+  requestedTripsDetails: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  trip: PropTypes.object.isRequired,
   startJourney: PropTypes.func.isRequired,
   completeJourney: PropTypes.func.isRequired,
   nextStop: PropTypes.func.isRequired,
   nextStopArrived: PropTypes.func.isRequired,
-  next_stop_idx: PropTypes.number.isRequired,
   arrived: PropTypes.bool.isRequired,
   getManifest: PropTypes.func.isRequired,
   passengers_by_stop: PropTypes.object,
@@ -123,10 +188,7 @@ CurrentTripScreen.propTypes = {
 const mapStateToProps = ({ user, currentTrip }) => {
   return {
     user: user,
-    trip: currentTrip.trip,
     arrived: currentTrip.arrived,
-    next_stop_idx: currentTrip.next_stop_idx,
-    passengers_by_stop: currentTrip.passengers_by_stop,
   }
 }
 
@@ -134,8 +196,8 @@ const mapDispatchToProps = {
   startJourney,
   completeJourney,
   nextStop,
-  nextStopArrived,
   getManifest,
+  requestedTripsDetails,
 }
 
 const styledComponent = withStyles(style)(CurrentTripScreen)
