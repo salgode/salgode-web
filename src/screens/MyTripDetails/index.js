@@ -59,7 +59,6 @@ class MyTripDetails extends Component {
   }
 
   async getTripDetail() {
-    this.setState({ loading: true })
     const { fetchdetailsTrip, match } = this.props
 
     const reserve = await fetchdetailsTrip(
@@ -68,7 +67,6 @@ class MyTripDetails extends Component {
     )
 
     if (reserve.error) {
-      this.setState({ loading: false })
       return alert(
         'Error obteniendo el detalle',
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
@@ -78,7 +76,6 @@ class MyTripDetails extends Component {
   }
 
   async getTripManifest() {
-    this.setState({ loading: true })
     const { fetchtripManifest, match } = this.props
 
     const reserve = await fetchtripManifest(
@@ -87,13 +84,12 @@ class MyTripDetails extends Component {
     )
 
     if (reserve.error) {
-      this.setState({ loading: false })
       return alert(
         'Error obteniendo el detalle',
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
       )
     }
-    this.setState({ manifest: reserve.payload.data, loading: false })
+    this.setState({ manifest: reserve.payload.data })
   }
 
   renderDetails() {

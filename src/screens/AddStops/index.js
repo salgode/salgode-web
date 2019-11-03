@@ -5,9 +5,10 @@ import PropTypes from 'prop-types'
 // ui components
 import { Grid, Button, Typography, Box, IconButton } from '@material-ui/core'
 import Select from 'react-select'
-import StopCard from '../../components/StopCard'
 import ClearIcon from '@material-ui/icons/Clear'
 
+import StopCard from '../../components/StopCard'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 // style
 import './style.sass'
 
@@ -91,33 +92,43 @@ class AddStopsScreen extends Component {
       value: spot,
     }))
     const middleStopsComponents = middleStops.map(this.createMiddleStop)
+    const breadcrumb = {
+      Conductor: '/',
+      'Crear Viaje': 'createTrip',
+      'Agregar Paradas': '/',
+    }
 
     return (
-      <Grid container justify="flex-start" alignItems="center">
-        <Grid item xs={12}>
-          <StopCard label="SalgoDe" stopName={startStop.name}></StopCard>
+      <div>
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
+        <Grid container justify="flex-start" alignItems="center">
+          <Grid item xs={12}>
+            <StopCard label="SalgoDe" stopName={startStop.name}></StopCard>
+          </Grid>
+          <Grid item xs={12}>
+            <StopCard label="LlegoHasta" stopName={endStop.name}></StopCard>
+          </Grid>
+          {middleStopsComponents}
+          <Grid item xs={10}>
+            <Typography component="p">
+              Agrega paradas extra (opcional)
+            </Typography>
+            <Select
+              value={null}
+              className="search"
+              isSearchable={true}
+              isDisabled={middleStops.length >= MAX_MIDDLE_STOPS}
+              options={filteredSpots}
+              onChange={option => this.props.addMiddleStop(option.value)}
+            />
+          </Grid>
+          <Grid container item xs={10} justify="center">
+            <Button color="primary" onClick={this.submitTrip}>
+              Crear Viaje
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <StopCard label="LlegoHasta" stopName={endStop.name}></StopCard>
-        </Grid>
-        {middleStopsComponents}
-        <Grid item xs={10}>
-          <Typography component="p">Agrega paradas extra (opcional)</Typography>
-          <Select
-            value={null}
-            className="search"
-            isSearchable={true}
-            isDisabled={middleStops.length >= MAX_MIDDLE_STOPS}
-            options={filteredSpots}
-            onChange={option => this.props.addMiddleStop(option.value)}
-          />
-        </Grid>
-        <Grid container item xs={10} justify="center">
-          <Button color="primary" onClick={this.submitTrip}>
-            Crear Viaje
-          </Button>
-        </Grid>
-      </Grid>
+      </div>
     )
   }
 }
@@ -125,8 +136,8 @@ class AddStopsScreen extends Component {
 AddStopsScreen.propTypes = {
   spots: PropTypes.array.isRequired,
   endStop: PropTypes.object.isRequired,
-  spaceCar: PropTypes.object.isRequired,
-  carUsed: PropTypes.object.isRequired,
+  spaceCar: PropTypes.string.isRequired,
+  carUsed: PropTypes.string.isRequired,
   startStop: PropTypes.object.isRequired,
   middleStops: PropTypes.array.isRequired,
   startTime: PropTypes.instanceOf(Date).isRequired,
