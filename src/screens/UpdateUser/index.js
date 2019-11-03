@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 // redux
 import { updateUser } from '../../redux/actions/updateUser'
+import { updateUserData } from '../../redux/actions/user'
 import {
   fetchUserVehicles,
   updateUserVehicle,
@@ -17,6 +18,7 @@ import Loading from '../../components/Loading/Loading'
 // utils
 import uploadFile from '../../utils/uploadFile'
 import { setObject, USER_DATA } from '../../utils/storeData'
+import routes from '../../routes'
 
 class UpdateUser extends Component {
   constructor(props) {
@@ -49,9 +51,12 @@ class UpdateUser extends Component {
     this.onChangeIdentification = this.onChangeIdentification.bind(this)
     this.setVehicle = this.setVehicle.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
+    this.uploadAllImages = this.uploadAllImages.bind(this)
     this.uploadAvatar = React.createRef()
     this.uploadDniFront = React.createRef()
     this.uploadDniBack = React.createRef()
+    this.uploadDriFront = React.createRef()
+    this.uploadDriBack = React.createRef()
   }
 
   componentDidMount() {
@@ -102,37 +107,48 @@ class UpdateUser extends Component {
     const updateData = { name, lastName, phone, imgs }
     const response = await this.props.updateUser(token, updateData)
     if (response.payload.data.success) {
-      setObject(USER_DATA, {
-        ...this.props.user,
-        name,
-        lastName,
-        phone,
-        ...imgs,
-      })
+      const data = { name, lastName, phone, ...imgs }
+      setObject(USER_DATA, { ...this.props.user, ...data })
+      this.props.updateUserData(data)
     }
     const vehicle_data = this.getVehicleData()
     if (this.state.hasVehicle) {
       this.props.updateUserVehicle(token, vehicle_data)
-      this.props.fetchUserVehicles(token)
     }
     this.setState({ loading: false })
+    this.props.history.push(routes.profile)
   }
 
   async uploadAllImages() {
     const images = {}
+    let avatar, dniFront, dniBack, driFront, driBack
 
     if (this.uploadAvatar.current.files.length !== 0) {
-      const res = await uploadFile(this.uploadAvatar)
-      images.avatar = res.image_urls.fetch
+      avatar = uploadFile(this.uploadAvatar).then(res => {
+        images.selfieLink = res.image_urls.fetch
+      })
     }
     if (this.uploadDniFront.current.files.length !== 0) {
-      const res = await uploadFile(this.uploadDniFront)
-      images.dniFront = res.image_urls.fetch
+      dniFront = uploadFile(this.uploadDniFront).then(res => {
+        images.dniFrontLink = res.image_urls.fetch
+      })
     }
     if (this.uploadDniBack.current.files.length !== 0) {
-      const res = await uploadFile(this.uploadDniBack)
-      images.dniBack = res.image_urls.fetch
+      dniBack = uploadFile(this.uploadDniBack).then(res => {
+        images.dniBackLink = res.image_urls.fetch
+      })
     }
+    if (this.uploadDriFront.current.files.length !== 0) {
+      driFront = uploadFile(this.uploadDriFront).then(res => {
+        images.driFrontLink = res.image_urls.fetch
+      })
+    }
+    if (this.uploadDriBack.current.files.length !== 0) {
+      driBack = uploadFile(this.uploadDriBack).then(res => {
+        images.driBackLink = res.image_urls.fetch
+      })
+    }
+    await Promise.all([avatar, dniFront, dniBack, driFront, driBack])
     return images
   }
 
@@ -232,9 +248,13 @@ class UpdateUser extends Component {
               onChangeSeats={this.onChangeSeats}
               onChangeColor={this.onChangeColor}
               onChangeModel={this.onChangeModel}
-              uploadAvatar={this.uploadAvatar}
-              uploadDniBack={this.uploadDniBack}
-              uploadDniFront={this.uploadDniFront}
+              ref={{
+                uploadAvatar: this.uploadAvatar,
+                uploadDniFront: this.uploadDniFront,
+                uploadDniBack: this.uploadDniBack,
+                uploadDriFront: this.uploadDriFront,
+                uploadDriBack: this.uploadDriBack,
+              }}
             ></UpdateForm>
             <Grid item xs={12}>
               <Button
@@ -258,13 +278,16 @@ class UpdateUser extends Component {
 UpdateUser.propTypes = {
   user: PropTypes.object.isRequired,
   updateUser: PropTypes.func.isRequired,
+  updateUserData: PropTypes.func.isRequired,
   vehicles: PropTypes.object.isRequired,
   fetchUserVehicles: PropTypes.func.isRequired,
   updateUserVehicle: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = {
   updateUser,
+  updateUserData,
   fetchUserVehicles,
   updateUserVehicle,
 }

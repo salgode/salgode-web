@@ -112,6 +112,12 @@ class ProfileCard extends Component {
             <CardMedia>
               <img src={user.dniBackLink} />
             </CardMedia>
+            <CardMedia>
+              <img src={user.driFrontLink} />
+            </CardMedia>
+            <CardMedia>
+              <img src={user.driBackLink} />
+            </CardMedia>
           </CardContent>
         </Collapse>
         <CardActions>

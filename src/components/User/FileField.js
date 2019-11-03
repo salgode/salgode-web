@@ -2,21 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Grid } from '@material-ui/core'
 
-function FileField(props) {
+const FileField = React.forwardRef((props, ref) => {
   return (
     <Grid item xs={4}>
       <div className="field">
         <label>{props.label}</label>
         <div className="control">
-          <input ref={props.createdRef} type="file" />
+          <input ref={ref} type="file" />
         </div>
       </div>
     </Grid>
   )
-}
+})
+
+FileField.displayName = 'FileField'
 
 FileField.propTypes = {
-  createdRef: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
 }
 

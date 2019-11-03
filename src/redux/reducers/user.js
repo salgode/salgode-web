@@ -33,6 +33,11 @@ export default function userReducer(state = {}, action) {
       }
     case userActions.USER_LOGOUT:
       return {}
+    case userActions.UPDATE_USER_DATA:
+      return {
+        ...state,
+        ...action.data,
+      }
     default:
       return state
   }

@@ -3,7 +3,14 @@ import PropTypes from 'prop-types'
 import { Grid, Typography } from '@material-ui/core'
 import { FormField, FileField } from './'
 
-function UpdateForm(props) {
+const UpdateForm = React.forwardRef((props, ref) => {
+  const {
+    uploadAvatar,
+    uploadDniFront,
+    uploadDniBack,
+    uploadDriFront,
+    uploadDriBack,
+  } = ref
   return (
     <>
       <Grid item xs={12}>
@@ -27,9 +34,12 @@ function UpdateForm(props) {
         value={props.phone}
         onChange={props.onChangePhoneNumber}
       />
-      <FileField label="Selfie" createdRef={props.uploadAvatar} />
-      <FileField label="Cédula Frontal" createdRef={props.uploadDniFront} />
-      <FileField label="Cédula Posterior" createdRef={props.uploadDniBack} />
+      <FileField label="Selfie" ref={uploadAvatar} />
+      <FileField label="Cédula Frontal" ref={uploadDniFront} />
+      <FileField label="Cédula Posterior" ref={uploadDniBack} />
+      <FileField label="Licencia Frontal" ref={uploadDriFront} />
+      <FileField label="Licencia Posterior" ref={uploadDriBack} />
+
       {!props.hasVehicle ? null : (
         <>
           <Grid item xs={12}>
@@ -73,7 +83,9 @@ function UpdateForm(props) {
       )}
     </>
   )
-}
+})
+
+UpdateForm.displayName = 'UpdateForm'
 
 UpdateForm.propTypes = {
   name: PropTypes.string.isRequired,
@@ -95,9 +107,6 @@ UpdateForm.propTypes = {
   onChangeSeats: PropTypes.func.isRequired,
   onChangeColor: PropTypes.func.isRequired,
   onChangeModel: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.object.isRequired,
-  uploadDniBack: PropTypes.object.isRequired,
-  uploadDniFront: PropTypes.object.isRequired,
 }
 
 export default UpdateForm

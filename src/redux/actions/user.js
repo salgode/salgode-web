@@ -6,6 +6,7 @@ export const actions = {
   USER_SIGNUP_FAIL: 'USER/SIGNUP_FAIL',
   USER_SIGNUP_SUCCESS: 'USER/SIGNUP_SUCCESS',
   USER_LOGOUT: 'USER/LOGOUT',
+  UPDATE_USER_DATA: 'UPDATE_USER_DATA',
 }
 
 export function loginUser(email, password) {
@@ -105,5 +106,12 @@ export function fetchUser(authToken) {
 export function logoutUser() {
   return {
     type: actions.USER_LOGOUT,
+  }
+}
+
+export function updateUserData(data) {
+  return {
+    type: actions.UPDATE_USER_DATA,
+    data,
   }
 }
