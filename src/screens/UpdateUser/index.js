@@ -1,18 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+
+// redux
 import { updateUser } from '../../redux/actions/updateUser'
 import {
   fetchUserVehicles,
   updateUserVehicle,
 } from '../../redux/actions/vehicles'
-import {
-  Typography,
-  Grid,
-  TextField,
-  Button,
-  MenuItem,
-} from '@material-ui/core'
+
+// components
+import { Grid, Button } from '@material-ui/core'
+import { UpdateForm } from '../../components/User'
+import Loading from '../../components/Loading/Loading'
+
+// utils
 import uploadFile from '../../utils/uploadFile'
 import { setObject, USER_DATA } from '../../utils/storeData'
 
@@ -35,9 +37,10 @@ class UpdateUser extends Component {
         phone: true,
       },
       hasVehicle: false,
+      loading: false,
     }
     this.onChangeName = this.onChangeName.bind(this)
-    this.onChangeLastname = this.onChangeLastname.bind(this)
+    this.onChangeLastName = this.onChangeLastName.bind(this)
     this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this)
     this.onChangeAlias = this.onChangeAlias.bind(this)
     this.onChangeBrand = this.onChangeBrand.bind(this)
@@ -45,6 +48,7 @@ class UpdateUser extends Component {
     this.onChangeColor = this.onChangeColor.bind(this)
     this.onChangeIdentification = this.onChangeIdentification.bind(this)
     this.setVehicle = this.setVehicle.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
     this.uploadAvatar = React.createRef()
     this.uploadDniFront = React.createRef()
     this.uploadDniBack = React.createRef()
@@ -56,6 +60,7 @@ class UpdateUser extends Component {
       name,
       lastName,
       phone,
+      loading: true,
       validity: {
         name: true,
         lastName: true,
@@ -70,7 +75,7 @@ class UpdateUser extends Component {
     if (!vehicles.length) {
       await this.props.fetchUserVehicles(this.props.user.token)
     }
-    if (!this.props.vehicles.vehicles.length) {
+    if (this.props.vehicles.vehicles.length) {
       const {
         alias,
         vehicle_attributes: { model, color, brand, seats },
@@ -86,21 +91,31 @@ class UpdateUser extends Component {
         hasVehicle: true,
       })
     }
+    this.setState({ loading: false })
   }
 
-  async onSubmit(data) {
+  async onSubmit() {
+    this.setState({ loading: true })
+    const { name, lastName, phone } = this.state
     const { token } = this.props.user
     const imgs = await this.uploadAllImages()
-    const updateData = { ...data, imgs }
+    const updateData = { name, lastName, phone, imgs }
     const response = await this.props.updateUser(token, updateData)
     if (response.payload.data.success) {
-      setObject(USER_DATA, { ...this.props.user, ...data, ...imgs })
+      setObject(USER_DATA, {
+        ...this.props.user,
+        name,
+        lastName,
+        phone,
+        ...imgs,
+      })
     }
     const vehicle_data = this.getVehicleData()
     if (this.state.hasVehicle) {
       this.props.updateUserVehicle(token, vehicle_data)
       this.props.fetchUserVehicles(token)
     }
+    this.setState({ loading: false })
   }
 
   async uploadAllImages() {
@@ -140,7 +155,7 @@ class UpdateUser extends Component {
     }))
   }
 
-  onChangeLastname({ target: { value: lastName } }) {
+  onChangeLastName({ target: { value: lastName } }) {
     this.setState(oldState => ({
       lastName,
       validity: { ...oldState.validity, lastName: lastName.length > 2 },
@@ -189,179 +204,52 @@ class UpdateUser extends Component {
       color,
       identification,
       seats,
+      loading,
     } = this.state
     return (
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography component="h1" variant="h4">
-            Datos del usuario
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            label="Nombre"
-            autoFocus
-            value={name}
-            onChange={this.onChangeName}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            label="Apellido"
-            value={lastName}
-            onChange={this.onChangeLastname}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            required
-            fullWidth
-            label="Número de Teléfono"
-            name="phoneNumber"
-            value={phone}
-            onChange={this.onChangePhone}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <div className="field">
-            <label htmlFor="Avatar">Selfie</label>
-            <div className="control">
-              <input
-                ref={this.uploadAvatar}
-                id="file-upload-avatar"
-                type="file"
-              />
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={4}>
-          <div className="field">
-            <label htmlFor="Avatar">Cedula frontal</label>
-            <div className="control">
-              <input
-                ref={this.uploadDniFront}
-                id="file-upload-avatar"
-                type="file"
-              />
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={4}>
-          <div className="field">
-            <label htmlFor="Avatar">Cedula posterior</label>
-            <div className="control">
-              <input
-                ref={this.uploadDniBack}
-                id="file-upload-avatar"
-                type="file"
-              />
-            </div>
-          </div>
-        </Grid>
-        {!hasVehicle ? null : (
+        {loading ? (
+          <Loading />
+        ) : (
           <>
+            <UpdateForm
+              name={name}
+              lastName={lastName}
+              phone={phone}
+              alias={alias}
+              model={model}
+              color={color}
+              brand={brand}
+              seats={seats}
+              identification={identification}
+              hasVehicle={hasVehicle}
+              onChangeName={this.onChangeName}
+              onChangeLastName={this.onChangeLastName}
+              onChangePhoneNumber={this.onChangePhoneNumber}
+              onChangeAlias={this.onChangeAlias}
+              onChangeBrand={this.onChangeBrand}
+              onChangeIdentification={this.onChangeIdentification}
+              onChangeSeats={this.onChangeSeats}
+              onChangeColor={this.onChangeColor}
+              onChangeModel={this.onChangeModel}
+              uploadAvatar={this.uploadAvatar}
+              uploadDniBack={this.uploadDniBack}
+              uploadDniFront={this.uploadDniFront}
+            ></UpdateForm>
             <Grid item xs={12}>
-              <Typography component="h1" variant="h4">
-                Datos del vehículo
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                variant="outlined"
-                fullWidth
-                label="Alias"
-                autoFocus
-                value={alias}
-                onChange={this.onChangeAlias}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                variant="outlined"
-                fullWidth
-                label="Marca"
-                value={brand}
-                onChange={this.onChangeBrand}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                variant="outlined"
-                fullWidth
-                label="Modelo"
-                value={model}
-                onChange={this.onChangeModel}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                variant="outlined"
-                fullWidth
-                label="Color"
-                value={color}
-                onChange={this.onChangeColor}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                variant="outlined"
-                fullWidth
-                label="Patente"
-                value={identification}
-                onChange={this.onChangeIdentification}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                select
-                required
-                variant="outlined"
-                fullWidth
-                label="Asientos"
-                type="number"
-                min={0}
-                max={20}
-                value={seats}
-                onChange={this.onChangeSeats}
+              <Button
+                type="button"
+                variant="contained"
+                color="secondary"
+                className={classes.submit}
+                // disabled={!this.getValidity()}
+                onClick={this.onSubmit}
               >
-                {[...Array(20).keys()].map(i => (
-                  <MenuItem key={i} value={i}>
-                    {i}
-                  </MenuItem>
-                ))}
-              </TextField>
+                Actualizar
+              </Button>
             </Grid>
           </>
         )}
-
-        <Button
-          type="button"
-          variant="contained"
-          color="secondary"
-          className={classes.submit}
-          // disabled={!this.getValidity()}
-          onClick={() =>
-            this.onSubmit({
-              name,
-              lastName,
-              phone,
-            })
-          }
-        >
-          Actualizar
-        </Button>
       </Grid>
     )
   }
