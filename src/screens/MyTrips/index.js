@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
 
 // Store
 import { fetchFutureTrips } from '../../redux/actions/trips'
@@ -12,6 +13,7 @@ import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 // Components
 import Loading from '../../components/Loading/Loading'
 import Grid from '@material-ui/core/Grid'
+import routes from '../../routes'
 
 class MyTrips extends Component {
   constructor(props) {
@@ -57,12 +59,31 @@ class MyTrips extends Component {
     }
   }
 
+  checkIsDriver() {
+    const { user } = this.props
+    if (
+      user.vehicles.length === 0 ||
+      user.driFrontLink === null ||
+      user.driBackLink === null
+    ) {
+      return true
+    }
+    return false
+  }
+
   render() {
     const { loading, trips } = this.state
     if (loading) return <Loading />
     const breadcrumb = {
       Conductor: '/',
       'Mis Viajes': '/',
+    }
+
+    if (this.checkIsDriver()) {
+      alert(
+        'Solo para conductores\nAsegurate de tener tu licencia de conducir y algún vehiculo registrado'
+      )
+      return <Redirect to={routes.profile} />
     }
     return (
       <div>
@@ -77,10 +98,7 @@ class MyTrips extends Component {
 
 MyTrips.propTypes = {
   fetchFutureTrips: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    token: PropTypes.string,
-    userId: PropTypes.string,
-  }).isRequired,
+  user: PropTypes.object.isRequired,
   futureTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
 
