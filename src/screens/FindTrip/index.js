@@ -71,11 +71,14 @@ class FindTripScreen extends Component {
 
   preFilterPayload(payload) {
     const newList = payload.trip_route_points.filter(function(value) {
-      return value.name === payload.stop || value.name === payload.end
+      return (
+        value.place_name === payload.stop || value.place_name === payload.end
+      )
     })
-    payload.stop = newList[0].id
-    payload.end = newList[1].id
+    payload.start = newList[0].place_id
+    payload.end = newList[1].place_id
     delete payload.trip_route_points
+    delete payload.stop
     return payload
   }
 
