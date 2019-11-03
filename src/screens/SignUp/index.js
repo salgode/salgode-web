@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
 import routes from '../../routes.js'
@@ -15,7 +15,7 @@ import { Redirect } from 'react-router-dom'
 
 const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
-class SignUpScreen extends React.Component {
+class SignUpScreen extends Component {
   constructor(props) {
     super(props)
 
@@ -30,7 +30,6 @@ class SignUpScreen extends React.Component {
     const { signUp, history } = this.props
 
     this.setState({ loading: true })
-
     const user = await signUp(payload)
 
     this.setState({ loading: false })
@@ -53,7 +52,6 @@ class SignUpScreen extends React.Component {
     return (
       <div className="sign-up">
         <SignUpForm onSubmit={this.onSubmit} />
-
         {loading && <Loading />}
       </div>
     )
@@ -78,7 +76,10 @@ const mapDispatchToProps = dispatch => ({
         payload.email,
         payload.phone,
         payload.password,
-        payload.passwordRepeat
+        payload.passwordRepeat,
+        payload.selfieLink,
+        payload.dniFrontLink,
+        payload.dniBackLink
       )
     ),
 })

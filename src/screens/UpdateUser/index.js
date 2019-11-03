@@ -16,7 +16,6 @@ const UpdateUser = () => {
       lastName: lastName,
       phone: phone,
     }
-    // console.log(alldata)
     setInitialValues(data)
     setIsLoading(false)
   }, [])

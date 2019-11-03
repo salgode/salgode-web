@@ -129,7 +129,7 @@ class FindTripsCard extends Component {
       const { stop } = this.state
       const position = toFilter
         .map(function(e) {
-          return e.name
+          return e.place_name
         })
         .indexOf(stop)
       newList = toFilter.filter(function(value, index) {
@@ -164,8 +164,11 @@ class FindTripsCard extends Component {
     points.map((point, i, arr) => {
       if (i !== arr.length - rest) {
         menuItems.push(
-          <MenuItem onClick={() => this.handleClose(name, point.name)} key={i}>
-            {point.name}
+          <MenuItem
+            onClick={() => this.handleClose(name, point.place_name)}
+            key={i}
+          >
+            {point.place_name}
           </MenuItem>
         )
       }
@@ -197,8 +200,8 @@ class FindTripsCard extends Component {
     const { expanded, reserved_seats, stop, end } = this.state
     const { classes, onSubmit } = this.props
 
-    const departurePoint = trip_route.start.name
-    const arrivalPoint = trip_route.end.name
+    const departurePoint = trip_route.start.place_name
+    const arrivalPoint = trip_route.end.place_name
 
     const date = ParseDate(etd_info.etd)
     const time = ParseHour(etd_info.etd)
@@ -264,7 +267,7 @@ class FindTripsCard extends Component {
                 color="primary"
                 onClick={this.handleExpandClick}
               >
-                Solicitar viaje
+                Ver Paradas
               </Button>
             </Grid>
           </Grid>
@@ -278,7 +281,7 @@ class FindTripsCard extends Component {
                   <ListItemIcon>
                     {this.renderSwitchStop(i, arr.length - 1)}
                   </ListItemIcon>
-                  <ListItemText primary={point.name} />
+                  <ListItemText primary={point.place_name} />
                 </ListItem>
               ))}
             </List>
