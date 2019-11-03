@@ -46,14 +46,9 @@ export function signupUser(
   phone,
   password,
   passwordRepeat,
-  selfieLink = 'placeholder',
-  driverLicenseLink = 'placeholder',
-  dniFrontLink = 'placeholder',
-  dniBackLink = 'placeholder'
-  // carPlate,
-  // carColor,
-  // carBrand,
-  // carModel
+  selfieLink,
+  dniFrontLink,
+  dniBackLink
 ) {
   const data = {
     email,
@@ -61,12 +56,10 @@ export function signupUser(
     first_name: name,
     phone,
     password,
-    // password_repeat: passwordRepeat,
     user_identifications: {
       selfie_image: selfieLink,
       identification_image_front: dniFrontLink,
       identification_image_back: dniBackLink,
-      driver_license: driverLicenseLink,
     },
   }
   return {
