@@ -31,7 +31,8 @@ class ProfileCard extends Component {
   }
 
   renderCars() {
-    const { vehiculos } = this.props
+    const { user } = this.props
+    const vehiculos = user.vehicles
     if (vehiculos && vehiculos.length > 0) {
       return vehiculos.map((car, i) => {
         return (
@@ -125,7 +126,6 @@ class ProfileCard extends Component {
 
 ProfileCard.propTypes = {
   user: PropTypes.object.isRequired,
-  vehiculos: PropTypes.array.isRequired,
 }
 
 export default ProfileCard

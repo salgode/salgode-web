@@ -32,6 +32,7 @@ export function loginUser(email, password) {
             dniBackLink: data.user_identifications.identification.back,
             driFrontLink: data.user_identifications.driver_license.front,
             driBackLink: data.user_identifications.driver_license.back,
+            vehicles: data.vehicles,
           }
         },
       },
