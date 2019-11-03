@@ -47,8 +47,15 @@ class CreateTripScreen extends Component {
   }
 
   handleDatePicked = date => {
-    this.props.setStartTime(date)
-    this.setState({ pickedDate: date })
+    const currentDate = new Date()
+    const givenDate = new Date(date)
+
+    if (givenDate > currentDate.setMinutes(currentDate.getMinutes() + 10)) {
+      this.props.setStartTime(date)
+      this.setState({ pickedDate: date })
+    } else {
+      alert('La fecha tiene que ser mayor a hoy día')
+    }
   }
 
   handleChange = () => event => {
