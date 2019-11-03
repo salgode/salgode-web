@@ -16,7 +16,11 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCircle,
+  faCircleNotch,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 import { red } from '@material-ui/core/colors'
@@ -74,8 +78,9 @@ const styles = theme => ({
   avatar: {
     backgroundColor: red[500],
   },
-  form: {
-    flexGrow: 1,
+  seats: {
+    marginRight: '20px',
+    marginTop: '5px',
   },
 })
 
@@ -123,7 +128,13 @@ class TripDetailsCard extends Component {
   }
 
   render() {
-    const { trip_route, trip_route_points, driver, etd_info } = this.props.trip
+    const {
+      trip_route,
+      trip_route_points,
+      driver,
+      etd_info,
+      available_seats,
+    } = this.props.trip
     const { expanded } = this.state
     const { classes } = this.props
 
@@ -179,6 +190,12 @@ class TripDetailsCard extends Component {
                     <FontAwesomeIcon icon={faClock} className="calendar-icon" />
                   </ListItemIcon>
                   <ListItemText primary={time} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <FontAwesomeIcon icon={faUsers} />
+                  </ListItemIcon>
+                  <ListItemText primary={available_seats} />
                 </ListItem>
               </List>
             </Grid>

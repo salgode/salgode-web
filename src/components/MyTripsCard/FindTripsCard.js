@@ -264,7 +264,7 @@ class FindTripsCard extends Component {
                 color="primary"
                 onClick={this.handleExpandClick}
               >
-                Solicitar viaje
+                Ver Paradas
               </Button>
             </Grid>
           </Grid>
