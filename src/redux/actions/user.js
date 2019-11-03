@@ -85,6 +85,18 @@ export function fetchUser(authToken) {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
+        transformResponse: data => {
+          return {
+            name: data.first_name,
+            lastName: data.last_name,
+            phone: data.phone,
+            selfieLink: data.user_identifications.selfie,
+            dniFrontLink: data.user_identifications.identification.front,
+            dniBackLink: data.user_identifications.identification.back,
+            driFrontLink: data.user_identifications.driver_license.front,
+            driBackLink: data.user_identifications.driver_license.back,
+          }
+        },
       },
     },
   }

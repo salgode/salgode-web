@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { updateUser } from '../../redux/actions/updateUser'
-import { fetchUser } from '../../redux/actions/user'
 import {
   fetchUserVehicles,
   updateUserVehicle,
@@ -16,7 +14,7 @@ import {
   MenuItem,
 } from '@material-ui/core'
 import uploadFile from '../../utils/uploadFile'
-import routes from '../../routes.js'
+import { setObject, USER_DATA } from '../../utils/storeData'
 
 class UpdateForm extends Component {
   constructor(props) {
@@ -36,6 +34,7 @@ class UpdateForm extends Component {
         lastName: true,
         phone: true,
       },
+      hasVehicle: false,
     }
     this.onChangeName = this.onChangeName.bind(this)
     this.onChangeLastname = this.onChangeLastname.bind(this)
@@ -71,29 +70,37 @@ class UpdateForm extends Component {
     if (!vehicles.length) {
       await this.props.fetchUserVehicles(this.props.user.token)
     }
-    const {
-      alias,
-      vehicle_attributes: { model, color, brand, seats },
-      vehicle_identifications: { identification },
-    } = this.props.vehicles.vehicles[0]
-    this.setState({
-      alias,
-      model,
-      color,
-      brand,
-      seats,
-      identification,
-    })
+    if (!this.props.vehicles.vehicles.length) {
+      const {
+        alias,
+        vehicle_attributes: { model, color, brand, seats },
+        vehicle_identifications: { identification },
+      } = this.props.vehicles.vehicles[0]
+      this.setState({
+        alias,
+        model,
+        color,
+        brand,
+        seats,
+        identification,
+        hasVehicle: true,
+      })
+    }
   }
 
   async onSubmit(data) {
     const { token } = this.props.user
     const imgs = await this.uploadAllImages()
-    data.imgs = imgs
-    await this.props.updateUser(token, data)
+    const updateData = { ...data, imgs }
+    const response = await this.props.updateUser(token, updateData)
+    if (response.payload.data.success) {
+      setObject(USER_DATA, { ...this.props.user, ...data, ...imgs })
+    }
     const vehicle_data = this.getVehicleData()
-    this.props.updateUserVehicle(token, vehicle_data)
-    this.props.fetchUser(token)
+    if (this.state.hasVehicle) {
+      this.props.updateUserVehicle(token, vehicle_data)
+      this.props.fetchUserVehicles(token)
+    }
   }
 
   async uploadAllImages() {
@@ -175,7 +182,7 @@ class UpdateForm extends Component {
       name,
       lastName,
       phone,
-      hasCar,
+      hasVehicle,
       alias,
       brand,
       model,
@@ -258,76 +265,87 @@ class UpdateForm extends Component {
             </div>
           </div>
         </Grid>
-        <Grid item xs={12}>
-          <Typography component="h1" variant="h4">
-            Datos del vehículo
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Alias"
-            autoFocus
-            value={alias}
-            onChange={this.onChangeAlias}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Marca"
-            value={brand}
-            onChange={this.onChangeBrand}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Modelo"
-            value={model}
-            onChange={this.onChangeModel}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Color"
-            value={color}
-            onChange={this.onChangeColor}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            variant="outlined"
-            fullWidth
-            label="Patente"
-            value={identification}
-            onChange={this.onChangeIdentification}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            select
-            variant="outlined"
-            fullWidth
-            label="Asientos"
-            type="number"
-            min={0}
-            max={20}
-            value={seats}
-            onChange={this.onChangeSeats}
-          >
-            {[...Array(20).keys()].map(i => (
-              <MenuItem key={i} value={i}>
-                {i}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
+        {!hasVehicle ? null : (
+          <>
+            <Grid item xs={12}>
+              <Typography component="h1" variant="h4">
+                Datos del vehículo
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                variant="outlined"
+                fullWidth
+                label="Alias"
+                autoFocus
+                value={alias}
+                onChange={this.onChangeAlias}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                variant="outlined"
+                fullWidth
+                label="Marca"
+                value={brand}
+                onChange={this.onChangeBrand}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                variant="outlined"
+                fullWidth
+                label="Modelo"
+                value={model}
+                onChange={this.onChangeModel}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                variant="outlined"
+                fullWidth
+                label="Color"
+                value={color}
+                onChange={this.onChangeColor}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                variant="outlined"
+                fullWidth
+                label="Patente"
+                value={identification}
+                onChange={this.onChangeIdentification}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                select
+                required
+                variant="outlined"
+                fullWidth
+                label="Asientos"
+                type="number"
+                min={0}
+                max={20}
+                value={seats}
+                onChange={this.onChangeSeats}
+              >
+                {[...Array(20).keys()].map(i => (
+                  <MenuItem key={i} value={i}>
+                    {i}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+          </>
+        )}
+
         <Button
           type="button"
           variant="contained"
@@ -353,14 +371,12 @@ UpdateForm.propTypes = {
   user: PropTypes.object.isRequired,
   updateUser: PropTypes.func.isRequired,
   vehicles: PropTypes.object.isRequired,
-  fetchUser: PropTypes.func.isRequired,
   fetchUserVehicles: PropTypes.func.isRequired,
   updateUserVehicle: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = {
   updateUser,
-  fetchUser,
   fetchUserVehicles,
   updateUserVehicle,
 }
