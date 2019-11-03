@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import { fetchFutureTrips } from '../../redux/actions/trips'
 import './style.sass'
 import { MyTripsCard } from '../../components/MyTripsCard/index'
+import EmptyState from '../../components/EmptyState/index'
 import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 // Components
@@ -43,7 +44,7 @@ class MyTrips extends Component {
   }
 
   renderTrips(trips) {
-    if (trips) {
+    if (trips && trips.length > 0) {
       return trips.map((trip, i) => {
         return (
           <Grid item md={4} key={i}>
@@ -51,6 +52,8 @@ class MyTrips extends Component {
           </Grid>
         )
       })
+    } else {
+      return <EmptyState text="No has creado ningun viaje" />
     }
   }
 
