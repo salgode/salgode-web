@@ -189,7 +189,7 @@ class RequestedTrip extends Component {
               <ListItemIcon>
                 {this.renderSwitchStop(i, arr.length - 1)}
               </ListItemIcon>
-              <ListItemText primary={point.name} />
+              <ListItemText primary={point.place_name} />
             </ListItem>
           ))}
         </List>
