@@ -7,6 +7,7 @@ import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
 
 // Components
 import { RequestedTripCard } from '../../components/MyTripsCard/index'
+import EmptyState from '../../components/EmptyState/index'
 import Loading from '../../components/Loading/Loading'
 import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
@@ -41,6 +42,20 @@ class RequestedTrip extends Component {
     this.setState({ trips: this.props.requestedTrips.trips, loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips && trips.length > 0) {
+      return trips.map((trip, i) => {
+        return (
+          <Grid item md={4} key={i}>
+            <RequestedTripCard trip={trip} />
+          </Grid>
+        )
+      })
+    } else {
+      return <EmptyState text="No tienes reservas" />
+    }
+  }
+
   render() {
     const { loading, trips } = this.state
     if (loading) return <Loading />
@@ -53,13 +68,7 @@ class RequestedTrip extends Component {
       <div>
         <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Grid container spacing={2} justify="center" alignItems="center">
-          {trips.map((trip, i) => {
-            return (
-              <Grid item md={4} key={i}>
-                <RequestedTripCard trip={trip} />
-              </Grid>
-            )
-          })}
+          {this.renderTrips(trips)}
         </Grid>
       </div>
     )

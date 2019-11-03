@@ -4,8 +4,9 @@ import PropTypes from 'prop-types'
 
 import { getPassengerTripsAction } from '../../redux/actions/passengerTrips'
 import PassengerTripCard from '../../components/PassengerTrips/index'
-import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
+import EmptyState from '../../components/EmptyState/index'
 import Loading from '../../components/Loading/Loading'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 import Grid from '@material-ui/core/Grid'
 
@@ -38,7 +39,7 @@ class PassengerTrips extends Component {
   }
 
   renderTrips(trips) {
-    if (trips) {
+    if (trips && trips.length > 0) {
       return trips.map((trip, i) => {
         return (
           <Grid item md={4} key={i}>
@@ -46,6 +47,8 @@ class PassengerTrips extends Component {
           </Grid>
         )
       })
+    } else {
+      return <EmptyState text="No tienes viajes hasta ahora" />
     }
   }
 

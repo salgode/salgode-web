@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import './style.sass'
-import { fetchUserVehicles } from '../../redux/actions/vehicles'
 import ProfileCard from '../../components/Profile/ProfileCard.js'
 
 export class Profile extends Component {
@@ -12,36 +11,17 @@ export class Profile extends Component {
 
     this.state = {
       loading: false,
-      vehicles: [],
     }
-    this.getVehicles = this.getVehicles.bind(this)
-  }
-  async getVehicles() {
-    this.setState({ loading: true })
-    const response = await this.props.fetchVehicles(this.props.user.token)
-
-    if (response.error) {
-      this.setState({ loading: false })
-      alert(
-        'Error obteniendo Vehiculos',
-        'Hubo un problema obteniendo los vehiculos. Por favor intentalo de nuevo.'
-      )
-    }
-    this.setState({ vehicles: this.props.vehicles.vehicles, loading: false })
-  }
-
-  componentDidMount() {
-    this.getVehicles()
   }
 
   render() {
-    const { loading, vehicles } = this.state
+    const { loading } = this.state
     if (!loading) {
       return (
         <div>
           <div>
             <br />
-            <ProfileCard user={this.props.user} vehiculos={vehicles} />
+            <ProfileCard user={this.props.user} />
           </div>
         </div>
       )
@@ -52,24 +32,14 @@ export class Profile extends Component {
 }
 
 Profile.propTypes = {
-  fetchVehicles: PropTypes.func.isRequired,
   user: PropTypes.shape({
     token: PropTypes.string,
     userId: PropTypes.string,
   }).isRequired,
-  vehicles: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
-
-const mapDispatchToProps = dispatch => ({
-  fetchVehicles: token => dispatch(fetchUserVehicles(token)),
-})
 
 const mapStateToProps = state => ({
   user: state.user,
-  vehicles: state.vehicles,
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Profile)
+export default connect(mapStateToProps)(Profile)

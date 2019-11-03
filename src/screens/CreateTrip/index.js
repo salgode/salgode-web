@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Select from 'react-select'
 import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 import { loginUser } from '../../redux/actions/user'
 import { Grid, Button, Typography } from '@material-ui/core'
@@ -74,6 +75,18 @@ class CreateTripScreen extends Component {
     }
   }
 
+  checkIsDriver() {
+    const { user } = this.props
+    if (
+      user.vehicles.length === 0 ||
+      user.driFrontLink === null ||
+      user.driBackLink === null
+    ) {
+      return true
+    }
+    return false
+  }
+
   render() {
     const { startStop, endStop, startTime, spots } = this.props
     const disabled = startStop && endStop && startTime ? false : true
@@ -86,6 +99,13 @@ class CreateTripScreen extends Component {
     const breadcrumb = {
       Conductor: '/',
       'Crear Viaje': '/',
+    }
+
+    if (this.checkIsDriver()) {
+      alert(
+        'Solo para conductores\nAsegurate de tener tu licencia de conducir y algún vehiculo registrado'
+      )
+      return <Redirect to={routes.profile} />
     }
 
     return (

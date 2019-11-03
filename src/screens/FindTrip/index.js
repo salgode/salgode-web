@@ -7,6 +7,7 @@ import Loading from '../../components/Loading/Loading'
 import Select, { components } from 'react-select'
 import { withStyles } from '@material-ui/core/styles'
 import { FindTripsCard } from './../../components/MyTripsCard/index'
+import EmptyState from '../../components/EmptyState/index'
 
 import './style.sass'
 
@@ -102,10 +103,12 @@ class FindTripScreen extends Component {
   }
 
   renderTrips(trips) {
-    if (trips) {
+    if (trips && trips.length > 0) {
       return trips.map((trip, i) => {
         return <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
       })
+    } else {
+      return <EmptyState text="No hay ningun viaje disponible" />
     }
   }
 

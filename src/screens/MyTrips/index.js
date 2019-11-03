@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
 
 // Store
 import { fetchFutureTrips } from '../../redux/actions/trips'
 import './style.sass'
 import { MyTripsCard } from '../../components/MyTripsCard/index'
+import EmptyState from '../../components/EmptyState/index'
 import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 // Components
 import Loading from '../../components/Loading/Loading'
 import Grid from '@material-ui/core/Grid'
+import routes from '../../routes'
 
 class MyTrips extends Component {
   constructor(props) {
@@ -43,7 +46,7 @@ class MyTrips extends Component {
   }
 
   renderTrips(trips) {
-    if (trips) {
+    if (trips && trips.length > 0) {
       return trips.map((trip, i) => {
         return (
           <Grid item md={4} key={i}>
@@ -51,7 +54,21 @@ class MyTrips extends Component {
           </Grid>
         )
       })
+    } else {
+      return <EmptyState text="No has creado ningun viaje" />
     }
+  }
+
+  checkIsDriver() {
+    const { user } = this.props
+    if (
+      user.vehicles.length === 0 ||
+      user.driFrontLink === null ||
+      user.driBackLink === null
+    ) {
+      return true
+    }
+    return false
   }
 
   render() {
@@ -60,6 +77,13 @@ class MyTrips extends Component {
     const breadcrumb = {
       Conductor: '/',
       'Mis Viajes': '/',
+    }
+
+    if (this.checkIsDriver()) {
+      alert(
+        'Solo para conductores\nAsegurate de tener tu licencia de conducir y algún vehiculo registrado'
+      )
+      return <Redirect to={routes.profile} />
     }
     return (
       <div>
@@ -74,10 +98,7 @@ class MyTrips extends Component {
 
 MyTrips.propTypes = {
   fetchFutureTrips: PropTypes.func.isRequired,
-  user: PropTypes.shape({
-    token: PropTypes.string,
-    userId: PropTypes.string,
-  }).isRequired,
+  user: PropTypes.object.isRequired,
   futureTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
 
