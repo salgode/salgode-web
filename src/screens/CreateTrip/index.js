@@ -39,9 +39,11 @@ class CreateTripScreen extends Component {
   }
 
   componentDidMount = () => {
-    this.props.getAllSpots(this.props.user.token)
-    this.props.fetchUserVehicles(this.props.user.token)
-    this.props.setSpaceInCar(1)
+    if (!this.checkIsDriver()) {
+      this.props.getAllSpots(this.props.user.token)
+      this.props.fetchUserVehicles(this.props.user.token)
+      this.props.setSpaceInCar(1)
+    }
   }
 
   handleDatePicked = date => {
