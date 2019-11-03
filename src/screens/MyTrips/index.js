@@ -49,7 +49,7 @@ class MyTrips extends Component {
     if (trips && trips.length > 0) {
       return trips.map((trip, i) => {
         return (
-          <Grid item md={4} key={i}>
+          <Grid item md={4} xs={12} sm={5} key={i}>
             <MyTripsCard trip={trip} />
           </Grid>
         )
@@ -88,7 +88,7 @@ class MyTrips extends Component {
     return (
       <div>
         <SimpleBreadcrumbs antecesors={breadcrumb} />
-        <Grid container spacing={2} justify="center" alignItems="center">
+        <Grid container spacing={2} justify="center">
           {this.renderTrips(trips)}
         </Grid>
       </div>
