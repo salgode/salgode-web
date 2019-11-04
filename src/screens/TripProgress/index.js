@@ -73,8 +73,22 @@ class CurrentTripScreen extends Component {
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
       )
     }
-    this.setState({ trip: reserve.payload.data })
+    const next_stop = this.nextStopIfStarted(reserve.payload.data)
+    this.setState({ trip: reserve.payload.data, next_stop_idx: next_stop })
     this.getPassengers()
+  }
+
+  nextStopIfStarted(trip) {
+    let next_stop = this.state.next_stop_idx
+    const trip_next_stop = trip.trip_next_point
+    if (trip_next_stop !== null) {
+      const point_to_idx = {}
+      trip.trip_route_points.forEach((point, i) => {
+        point_to_idx[point.place_id] = i
+      })
+      next_stop = point_to_idx[trip_next_stop.place_id]
+    }
+    return next_stop
   }
 
   get_passengers_by_stop(manifest, trip) {
@@ -82,7 +96,7 @@ class CurrentTripScreen extends Component {
     const point_to_idx = {}
     trip.trip_route_points.forEach((point, i) => {
       idx_to_passengers[i] = { up: [], down: [] }
-      point_to_idx[point] = i
+      point_to_idx[point.place_id] = i
     })
     manifest.passengers.forEach(passenger => {
       const idx_up = point_to_idx[passenger.route.start]
@@ -97,16 +111,17 @@ class CurrentTripScreen extends Component {
     const { user } = this.props
     const { trip, next_stop_idx } = this.state
     const { trip_id } = trip
+    this.setState({ loading: true })
     if (next_stop_idx === 0) {
       await this.props.startJourney(user.token, trip_id)
       await this.props.nextStop(user.token, trip_id)
-      this.setState({ next_stop_idx: next_stop_idx + 1 })
+      this.setState({ next_stop_idx: next_stop_idx + 1, loading: false })
     } else if (next_stop_idx === trip.trip_route_points.length - 1) {
       await this.props.completeJourney(user.token, trip_id)
       await this.props.history.push(routes.myTrips)
     } else {
       await this.props.nextStop(user.token, trip_id)
-      this.setState({ next_stop_idx: next_stop_idx + 1 })
+      this.setState({ next_stop_idx: next_stop_idx + 1, loading: false })
     }
   }
 
@@ -174,7 +189,6 @@ CurrentTripScreen.propTypes = {
   startJourney: PropTypes.func.isRequired,
   completeJourney: PropTypes.func.isRequired,
   nextStop: PropTypes.func.isRequired,
-  nextStopArrived: PropTypes.func.isRequired,
   arrived: PropTypes.bool.isRequired,
   getManifest: PropTypes.func.isRequired,
   passengers_by_stop: PropTypes.object,
