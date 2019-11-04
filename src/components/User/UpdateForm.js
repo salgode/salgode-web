@@ -33,6 +33,7 @@ const UpdateForm = React.forwardRef((props, ref) => {
         label="Número de Teléfono"
         value={props.phone}
         onChange={props.onChangePhoneNumber}
+        onFocus={props.formatPhoneCL}
       />
       <FileField label="Selfie" ref={uploadAvatar} />
       <FileField label="Cédula Frontal" ref={uploadDniFront} />
@@ -111,6 +112,7 @@ UpdateForm.propTypes = {
   onChangeName: PropTypes.func.isRequired,
   onChangeLastName: PropTypes.func.isRequired,
   onChangePhoneNumber: PropTypes.func.isRequired,
+  formatPhoneCL: PropTypes.func.isRequired,
   onChangeAlias: PropTypes.func.isRequired,
   onChangeBrand: PropTypes.func.isRequired,
   onChangeIdentification: PropTypes.func.isRequired,

@@ -15,6 +15,7 @@ function FormField(props) {
         onChange={props.onChange}
         select={props.select}
         type={props.type}
+        onFocus={props.onFocus}
       >
         {props.select
           ? props.options.map((option, i) => (
@@ -36,6 +37,7 @@ FormField.propTypes = {
   select: PropTypes.bool,
   focus: PropTypes.bool,
   type: PropTypes.string,
+  onFocus: PropTypes.func,
 }
 
 export default FormField

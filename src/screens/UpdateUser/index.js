@@ -18,8 +18,8 @@ import Loading from '../../components/Loading/Loading'
 // utils
 import uploadFile from '../../utils/uploadFile'
 import { setObject, USER_DATA } from '../../utils/storeData'
-import { formatPhone } from '../../utils'
 import routes from '../../routes'
+import { formatPhone, notWrongPhone, validPhone } from '../../utils/userInputs'
 
 class UpdateUser extends Component {
   constructor(props) {
@@ -51,6 +51,7 @@ class UpdateUser extends Component {
     this.onChangeName = this.onChangeName.bind(this)
     this.onChangeLastName = this.onChangeLastName.bind(this)
     this.onChangePhoneNumber = this.onChangePhoneNumber.bind(this)
+    this.formatPhoneCL = this.formatPhoneCL.bind(this)
     this.onChangeAlias = this.onChangeAlias.bind(this)
     this.onChangeBrand = this.onChangeBrand.bind(this)
     this.onChangeModel = this.onChangeModel.bind(this)
@@ -184,12 +185,20 @@ class UpdateUser extends Component {
   }
 
   onChangePhoneNumber({ target: { value: phone } }) {
-    phone = phone.replace(/ /g, '')
-    const validity = phone.match(/^[+]?\d{11}$/)
-    this.setState(oldState => ({
-      phone,
-      validity: { ...oldState.validity, phone: !!validity },
-    }))
+    if (notWrongPhone(phone)) {
+      phone = formatPhone(phone)
+      const validity = validPhone(phone)
+      this.setState(oldState => ({
+        phone,
+        validity: { ...oldState.validity, phone: !!validity },
+      }))
+    }
+  }
+
+  formatPhoneCL() {
+    if (!/^\+56 9/g.test(this.state.phone)) {
+      this.setState({ phone: '+56 9' })
+    }
   }
 
   onChangeAlias({ target: { value: alias } }) {
@@ -294,6 +303,7 @@ class UpdateUser extends Component {
               onChangeColor={this.onChangeColor}
               onChangeModel={this.onChangeModel}
               onChangeHasVehicle={this.onChangeHasVehicle}
+              formatPhoneCL={this.formatPhoneCL}
               ref={{
                 uploadAvatar: this.uploadAvatar,
                 uploadDniFront: this.uploadDniFront,
