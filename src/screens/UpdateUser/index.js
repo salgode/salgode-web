@@ -112,14 +112,15 @@ class UpdateUser extends Component {
     const imgs = await this.uploadAllImages()
     const updateData = { name, lastName, phone, imgs }
     const response = await this.props.updateUser(token, updateData)
-    if (response.payload.data.success) {
-      const data = { name, lastName, phone, ...imgs }
-      setObject(USER_DATA, { ...this.props.user, ...data })
-      this.props.updateUserData(data)
-    }
     const vehicle_data = this.getVehicleData()
     if (this.state.hasVehicle) {
       this.props.updateUserVehicle(token, vehicle_data)
+    }
+    if (response.payload.data.success) {
+      const vehicles = [vehicle_data]
+      const data = { name, lastName, phone, ...imgs, vehicles }
+      setObject(USER_DATA, { ...this.props.user, ...data })
+      this.props.updateUserData(data)
     }
     this.setState({ loading: false })
     this.props.history.push(routes.profile)
@@ -132,26 +133,31 @@ class UpdateUser extends Component {
     if (this.uploadAvatar.current.files.length !== 0) {
       avatar = uploadFile(this.uploadAvatar).then(res => {
         images.selfieLink = res.image_urls.fetch
+        images.selfieID = res.image_id
       })
     }
     if (this.uploadDniFront.current.files.length !== 0) {
       dniFront = uploadFile(this.uploadDniFront).then(res => {
         images.dniFrontLink = res.image_urls.fetch
+        images.dniFrontID = res.image_id
       })
     }
     if (this.uploadDniBack.current.files.length !== 0) {
       dniBack = uploadFile(this.uploadDniBack).then(res => {
         images.dniBackLink = res.image_urls.fetch
+        images.dniBackID = res.image_id
       })
     }
     if (this.uploadDriFront.current.files.length !== 0) {
       driFront = uploadFile(this.uploadDriFront).then(res => {
         images.driFrontLink = res.image_urls.fetch
+        images.driFrontID = res.image_id
       })
     }
     if (this.uploadDriBack.current.files.length !== 0) {
       driBack = uploadFile(this.uploadDriBack).then(res => {
         images.driBackLink = res.image_urls.fetch
+        images.driBackID = res.image_id
       })
     }
     await Promise.all([avatar, dniFront, dniBack, driFront, driBack])

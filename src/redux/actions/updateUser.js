@@ -10,9 +10,9 @@ export function updateUser(authToken, { lastName, name, phone, imgs }) {
     first_name: name,
     phone: phone,
     user_identifications: {
-      selfie_image: imgs.selfieLink,
-      identification: { front: imgs.dniFrontLink, back: imgs.dniBackLink },
-      driver_license: { front: imgs.driFrontLink, back: imgs.driBackLink },
+      selfie_image: imgs.selfieID,
+      identification: { front: imgs.dniFrontID, back: imgs.dniBackID },
+      driver_license: { front: imgs.driFrontID, back: imgs.driBackID },
     },
   }
   return {
