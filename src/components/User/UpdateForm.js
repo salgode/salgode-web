@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Switch, FormControlLabel } from '@material-ui/core'
 import { FormField, FileField } from './'
 
 const UpdateForm = React.forwardRef((props, ref) => {
@@ -39,7 +39,17 @@ const UpdateForm = React.forwardRef((props, ref) => {
       <FileField label="Cédula Posterior" ref={uploadDniBack} />
       <FileField label="Licencia Frontal" ref={uploadDriFront} />
       <FileField label="Licencia Posterior" ref={uploadDriBack} />
-
+      <Grid item xs={4}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={props.hasVehicle}
+              onChange={props.onChangeHasVehicle}
+            />
+          }
+          label="Tengo Vehículo"
+        />
+      </Grid>
       {!props.hasVehicle ? null : (
         <>
           <Grid item xs={12}>
@@ -107,6 +117,7 @@ UpdateForm.propTypes = {
   onChangeSeats: PropTypes.func.isRequired,
   onChangeColor: PropTypes.func.isRequired,
   onChangeModel: PropTypes.func.isRequired,
+  onChangeHasVehicle: PropTypes.func.isRequired,
 }
 
 export default UpdateForm

@@ -18,6 +18,7 @@ import Loading from '../../components/Loading/Loading'
 // utils
 import uploadFile from '../../utils/uploadFile'
 import { setObject, USER_DATA } from '../../utils/storeData'
+import { formatPhone } from '../../utils'
 import routes from '../../routes'
 
 class UpdateUser extends Component {
@@ -37,6 +38,12 @@ class UpdateUser extends Component {
         name: true,
         lastName: true,
         phone: true,
+        alias: true,
+        brand: true,
+        model: true,
+        color: true,
+        seats: true,
+        identification: true,
       },
       hasVehicle: false,
       loading: false,
@@ -48,10 +55,13 @@ class UpdateUser extends Component {
     this.onChangeBrand = this.onChangeBrand.bind(this)
     this.onChangeModel = this.onChangeModel.bind(this)
     this.onChangeColor = this.onChangeColor.bind(this)
+    this.onChangeSeats = this.onChangeSeats.bind(this)
     this.onChangeIdentification = this.onChangeIdentification.bind(this)
+    this.onChangeHasVehicle = this.onChangeHasVehicle.bind(this)
     this.setVehicle = this.setVehicle.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.uploadAllImages = this.uploadAllImages.bind(this)
+    this.getValidity = this.getValidity.bind(this)
     this.uploadAvatar = React.createRef()
     this.uploadDniFront = React.createRef()
     this.uploadDniBack = React.createRef()
@@ -66,11 +76,6 @@ class UpdateUser extends Component {
       lastName,
       phone,
       loading: true,
-      validity: {
-        name: true,
-        lastName: true,
-        phone: true,
-      },
     })
     this.setVehicle()
   }
@@ -188,31 +193,68 @@ class UpdateUser extends Component {
   }
 
   onChangeAlias({ target: { value: alias } }) {
-    this.setState({ alias })
+    this.setState(oldState => ({
+      alias,
+      validity: { ...oldState.validity, alias: alias.length > 2 },
+    }))
   }
 
   onChangeBrand({ target: { value: brand } }) {
-    this.setState({ brand })
+    this.setState(oldState => ({
+      brand,
+      validity: { ...oldState.validity, brand: brand.length > 2 },
+    }))
   }
   onChangeModel({ target: { value: model } }) {
-    this.setState({ model })
+    this.setState(oldState => ({
+      model,
+      validity: { ...oldState.validity, model: model.length > 2 },
+    }))
   }
   onChangeColor({ target: { value: color } }) {
-    this.setState({ color })
+    this.setState(oldState => ({
+      color,
+      validity: { ...oldState.validity, color: color.length > 2 },
+    }))
   }
   onChangeIdentification({ target: { value: identification } }) {
-    this.setState({ identification })
+    this.setState(oldState => ({
+      identification,
+      validity: {
+        ...oldState.validity,
+        identification: identification.length > 2,
+      },
+    }))
   }
   onChangeSeats({ target: { value: seats } }) {
-    this.setState({ seats })
+    this.setState(oldState => ({
+      seats,
+      validity: { ...oldState.validity, seats: seats >= 0 && seats < 20 },
+    }))
+  }
+
+  onChangeHasVehicle({ target: { checked: hasVehicle } }) {
+    this.setState({ hasVehicle })
+  }
+
+  getValidity() {
+    const validity =
+      this.state.validity.name &&
+      this.state.validity.lastName &&
+      this.state.validity.phone &&
+      this.state.validity.alias &&
+      this.state.validity.brand &&
+      this.state.validity.model &&
+      this.state.validity.color &&
+      this.state.validity.identification &&
+      this.state.validity.seats
+    return validity
   }
 
   render() {
-    const classes = {}
     const {
       name,
       lastName,
-      phone,
       hasVehicle,
       alias,
       brand,
@@ -222,6 +264,9 @@ class UpdateUser extends Component {
       seats,
       loading,
     } = this.state
+    let { phone } = this.state
+    if (!phone.includes('+')) phone = '+' + phone
+    const formatedPhone = formatPhone(phone)
     return (
       <Grid container spacing={2}>
         {loading ? (
@@ -231,7 +276,7 @@ class UpdateUser extends Component {
             <UpdateForm
               name={name}
               lastName={lastName}
-              phone={phone}
+              phone={formatedPhone}
               alias={alias}
               model={model}
               color={color}
@@ -248,6 +293,7 @@ class UpdateUser extends Component {
               onChangeSeats={this.onChangeSeats}
               onChangeColor={this.onChangeColor}
               onChangeModel={this.onChangeModel}
+              onChangeHasVehicle={this.onChangeHasVehicle}
               ref={{
                 uploadAvatar: this.uploadAvatar,
                 uploadDniFront: this.uploadDniFront,
@@ -261,8 +307,7 @@ class UpdateUser extends Component {
                 type="button"
                 variant="contained"
                 color="secondary"
-                className={classes.submit}
-                // disabled={!this.getValidity()}
+                disabled={!this.getValidity()}
                 onClick={this.onSubmit}
               >
                 Actualizar
