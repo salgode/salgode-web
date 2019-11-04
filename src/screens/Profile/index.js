@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 import './style.sass'
 import ProfileCard from '../../components/Profile/ProfileCard.js'
 
-import { fetchUser } from '../../redux/actions/user'
-
 export class Profile extends Component {
   constructor(props) {
     super(props)
