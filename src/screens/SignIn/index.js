@@ -46,7 +46,7 @@ class SignInScreen extends React.Component {
   }
 
   render() {
-    if (getObject(USER_DATA).token != null) {
+    if (getObject(USER_DATA) && getObject(USER_DATA).token != null) {
       return <Redirect to={routes.requestTrip} />
     }
     const { loading } = this.state
