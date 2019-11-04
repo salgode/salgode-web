@@ -46,7 +46,7 @@ class SignUpScreen extends Component {
 
   render() {
     const { loading } = this.state
-    if (getObject(USER_DATA).token != null) {
+    if (getObject(USER_DATA) && getObject(USER_DATA).token != null) {
       return <Redirect to={routes.requestTrip} />
     }
     return (
