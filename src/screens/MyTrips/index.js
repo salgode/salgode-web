@@ -27,7 +27,9 @@ class MyTrips extends Component {
   }
 
   componentDidMount() {
-    this.getTrips()
+    if (!this.checkIsDriver()) {
+      this.getTrips()
+    }
   }
 
   async getTrips() {
