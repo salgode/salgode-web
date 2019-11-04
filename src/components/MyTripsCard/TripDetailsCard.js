@@ -16,7 +16,11 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCircle,
+  faCircleNotch,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
 import { red } from '@material-ui/core/colors'
@@ -74,8 +78,9 @@ const styles = theme => ({
   avatar: {
     backgroundColor: red[500],
   },
-  form: {
-    flexGrow: 1,
+  seats: {
+    marginRight: '20px',
+    marginTop: '5px',
   },
 })
 
@@ -123,12 +128,18 @@ class TripDetailsCard extends Component {
   }
 
   render() {
-    const { trip_route, trip_route_points, driver, etd_info } = this.props.trip
+    const {
+      trip_route,
+      trip_route_points,
+      driver,
+      etd_info,
+      available_seats,
+    } = this.props.trip
     const { expanded } = this.state
     const { classes } = this.props
 
-    const departurePoint = trip_route.start.name
-    const arrivalPoint = trip_route.end.name
+    const departurePoint = trip_route.start.place_name
+    const arrivalPoint = trip_route.end.place_name
 
     const date = ParseDate(etd_info.etd)
     const time = ParseHour(etd_info.etd)
@@ -180,6 +191,12 @@ class TripDetailsCard extends Component {
                   </ListItemIcon>
                   <ListItemText primary={time} />
                 </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <FontAwesomeIcon icon={faUsers} />
+                  </ListItemIcon>
+                  <ListItemText primary={available_seats} />
+                </ListItem>
               </List>
             </Grid>
             <Grid item xs={12} md={5}>
@@ -203,7 +220,7 @@ class TripDetailsCard extends Component {
                   <ListItemIcon>
                     {this.renderSwitchStop(i, arr.length - 1)}
                   </ListItemIcon>
-                  <ListItemText primary={point.name} />
+                  <ListItemText primary={point.place_name} />
                 </ListItem>
               ))}
             </List>

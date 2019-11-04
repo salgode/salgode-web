@@ -4,10 +4,13 @@ import PropTypes from 'prop-types'
 
 // Store
 import { fetchRequestedTrips } from '../../redux/actions/requestedTrip'
-import { RequestedTripCard } from '../../components/MyTripsCard/index'
 
 // Components
-import { CircularProgress } from '@material-ui/core'
+import { RequestedTripCard } from '../../components/MyTripsCard/index'
+import EmptyState from '../../components/EmptyState/index'
+import Loading from '../../components/Loading/Loading'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
+
 import Grid from '@material-ui/core/Grid'
 
 class RequestedTrip extends Component {
@@ -27,7 +30,6 @@ class RequestedTrip extends Component {
 
   async getTrips() {
     this.setState({ loading: true })
-
     const response = await this.props.fetchRequestedTrips(this.props.user.token)
 
     if (response.error) {
@@ -40,19 +42,33 @@ class RequestedTrip extends Component {
     this.setState({ trips: this.props.requestedTrips.trips, loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips && trips.length > 0) {
+      return trips.map((trip, i) => {
+        return (
+          <Grid item md={4} key={i}>
+            <RequestedTripCard trip={trip} />
+          </Grid>
+        )
+      })
+    } else {
+      return <EmptyState text="No tienes reservas" />
+    }
+  }
+
   render() {
     const { loading, trips } = this.state
+    if (loading) return <Loading />
+
+    const breadcrumb = {
+      Pasajero: '/',
+      Reservas: '/',
+    }
     return (
       <div>
-        {loading && <CircularProgress />}
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
         <Grid container spacing={2} justify="center" alignItems="center">
-          {trips.map((trip, i) => {
-            return (
-              <Grid item md={4} key={i}>
-                <RequestedTripCard trip={trip} />
-              </Grid>
-            )
-          })}
+          {this.renderTrips(trips)}
         </Grid>
       </div>
     )
@@ -66,6 +82,7 @@ RequestedTrip.propTypes = {
     userId: PropTypes.string.isRequired,
   }).isRequired,
   requestedTrips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  trips: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -75,6 +92,7 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   user: state.user,
   requestedTrips: state.requestedTrips,
+  trips: state.findTrips.trips,
 })
 
 export default connect(

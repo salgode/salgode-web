@@ -48,12 +48,12 @@ export function reserveTrip(authToken, trip_id, reserved_seats, start, end) {
   }
 }
 
-export function findTripsByPlace(authToken) {
+export function findTripsByPlace(authToken, place_id) {
   return {
     type: actions.FIND_TRIPS_BY_PLACE,
     payload: {
       request: {
-        url: `trips/search/intersects/${authToken}`,
+        url: `trips/search/intersects/${place_id}`,
         method: 'get',
         headers: {
           Authorization: `Bearer ${authToken}`,

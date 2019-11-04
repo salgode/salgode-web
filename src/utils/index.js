@@ -81,4 +81,17 @@ const openBases = () => {
   window.open('/public/bases.pdf')
 }
 
-export { rutValidation, rutFormat, isValid, isPhone, openBases }
+function formatPhone(phone) {
+  const phoneWithoutSpaces = phone.replace(/ /g, '')
+  let finalPhone = ''
+  const offset = phoneWithoutSpaces.slice(0, 1) === '+' ? [3, 4, 8] : [1, 5]
+  for (const index in phoneWithoutSpaces) {
+    if (offset.includes(parseInt(index))) {
+      finalPhone = finalPhone.concat(' ')
+    }
+    finalPhone = finalPhone.concat(phoneWithoutSpaces[parseInt(index)])
+  }
+  return finalPhone
+}
+
+export { rutValidation, rutFormat, isValid, isPhone, openBases, formatPhone }

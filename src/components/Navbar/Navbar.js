@@ -188,6 +188,11 @@ function DrawerRender(open, setOpen, close, logout) {
     setSelectedIndex(index)
   }
 
+  const handleLogout = () => {
+    logout()
+    handleDrawerClose()
+  }
+
   return (
     <ClickAwayListener onClickAway={handleDrawerClose}>
       <Drawer
@@ -317,7 +322,7 @@ function DrawerRender(open, setOpen, close, logout) {
             button
             component={Link}
             to={routes.signIn}
-            onClick={() => logout()}
+            onClick={() => handleLogout()}
           >
             <ListItemIcon>
               <InputIcon />
@@ -349,7 +354,10 @@ function Navbar(props) {
           })}
         >
           <Toolbar>
-            <Box className={classes.navbarOffset} />
+            <Box
+              className={classes.navbarOffset}
+              style={{ display: props.display }}
+            />
             <Link to={routes.requestTrip} className={classes.appName}>
               <Typography variant="h5" className={classes.appName}>
                 SalgoDe
@@ -391,7 +399,7 @@ export class NavbarWrapper extends Component {
 
   render() {
     const { user } = this.props
-    const display = user.token ? 'block' : 'none'
+    const display = user != null && user.token ? 'block' : 'none'
     return <Navbar logoutHandler={this.logoutHandler} display={display} />
   }
 }

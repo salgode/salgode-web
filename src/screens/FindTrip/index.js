@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { Container } from '@material-ui/core'
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
 import Select, { components } from 'react-select'
 import { withStyles } from '@material-ui/core/styles'
 import { FindTripsCard } from './../../components/MyTripsCard/index'
+import EmptyState from '../../components/EmptyState/index'
 
 import './style.sass'
 
@@ -71,11 +72,14 @@ class FindTripScreen extends Component {
 
   preFilterPayload(payload) {
     const newList = payload.trip_route_points.filter(function(value) {
-      return value.name === payload.stop || value.name === payload.end
+      return (
+        value.place_name === payload.stop || value.place_name === payload.end
+      )
     })
-    payload.stop = newList[0].id
-    payload.end = newList[1].id
+    payload.start = newList[0].place_id
+    payload.end = newList[1].place_id
     delete payload.trip_route_points
+    delete payload.stop
     return payload
   }
 
@@ -98,6 +102,16 @@ class FindTripScreen extends Component {
     this.setState({ loading: false })
   }
 
+  renderTrips(trips) {
+    if (trips && trips.length > 0) {
+      return trips.map((trip, i) => {
+        return <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
+      })
+    } else {
+      return <EmptyState text="No hay ningun viaje disponible" />
+    }
+  }
+
   render() {
     const { loading } = this.state
     const { classes, trips } = this.props
@@ -111,6 +125,16 @@ class FindTripScreen extends Component {
     return (
       <div className="find-trip">
         <Container>
+          <div style={{ textAlign: 'center' }}>
+            <a
+              target="_blank"
+              href="https://www.google.com/maps/d/u/0/viewer?usp=sharing&mid=16Kt-BFUrWVFqm4nCftaDyt4fK21roimT"
+              rel="noreferrer noopener"
+              className="map-link"
+            >
+              Ver Puntos de Encuentro
+            </a>
+          </div>
           <Select
             components={{ Placeholder }}
             placeholder={'#Desde'}
@@ -127,15 +151,7 @@ class FindTripScreen extends Component {
               }),
             }}
           />
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <div>
-              {trips.map((trip, i) => (
-                <FindTripsCard trip={trip} key={i} onSubmit={this.onSubmit} />
-              ))}
-            </div>
-          )}
+          {loading ? <Loading /> : <div>{this.renderTrips(trips)}</div>}
         </Container>
       </div>
     )
@@ -167,7 +183,8 @@ const mapDispatchToProps = dispatch => ({
       )
     ),
   getAllSpots: token => dispatch(getAllSpots(token)),
-  findTripsByPlace: token => dispatch(findTripsByPlace(token)),
+  findTripsByPlace: (token, place_id) =>
+    dispatch(findTripsByPlace(token, place_id)),
 })
 
 const mapStateToProps = state => ({

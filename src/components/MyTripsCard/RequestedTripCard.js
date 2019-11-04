@@ -189,7 +189,7 @@ class RequestedTrip extends Component {
               <ListItemIcon>
                 {this.renderSwitchStop(i, arr.length - 1)}
               </ListItemIcon>
-              <ListItemText primary={point.name} />
+              <ListItemText primary={point.place_name} />
             </ListItem>
           ))}
         </List>
@@ -225,11 +225,11 @@ class RequestedTrip extends Component {
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-              {trip_route.start.name}
+              {trip_route.start.place_name}
             </Typography>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-              {trip_route.end.name}
+              {trip_route.end.place_name}
             </Typography>
           </div>
           <div className={classes.marginCard}>

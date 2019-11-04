@@ -9,10 +9,11 @@ import { tripManifest } from '../../redux/actions/tripManifest'
 import { TripReservationsCard } from '../../components/MyTripsCard/index'
 import { TripDetailsCard } from '../../components/MyTripsCard/index'
 import { TripManifestCard } from '../../components/MyTripsCard/index'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 // Components
-import { CircularProgress } from '@material-ui/core'
-import Divider from '@material-ui/core/Divider'
+import Loading from '../../components/Loading/Loading'
+import './style.css'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
@@ -58,7 +59,6 @@ class MyTripDetails extends Component {
   }
 
   async getTripDetail() {
-    this.setState({ loading: true })
     const { fetchdetailsTrip, match } = this.props
 
     const reserve = await fetchdetailsTrip(
@@ -67,7 +67,6 @@ class MyTripDetails extends Component {
     )
 
     if (reserve.error) {
-      this.setState({ loading: false })
       return alert(
         'Error obteniendo el detalle',
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
@@ -77,7 +76,6 @@ class MyTripDetails extends Component {
   }
 
   async getTripManifest() {
-    this.setState({ loading: true })
     const { fetchtripManifest, match } = this.props
 
     const reserve = await fetchtripManifest(
@@ -86,7 +84,6 @@ class MyTripDetails extends Component {
     )
 
     if (reserve.error) {
-      this.setState({ loading: false })
       return alert(
         'Error obteniendo el detalle',
         'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
@@ -109,8 +106,6 @@ class MyTripDetails extends Component {
           </Grid>
         )
       })
-    } else {
-      return 'Not found'
     }
   }
 
@@ -124,29 +119,37 @@ class MyTripDetails extends Component {
           </Grid>
         )
       })
-    } else {
-      return 'Not found'
     }
   }
 
   render() {
     const { loading, reservations } = this.state
-    if (loading) return <CircularProgress />
+    if (loading) return <Loading />
+    const breadcrumb = {
+      Conductor: '/',
+      'Mis Viajes': 'myTrips',
+      Detalle: '/',
+    }
     return (
-      <div>
-        {this.renderDetails()}
-        <Typography component="h2" variant="h5">
-          Registrarse
-        </Typography>
-        <Divider />
-        <Grid container spacing={2} justify="center" alignItems="center">
-          <Grid item md={4} xs={12}>
-            {this.renderPassengers()}
+      <div className="card-container">
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
+        <div>{this.renderDetails()}</div>
+        <div className="cards">
+          <Grid container spacing={2} justify="center">
+            <Grid item md={4}>
+              <Typography variant="h6" component="h2" align="center">
+                Pasajeros
+              </Typography>
+              {this.renderPassengers()}
+            </Grid>
+            <Grid item md={4}>
+              <Typography variant="h6" component="h2" align="center">
+                Solicitudes
+              </Typography>
+              {this.renderReservations(reservations)}
+            </Grid>
           </Grid>
-          <Grid item md={6} ks={12}>
-            {this.renderReservations(reservations)}
-          </Grid>
-        </Grid>
+        </div>
       </div>
     )
   }

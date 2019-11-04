@@ -1,55 +1,33 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import { withStyles } from '@material-ui/core'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
-
-const style = () => ({
-  title: {
-    padding: '0 0 24px 0',
-    fontSize: 22,
-    fontWeight: 600,
-  },
-  stepper: {
-    display: 'flex',
-    height: '10vh',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  line: {
-    width: '60%',
-    height: 5,
-    backgroundColor: 'grey',
-  },
-})
+import Stepper from '@material-ui/core/Stepper'
+import Step from '@material-ui/core/Step'
+import StepLabel from '@material-ui/core/StepLabel'
 
 class ProgressStepper extends Component {
   render() {
-    const { pointName, ending, starting, classes } = this.props
+    const { steps, activeStep } = this.props
+
     return (
       <>
-        <div className={classes.stepper}>
-          <FiberManualRecordIcon
-            color={starting ? 'primary' : 'inherit'}
-            fontSize="large"
-          />
-          <div className={classes.line} />
-          <FiberManualRecordIcon
-            color={ending ? 'secondary' : 'inherit'}
-            fontSize="large"
-          />
-        </div>
-        <h1 className={classes.title}>{pointName}</h1>
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {steps.map((passenger, i) => {
+            return (
+              <Step key={i}>
+                <StepLabel>{passenger.place_name}</StepLabel>
+              </Step>
+            )
+          })}
+        </Stepper>
       </>
     )
   }
 }
 
 ProgressStepper.propTypes = {
-  classes: PropTypes.any,
-  pointName: PropTypes.string.isRequired,
-  starting: PropTypes.bool.isRequired,
-  ending: PropTypes.bool.isRequired,
+  steps: PropTypes.array.isRequired,
+  activeStep: PropTypes.number.isRequired,
 }
 
-export default withStyles(style)(ProgressStepper)
+export default ProgressStepper

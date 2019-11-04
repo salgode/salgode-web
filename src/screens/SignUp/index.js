@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './style.sass'
 import routes from '../../routes.js'
-import { setObject, USER_DATA, TOKEN } from '../../utils/storeData'
+import { getObject, setObject, USER_DATA, TOKEN } from '../../utils/storeData'
 
 // Store
 import { connect } from 'react-redux'
@@ -10,11 +10,12 @@ import { signupUser } from '../../redux/actions/user'
 
 // Components
 import { SignUpForm } from '../../components/index'
-import { CircularProgress } from '@material-ui/core'
+import Loading from '../../components/Loading/Loading'
+import { Redirect } from 'react-router-dom'
 
 const MESSAGE = 'Hubo un problema registrandote. Por favor intentalo de nuevo.'
 
-class SignUpScreen extends React.Component {
+class SignUpScreen extends Component {
   constructor(props) {
     super(props)
 
@@ -29,13 +30,14 @@ class SignUpScreen extends React.Component {
     const { signUp, history } = this.props
 
     this.setState({ loading: true })
-
     const user = await signUp(payload)
 
     this.setState({ loading: false })
 
-    if (user.error || !user.payload.data.email || !user.payload.data.user_id)
+    if (user.error || !user.payload.data.email || !user.payload.data.user_id) {
+      this.setState({ loading: false })
       return alert(MESSAGE)
+    }
 
     setObject(USER_DATA, user.payload.data)
     setObject(TOKEN, user.payload.data.token)
@@ -44,12 +46,13 @@ class SignUpScreen extends React.Component {
 
   render() {
     const { loading } = this.state
-
+    if (getObject(USER_DATA).token != null) {
+      return <Redirect to={routes.requestTrip} />
+    }
     return (
       <div className="sign-up">
         <SignUpForm onSubmit={this.onSubmit} />
-
-        {loading && <CircularProgress />}
+        {loading && <Loading />}
       </div>
     )
   }
@@ -73,7 +76,10 @@ const mapDispatchToProps = dispatch => ({
         payload.email,
         payload.phone,
         payload.password,
-        payload.passwordRepeat
+        payload.passwordRepeat,
+        payload.selfieLink,
+        payload.dniFrontLink,
+        payload.dniBackLink
       )
     ),
 })

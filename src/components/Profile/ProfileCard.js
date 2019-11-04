@@ -16,19 +16,6 @@ import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 
-/*
-const useStyles = makeStyles({
-	card: {
-		minWidth: 275
-	},
-	bigAvatar: {
-		margin: 10,
-		width: 60,
-		height: 60
-	}
-});
-*/
-
 class ProfileCard extends Component {
   constructor(props) {
     super(props)
@@ -41,6 +28,34 @@ class ProfileCard extends Component {
 
   handleExpandClick = (name, expanded) => {
     this.setState({ [name]: !expanded })
+  }
+
+  renderCars() {
+    const { user } = this.props
+    const vehiculos = user.vehicles
+    if (vehiculos && vehiculos.length > 0) {
+      return vehiculos.map((car, i) => {
+        return (
+          <Grid item md={4} key={i}>
+            <Card>
+              <CardHeader
+                title={car.alias}
+                subheader={
+                  car.vehicle_attributes.type === 'car' ? 'Automóvil' : 'otro'
+                }
+              />
+              <CardContent />
+            </Card>
+          </Grid>
+        )
+      })
+    } else {
+      return (
+        <Typography variant="body2" component="p">
+          No has agregado ningun vehiculo
+        </Typography>
+      )
+    }
   }
 
   render() {
@@ -75,19 +90,7 @@ class ProfileCard extends Component {
         <Collapse in={expanded1} timeout="auto" unmountOnExit>
           <CardContent>
             <Grid container spacing={2}>
-              {this.props.vehiculos.map((car, i) => {
-                return (
-                  <Grid item md={4} key={i}>
-                    <Card>
-                      <CardHeader
-                        title={car.nickname}
-                        subheader={car.type === 'car' ? 'Automóvil' : 'otro'}
-                      />
-                      <CardContent />
-                    </Card>
-                  </Grid>
-                )
-              })}
+              {this.renderCars()}
             </Grid>
           </CardContent>
         </Collapse>
@@ -111,6 +114,12 @@ class ProfileCard extends Component {
             <CardMedia>
               <img src={user.dniBackLink} />
             </CardMedia>
+            <CardMedia>
+              <img src={user.driFrontLink} />
+            </CardMedia>
+            <CardMedia>
+              <img src={user.driBackLink} />
+            </CardMedia>
           </CardContent>
         </Collapse>
         <CardActions>
@@ -125,7 +134,6 @@ class ProfileCard extends Component {
 
 ProfileCard.propTypes = {
   user: PropTypes.object.isRequired,
-  vehiculos: PropTypes.array.isRequired,
 }
 
 export default ProfileCard
