@@ -39,8 +39,10 @@ class ProfileCard extends Component {
           <Grid item md={4} key={i}>
             <Card>
               <CardHeader
-                title={car.nickname}
-                subheader={car.type === 'car' ? 'Automóvil' : 'otro'}
+                title={car.alias}
+                subheader={
+                  car.vehicle_attributes.type === 'car' ? 'Automóvil' : 'otro'
+                }
               />
               <CardContent />
             </Card>
@@ -111,6 +113,12 @@ class ProfileCard extends Component {
             </CardMedia>
             <CardMedia>
               <img src={user.dniBackLink} />
+            </CardMedia>
+            <CardMedia>
+              <img src={user.driFrontLink} />
+            </CardMedia>
+            <CardMedia>
+              <img src={user.driBackLink} />
             </CardMedia>
           </CardContent>
         </Collapse>

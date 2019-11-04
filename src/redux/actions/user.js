@@ -6,6 +6,7 @@ export const actions = {
   USER_SIGNUP_FAIL: 'USER/SIGNUP_FAIL',
   USER_SIGNUP_SUCCESS: 'USER/SIGNUP_SUCCESS',
   USER_LOGOUT: 'USER/LOGOUT',
+  UPDATE_USER_DATA: 'UPDATE_USER_DATA',
 }
 
 export function loginUser(email, password) {
@@ -75,15 +76,28 @@ export function signupUser(
   }
 }
 
-export function fetchUser(authToken, id) {
+export function fetchUser(authToken) {
   return {
     type: actions.USER_LOGIN,
     payload: {
       request: {
-        url: `/users/${id}`,
+        url: `/user`,
         method: 'get',
         headers: {
-          Authorization: authToken,
+          Authorization: `Bearer ${authToken}`,
+        },
+        transformResponse: data => {
+          return {
+            name: data.first_name,
+            lastName: data.last_name,
+            phone: data.phone,
+            selfieLink: data.user_identifications.selfie,
+            dniFrontLink: data.user_identifications.identification.front,
+            dniBackLink: data.user_identifications.identification.back,
+            driFrontLink: data.user_identifications.driver_license.front,
+            driBackLink: data.user_identifications.driver_license.back,
+            vehicles: data.vehicles,
+          }
         },
       },
     },
@@ -93,5 +107,12 @@ export function fetchUser(authToken, id) {
 export function logoutUser() {
   return {
     type: actions.USER_LOGOUT,
+  }
+}
+
+export function updateUserData(data) {
+  return {
+    type: actions.UPDATE_USER_DATA,
+    data,
   }
 }
