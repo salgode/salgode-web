@@ -8,10 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faUsers } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
+import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -23,14 +24,14 @@ const styles = theme => ({
     marginLeft: '10%',
     marginTop: '20px',
     minWidth: 300,
-    minHeight: 150,
+    minHeight: 250,
   },
   [theme.breakpoints.down('sm')]: {
     card: {
       marginRight: '3%',
       marginLeft: '3%',
       minWidth: 300,
-      minHeight: 220,
+      minHeight: 250,
     },
   },
   title: {
@@ -85,6 +86,27 @@ class MyTripsCard extends Component {
     this.state = {}
   }
 
+  setColorChip = status => {
+    const { classes } = this.props
+    if (status === 'open') {
+      return classes.primary
+    }
+    if (status === 'completed') {
+      return classes.danger
+    }
+    if (status === 'in_progress') {
+      return classes.secondary
+    } else {
+      return classes.secondary
+    }
+  }
+
+  setLabelChip = status => {
+    if (status === 'open') return 'Disponible'
+    if (status === 'completed') return 'Completado'
+    if (status === 'in_progress') return 'En proceso'
+  }
+
   render() {
     const { classes, trip } = this.props
 
@@ -93,6 +115,11 @@ class MyTripsCard extends Component {
 
     return (
       <Card className={classes.card}>
+        <Chip
+          className={this.setColorChip(trip.trip_status)}
+          size="small"
+          label={this.setLabelChip(trip.trip_status)}
+        />
         <CardContent className={classes.cardContent}>
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
@@ -127,15 +154,17 @@ class MyTripsCard extends Component {
           </div>
         </CardContent>
         <CardActions className={classes.buttonContainer}>
-          <Button
-            variant="outlined"
-            className={classes.buttonSuccess}
-            color="primary"
-            component={Link}
-            to={'/progress/' + trip.trip_id}
-          >
-            INICIAR VIAJE
-          </Button>
+          {trip.trip_status !== 'completed' && (
+            <Button
+              variant="outlined"
+              className={classes.buttonSuccess}
+              color="primary"
+              component={Link}
+              to={'/progress/' + trip.trip_id}
+            >
+              INICIAR VIAJE
+            </Button>
+          )}
           <Button
             variant="outlined"
             className={classes.buttonSuccess}
