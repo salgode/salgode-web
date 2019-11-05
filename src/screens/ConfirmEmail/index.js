@@ -10,8 +10,8 @@ import { withStyles } from '@material-ui/core/styles'
 import './style.sass'
 
 import { getObject, USER_DATA } from '../../utils/storeData'
-
 import axios from 'axios'
+import { BACKEND_CONFIRM_EMAIL } from '../../constants'
 
 const SUCCESS_TITLE = '¡Correo confirmado!'
 const SUCCESS_MSG =
@@ -19,38 +19,6 @@ const SUCCESS_MSG =
 const ERROR_TITLE = 'Error de confirmación'
 const ERROR_MSG =
   'Hubo un error al confirmar tu correo. Si el error persiste, contacta a hello@salgode.com.'
-
-const styles = theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  button: {
-    marginTop: '10vh',
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: '20vh',
-  },
-  error: {
-    color: '#d50000',
-  },
-  icon: {
-    fontSize: 100,
-  },
-  title: {
-    fontWeight: 500,
-    fontSize: 28,
-    marginTop: 16,
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontWeight: 100,
-  },
-})
 
 class ConfirmEmail extends Component {
   constructor(props) {
@@ -62,8 +30,9 @@ class ConfirmEmail extends Component {
   }
 
   componentDidMount() {
+    const queryString = this.props.location.search
     axios
-      .get('http://www.mocky.io/v2/5dc0ed2b3300006f001a4d6f')
+      .get(BACKEND_CONFIRM_EMAIL + queryString)
       .then(() => {
         this.setState({ loading: false })
       })
@@ -123,6 +92,39 @@ class ConfirmEmail extends Component {
 
 ConfirmEmail.propTypes = {
   classes: PropTypes.object.isRequired,
+  location: PropTypes.object,
 }
+
+const styles = theme => ({
+  '@global': {
+    body: {
+      backgroundColor: theme.palette.common.white,
+    },
+  },
+  button: {
+    marginTop: '10vh',
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: '20vh',
+  },
+  error: {
+    color: '#d50000',
+  },
+  icon: {
+    fontSize: 100,
+  },
+  title: {
+    fontWeight: 500,
+    fontSize: 28,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontWeight: 100,
+  },
+})
 
 export default withStyles(styles)(ConfirmEmail)
