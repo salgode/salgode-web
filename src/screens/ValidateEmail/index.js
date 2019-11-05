@@ -1,14 +1,24 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 import Loading from '../../components/Loading/Loading'
-import { Container, Typography } from '@material-ui/core'
+import { Button, Container, Typography } from '@material-ui/core'
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import { withStyles } from '@material-ui/core/styles'
 import './style.sass'
 
+import { getObject, USER_DATA } from '../../utils/storeData'
+
 import axios from 'axios'
+
+const SUCCESS_TITLE = '¡Correo confirmado!'
+const SUCCESS_MSG =
+  'Ahora podrás disfrutar de todas las funcionalidades de SalgoDe'
+const ERROR_TITLE = 'Error de confirmación'
+const ERROR_MSG =
+  'Hubo un error al confirmar tu correo. Si el error persiste, contacta a hello@salgode.com.'
 
 const styles = theme => ({
   '@global': {
@@ -16,11 +26,14 @@ const styles = theme => ({
       backgroundColor: theme.palette.common.white,
     },
   },
+  button: {
+    marginTop: '10vh',
+  },
   container: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: '25vh',
+    marginTop: '20vh',
   },
   error: {
     color: '#d50000',
@@ -50,7 +63,7 @@ class ValidateEmail extends Component {
 
   componentDidMount() {
     axios
-      .get('http://www.mocky.io/v2/5dc0ed2b3300006f001a4d6f1')
+      .get('http://www.mocky.io/v2/5dc0ed2b3300006f001a4d6f')
       .then(() => {
         this.setState({ loading: false })
       })
@@ -62,6 +75,8 @@ class ValidateEmail extends Component {
   render() {
     const { loading, error } = this.state
     const { classes } = this.props
+    const isLoggedIn = getObject(USER_DATA)
+
     if (loading) {
       return <Loading />
     }
@@ -71,11 +86,10 @@ class ValidateEmail extends Component {
           <ErrorOutlineIcon className={[classes.icon, classes.error]} />
           <Container>
             <Typography align="center" className={classes.title}>
-              Error de confirmación
+              {ERROR_TITLE}
             </Typography>
             <Typography align="center" className={classes.subtitle}>
-              Hubo un error al confirmar tu correo. Si el error persiste,
-              contacta a hello@salgode.com
+              {ERROR_MSG}
             </Typography>
           </Container>
         </Container>
@@ -86,12 +100,22 @@ class ValidateEmail extends Component {
         <DoneOutlineIcon color="primary" className={classes.icon} />
         <Container>
           <Typography align="center" className={classes.title}>
-            ¡Correo confirmado!
+            {SUCCESS_TITLE}
           </Typography>
           <Typography align="center" className={classes.subtitle}>
-            Ahora podrás disfrutar de todas las funcionalidades de SalgoDe
+            {SUCCESS_MSG}
           </Typography>
         </Container>
+        <Button
+          component={Link}
+          to="/"
+          variant="contained"
+          color="primary"
+          size="large"
+          className={classes.button}
+        >
+          {isLoggedIn.token ? 'Buscar viajes' : 'Iniciar sesión'}
+        </Button>
       </Container>
     )
   }
