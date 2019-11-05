@@ -99,10 +99,11 @@ class MyTripDetails extends Component {
 
   renderReservations(reservations) {
     if (reservations) {
+      const { params } = this.props.match
       return reservations.map((reservation, i) => {
         return (
           <Grid item md={4} key={i}>
-            <TripReservationsCard trip={reservation} />
+            <TripReservationsCard trip={reservation} trip_id={params.id} />
           </Grid>
         )
       })

@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 // Components
 import { ParseDate, ParseHour } from '../index'
 import './index.sass'
-import { requestedTripsDetails } from '../../redux/actions/tripDetails'
 import { cancelPassengerReservation } from '../../redux/actions/requestedTrip'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -100,7 +99,6 @@ class RequestedTrip extends Component {
       expanded: false,
       points: [],
     }
-    this.detailTripSubmit = this.detailTripSubmit.bind(this)
     this.cancelReservationSubmit = this.cancelReservationSubmit.bind(this)
   }
 
@@ -130,29 +128,16 @@ class RequestedTrip extends Component {
     }
   }
 
-  async detailTripSubmit() {
-    this.setState({ loading: true })
+  handleExpandClick = () => {
     const { expanded } = this.state
-    const { fetchdetailsTrip, trip } = this.props
-
-    const reserve = await fetchdetailsTrip(this.props.user.token, trip.trip_id)
-
-    if (reserve.error) {
-      this.setState({ loading: false })
-      return alert(
-        'Error obteniendo el detalle',
-        'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
-      )
-    }
-    const points = reserve.payload.data.trip_route_points
-    this.setState({ expanded: !expanded, loading: false, points: points })
+    this.setState({ expanded: !expanded })
   }
 
   async cancelReservationSubmit() {
     this.setState({ loading: true })
     const { cancelTrip, trip } = this.props
 
-    const reserve = await cancelTrip(this.props.user.token, trip.trip_id)
+    const reserve = await cancelTrip(this.props.user.token, trip.reservation_id)
     if (reserve.error && !reserve.payload.data.success) {
       this.setState({ loading: false })
       return alert(
@@ -180,11 +165,12 @@ class RequestedTrip extends Component {
   }
 
   renderCollapseDetail() {
-    const { expanded, points } = this.state
+    const { expanded } = this.state
+    const { trip_route_points } = this.props.trip
     if (expanded) {
       return (
         <List dense={true}>
-          {points.map((point, i, arr) => (
+          {trip_route_points.map((point, i, arr) => (
             <ListItem key={i}>
               <ListItemIcon>
                 {this.renderSwitchStop(i, arr.length - 1)}
@@ -202,7 +188,7 @@ class RequestedTrip extends Component {
   render() {
     const { expanded } = this.state
     const { classes, trip } = this.props
-    const { reservation_status, driver, trip_route, etd_info } = trip
+    const { reservation_status, driver, reservation_route, etd_info } = trip
     const date = ParseDate(etd_info.etd)
     const time = ParseHour(etd_info.etd)
     return (
@@ -213,11 +199,14 @@ class RequestedTrip extends Component {
           label={this.setLabelChip(reservation_status)}
         />
         <CardHeader
-          className={classes.avatar}
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              B
-            </Avatar>
+            driver.driver_avatar ? (
+              <Avatar src={driver.driver_avatar}></Avatar>
+            ) : (
+              <Avatar aria-label="recipe" className={classes.avatar}>
+                {driver.driver_name[0]}
+              </Avatar>
+            )
           }
           title={driver.driver_name}
         />
@@ -225,11 +214,11 @@ class RequestedTrip extends Component {
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-              {trip_route.start.place_name}
+              {reservation_route.start.place_name}
             </Typography>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-              {trip_route.end.place_name}
+              {reservation_route.end.place_name}
             </Typography>
           </div>
           <div className={classes.marginCard}>
@@ -248,7 +237,7 @@ class RequestedTrip extends Component {
             variant="outlined"
             className={classes.buttonSuccess}
             color="primary"
-            onClick={this.detailTripSubmit}
+            onClick={this.handleExpandClick}
           >
             VER VIAJE
           </Button>
@@ -275,22 +264,18 @@ class RequestedTrip extends Component {
 }
 
 RequestedTrip.propTypes = {
-  fetchdetailsTrip: PropTypes.func.isRequired,
   cancelTrip: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   trip: PropTypes.object.isRequired,
-  tripDetails: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchdetailsTrip: (token, id) => dispatch(requestedTripsDetails(token, id)),
   cancelTrip: (token, id) => dispatch(cancelPassengerReservation(token, id)),
 })
 
 const mapStateToProps = state => ({
   user: state.user,
-  tripDetails: state.tripDetails,
 })
 
 export default connect(

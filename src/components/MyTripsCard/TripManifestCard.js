@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import { faCircle, faPhoneVolume } from '@fortawesome/free-solid-svg-icons'
 
 import './index.sass'
 
@@ -88,19 +88,6 @@ class TripManifestCard extends Component {
     super(props)
   }
 
-  rederSelectOptions() {
-    const { available_seats } = this.props.trip
-    const items = []
-    for (let step = 1; step <= available_seats; step++) {
-      items.push(
-        <option value={step} key={step}>
-          {step}
-        </option>
-      )
-    }
-    return items
-  }
-
   render() {
     const {
       passenger_avatar,
@@ -110,8 +97,8 @@ class TripManifestCard extends Component {
     } = this.props.trip
     const { classes } = this.props
 
-    const departurePoint = trip_route.start.name
-    const arrivalPoint = trip_route.end.name
+    const departurePoint = trip_route.start.place_name
+    const arrivalPoint = trip_route.end.place_name
 
     return (
       <Card className={classes.card}>
@@ -141,7 +128,7 @@ class TripManifestCard extends Component {
               component="p"
               className={classes.margin}
             >
-              <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
+              <FontAwesomeIcon icon={faPhoneVolume} />
               {passenger_phone}
             </Typography>
           </div>

@@ -14,7 +14,7 @@ import Loading from '../../components/Loading/Loading'
 import { Redirect } from 'react-router-dom'
 
 const MESSAGE =
-  'Hubo un problema iniciando sesión. Por favor intentalo de nuevo.'
+  'Hubo un problema iniciando sesión. Por favor intentalo de nuevo.\nRevisa que tu email y password sean los correctos'
 
 class SignInScreen extends React.Component {
   constructor(props) {
