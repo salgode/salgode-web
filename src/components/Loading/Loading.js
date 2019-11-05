@@ -16,7 +16,7 @@ const useStyles = makeStyles({
     height: '102%',
     position: 'fixed',
     backgroundColor: fade('#ffffff', 0.5),
-    zIndex: 10001,
+    zIndex: 1000,
     top: 56,
   },
   circularProgress: {
