@@ -11,10 +11,9 @@ const useStyles = makeStyles({
     padding: 0,
   },
   dim: {
-    left: 0,
-    width: '100%',
-    height: '102%',
     position: 'fixed',
+    left: '50%',
+    transform: 'translate(-50%, 0)',
     backgroundColor: fade('#ffffff', 0.5),
     zIndex: 1000,
     top: 56,
