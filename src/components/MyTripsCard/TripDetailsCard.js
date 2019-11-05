@@ -148,9 +148,13 @@ class TripDetailsCard extends Component {
       <Card className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {driver.driver_name[0]}
-            </Avatar>
+            driver.driver_avatar ? (
+              <Avatar src={driver.driver_avatar}></Avatar>
+            ) : (
+              <Avatar aria-label="recipe" className={classes.avatar}>
+                {driver.driver_name[0]}
+              </Avatar>
+            )
           }
           title={driver.driver_name}
         />
@@ -206,7 +210,7 @@ class TripDetailsCard extends Component {
                 color="primary"
                 onClick={this.handleExpandClick}
               >
-                Ver Paradas
+                {expanded ? 'Cerrar Paradas' : 'Ver Paradas'}
               </Button>
             </Grid>
           </Grid>
