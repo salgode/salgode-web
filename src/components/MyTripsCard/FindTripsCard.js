@@ -8,7 +8,6 @@ import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import Collapse from '@material-ui/core/Collapse'
 import { Grid } from '@material-ui/core'
-import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -24,7 +23,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircle, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
 import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 
-import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { red } from '@material-ui/core/colors'
 
 import { ParseDate, ParseHour } from '../../components/Parse/index'
@@ -210,14 +208,13 @@ class FindTripsCard extends Component {
       <Card className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {driver.driver_name[0]}
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
+            driver.driver_avatar ? (
+              <Avatar src={driver.driver_avatar}></Avatar>
+            ) : (
+              <Avatar aria-label="recipe" className={classes.avatar}>
+                {driver.driver_name[0]}
+              </Avatar>
+            )
           }
           title={driver.driver_name}
         />
@@ -267,7 +264,7 @@ class FindTripsCard extends Component {
                 color="primary"
                 onClick={this.handleExpandClick}
               >
-                Ver Paradas
+                {expanded ? 'Cerrar Paradas' : 'Ver Paradas'}
               </Button>
             </Grid>
           </Grid>

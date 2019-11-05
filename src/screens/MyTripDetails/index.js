@@ -169,7 +169,7 @@ MyTripDetails.propTypes = {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchTripReservations: token => dispatch(tripReservations(token)),
+  fetchTripReservations: (token, id) => dispatch(tripReservations(token, id)),
   fetchdetailsTrip: (token, id) => dispatch(requestedTripsDetails(token, id)),
   fetchtripManifest: (token, id) => dispatch(tripManifest(token, id)),
 })
