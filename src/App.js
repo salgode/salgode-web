@@ -6,6 +6,7 @@ import './styles/App.css'
 import {
   SignIn,
   SignUp,
+  ValidateEmail,
   NotFound,
   RequestTrip,
   MyTrips,
@@ -34,6 +35,11 @@ const App = () => {
             <Switch>
               <Route exact path={routes.signIn} component={SignIn} />
               <Route exact path={routes.signUp} component={SignUp} />
+              <Route
+                exact
+                path={routes.validateEmail}
+                component={ValidateEmail}
+              />
               <PrivateRoute
                 exact
                 path={routes.requestTrip}
