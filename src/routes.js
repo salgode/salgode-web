@@ -12,4 +12,5 @@ export default {
   passengerTrips: '/passenger-trips',
   myTripDetails: '/my-trips/:id',
   currentTrip: '/progress/:id',
+  confirmEmail: '/confirm/email',
 }

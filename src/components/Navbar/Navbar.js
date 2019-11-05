@@ -358,7 +358,7 @@ function Navbar(props) {
               className={classes.navbarOffset}
               style={{ display: props.display }}
             />
-            <Link to={routes.requestTrip} className={classes.appName}>
+            <Link to={routes.signIn} className={classes.appName}>
               <Typography variant="h5" className={classes.appName}>
                 SalgoDe
               </Typography>
