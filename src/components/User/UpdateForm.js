@@ -74,7 +74,7 @@ const UpdateForm = React.forwardRef((props, ref) => {
             onChange={props.onChangeModel}
           />
           <FormField
-            label="Alias"
+            label="Color"
             value={props.color}
             onChange={props.onChangeColor}
           />

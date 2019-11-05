@@ -52,7 +52,7 @@ class ProfileCard extends Component {
     } else {
       return (
         <Typography variant="body2" component="p">
-          No has agregado ningun vehiculo
+          No has agregado ningún vehículo
         </Typography>
       )
     }
