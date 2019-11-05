@@ -9,8 +9,9 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import { withStyles } from '@material-ui/core/styles'
 import './style.sass'
 
-import { getObject, USER_DATA } from '../../utils/storeData'
 import axios from 'axios'
+import queryString from 'query-string'
+import { getObject, USER_DATA } from '../../utils/storeData'
 import { BACKEND_CONFIRM_EMAIL } from '../../constants'
 
 const SUCCESS_TITLE = '¡Correo confirmado!'
@@ -30,9 +31,9 @@ class ConfirmEmail extends Component {
   }
 
   componentDidMount() {
-    const queryString = this.props.location.search
+    const { user, token } = queryString.parse(this.props.location.search)
     axios
-      .get(BACKEND_CONFIRM_EMAIL + queryString)
+      .get(`${BACKEND_CONFIRM_EMAIL}?user=${user}&token=${token}`)
       .then(() => {
         this.setState({ loading: false })
       })
