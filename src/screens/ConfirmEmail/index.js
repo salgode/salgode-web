@@ -7,7 +7,6 @@ import { Button, Container, Typography } from '@material-ui/core'
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline'
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline'
 import { withStyles } from '@material-ui/core/styles'
-import './style.sass'
 
 import axios from 'axios'
 import queryString from 'query-string'
