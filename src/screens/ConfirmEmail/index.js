@@ -52,7 +52,7 @@ const styles = theme => ({
   },
 })
 
-class ValidateEmail extends Component {
+class ConfirmEmail extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -121,8 +121,8 @@ class ValidateEmail extends Component {
   }
 }
 
-ValidateEmail.propTypes = {
+ConfirmEmail.propTypes = {
   classes: PropTypes.object.isRequired,
 }
 
-export default withStyles(styles)(ValidateEmail)
+export default withStyles(styles)(ConfirmEmail)

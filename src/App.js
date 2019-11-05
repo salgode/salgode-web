@@ -6,7 +6,7 @@ import './styles/App.css'
 import {
   SignIn,
   SignUp,
-  ValidateEmail,
+  ConfirmEmail,
   NotFound,
   RequestTrip,
   MyTrips,
@@ -37,8 +37,8 @@ const App = () => {
               <Route exact path={routes.signUp} component={SignUp} />
               <Route
                 exact
-                path={routes.validateEmail}
-                component={ValidateEmail}
+                path={routes.confirmEmail}
+                component={ConfirmEmail}
               />
               <PrivateRoute
                 exact
