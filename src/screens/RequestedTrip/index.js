@@ -67,7 +67,7 @@ class RequestedTrip extends Component {
     return (
       <div>
         <SimpleBreadcrumbs antecesors={breadcrumb} />
-        <Grid container spacing={2} justify="center" alignItems="center">
+        <Grid container spacing={2} justify="center">
           {this.renderTrips(trips)}
         </Grid>
       </div>
