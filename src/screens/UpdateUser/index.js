@@ -8,12 +8,14 @@ import { updateUserData } from '../../redux/actions/user'
 import {
   fetchUserVehicles,
   updateUserVehicle,
+  createUserVehicle,
 } from '../../redux/actions/vehicles'
 
 // components
 import { Grid, Button } from '@material-ui/core'
 import { UpdateForm } from '../../components/User'
 import Loading from '../../components/Loading/Loading'
+import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 // utils
 import uploadFile from '../../utils/uploadFile'
@@ -46,6 +48,7 @@ class UpdateUser extends Component {
         identification: true,
       },
       hasVehicle: false,
+      newVehicle: true,
       loading: false,
     }
     this.onChangeName = this.onChangeName.bind(this)
@@ -82,16 +85,13 @@ class UpdateUser extends Component {
   }
 
   async setVehicle() {
-    const { vehicles } = this.props.vehicles
-    if (!vehicles.length) {
-      await this.props.fetchUserVehicles(this.props.user.token)
-    }
-    if (this.props.vehicles.vehicles.length) {
+    const { vehicles } = this.props.user
+    if (vehicles.length > 0) {
       const {
         alias,
         vehicle_attributes: { model, color, brand, seats },
         vehicle_identifications: { identification },
-      } = this.props.vehicles.vehicles[0]
+      } = vehicles[0]
       this.setState({
         alias,
         model,
@@ -100,24 +100,58 @@ class UpdateUser extends Component {
         seats,
         identification,
         hasVehicle: true,
+        newVehicle: false,
+        loading: false,
+      })
+    } else {
+      this.setState({
+        validity: {
+          name: true,
+          lastName: true,
+          phone: true,
+          alias: false,
+          brand: false,
+          model: false,
+          color: false,
+          seats: false,
+          identification: false,
+        },
+        loading: false,
       })
     }
-    this.setState({ loading: false })
   }
 
   async onSubmit() {
     this.setState({ loading: true })
-    const { name, lastName, phone } = this.state
+    const { name, lastName, phone, hasVehicle, newVehicle } = this.state
     const { token } = this.props.user
     const imgs = await this.uploadAllImages()
     const updateData = { name, lastName, phone, imgs }
     const response = await this.props.updateUser(token, updateData)
-    const vehicle_data = this.getVehicleData()
-    if (this.state.hasVehicle) {
-      this.props.updateUserVehicle(token, vehicle_data)
+    let vehicle_data = this.getVehicleData()
+    let vehicles_response = {}
+    if (hasVehicle) {
+      if (!newVehicle) {
+        vehicles_response = await this.props.updateUserVehicle(
+          token,
+          vehicle_data
+        )
+      } else {
+        vehicles_response = await this.props.createUserVehicle(
+          token,
+          vehicle_data
+        )
+      }
     }
     if (response.payload.data.success) {
-      const vehicles = [vehicle_data]
+      let vehicles = []
+      if (hasVehicle) {
+        if (newVehicle) {
+          const vehicle_id = vehicles_response.payload.data.resource_id
+          vehicle_data = { vehicle_id, ...vehicle_data }
+        }
+        vehicles = [vehicle_data]
+      }
       const data = { name, lastName, phone, ...imgs, vehicles }
       setObject(USER_DATA, { ...this.props.user, ...data })
       this.props.updateUserData(data)
@@ -165,15 +199,36 @@ class UpdateUser extends Component {
   }
 
   getVehicleData() {
-    const { alias, model, color, brand, seats, identification } = this.state
-    const { vehicle_id } = this.props.vehicles.vehicles[0]
-    const vehicle_data = {
-      vehicle_id,
+    const {
       alias,
-      vehicle_attributes: { model, color, brand, seats },
-      vehicle_identifications: { identification },
+      model,
+      color,
+      brand,
+      seats,
+      identification,
+      newVehicle,
+    } = this.state
+    if (!newVehicle) {
+      const { vehicle_id } = this.props.user.vehicles[0]
+      const vehicle_data = {
+        vehicle_id,
+        alias,
+        vehicle_attributes: { model, color, brand, seats },
+        vehicle_identifications: { identification },
+      }
+      return vehicle_data
+    } else {
+      const vehicle_data = {
+        alias,
+        vehicle_attributes: { model, color, brand, seats, type: 'car' },
+        vehicle_identifications: {
+          identification,
+          type: 'license_plate',
+          country: 'CL',
+        },
+      }
+      return vehicle_data
     }
-    return vehicle_data
   }
 
   onChangeName({ target: { value: name } }) {
@@ -256,13 +311,17 @@ class UpdateUser extends Component {
     const validity =
       this.state.validity.name &&
       this.state.validity.lastName &&
-      this.state.validity.phone &&
+      this.state.validity.phone
+    const with_car =
       this.state.validity.alias &&
       this.state.validity.brand &&
       this.state.validity.model &&
       this.state.validity.color &&
       this.state.validity.identification &&
       this.state.validity.seats
+    if (this.state.hasVehicle) {
+      return validity && with_car
+    }
     return validity
   }
 
@@ -282,8 +341,13 @@ class UpdateUser extends Component {
     let { phone } = this.state
     if (!phone.includes('+')) phone = '+' + phone
     const formatedPhone = formatPhone(phone)
+    const breadcrumb = {
+      'Mi Perfil': 'profile',
+      'Editar Perfil': '/',
+    }
     return (
       <Grid container spacing={2}>
+        <SimpleBreadcrumbs antecesors={breadcrumb} />
         {loading ? (
           <Loading />
         ) : (
@@ -343,6 +407,7 @@ UpdateUser.propTypes = {
   vehicles: PropTypes.object.isRequired,
   fetchUserVehicles: PropTypes.func.isRequired,
   updateUserVehicle: PropTypes.func.isRequired,
+  createUserVehicle: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
 }
 
@@ -351,6 +416,7 @@ const mapDispatchToProps = {
   updateUserData,
   fetchUserVehicles,
   updateUserVehicle,
+  createUserVehicle,
 }
 
 const mapStateToProps = state => ({
