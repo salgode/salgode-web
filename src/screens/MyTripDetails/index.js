@@ -99,10 +99,11 @@ class MyTripDetails extends Component {
 
   renderReservations(reservations) {
     if (reservations) {
+      const { params } = this.props.match
       return reservations.map((reservation, i) => {
         return (
           <Grid item md={4} key={i}>
-            <TripReservationsCard trip={reservation} />
+            <TripReservationsCard trip={reservation} trip_id={params.id} />
           </Grid>
         )
       })
@@ -169,7 +170,7 @@ MyTripDetails.propTypes = {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchTripReservations: token => dispatch(tripReservations(token)),
+  fetchTripReservations: (token, id) => dispatch(tripReservations(token, id)),
   fetchdetailsTrip: (token, id) => dispatch(requestedTripsDetails(token, id)),
   fetchtripManifest: (token, id) => dispatch(tripManifest(token, id)),
 })

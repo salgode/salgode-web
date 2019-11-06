@@ -120,18 +120,17 @@ class TripReservationsCard extends Component {
 
   async acceptReservationSubmit() {
     this.setState({ loading: true })
-    const { acceptReservationSubmit, trip } = this.props
+    const { acceptReservationSubmit, trip, trip_id } = this.props
     const reserve = await acceptReservationSubmit(
       this.props.user.token,
-      trip.trip_id,
+      trip_id,
       trip.reservation_id
     )
 
     if (reserve.error) {
       this.setState({ loading: false })
       return alert(
-        'Error obteniendo el detalle',
-        'Hubo un problema obteniendo el detalle del viaje. Por favor intentalo de nuevo.'
+        'Error al aceptar el viaje\nHubo un problema aceptando el viaje. Por favor intentalo de nuevo.'
       )
     }
     this.setState({ loading: false })
@@ -139,10 +138,10 @@ class TripReservationsCard extends Component {
 
   async declinedReservationSubmit() {
     this.setState({ loading: true })
-    const { declinedReservationSubmit, trip } = this.props
+    const { declinedReservationSubmit, trip, trip_id } = this.props
     const reserve = await declinedReservationSubmit(
       this.props.user.token,
-      trip.trip_id,
+      trip_id,
       trip.reservation_id
     )
 
@@ -156,14 +155,21 @@ class TripReservationsCard extends Component {
     this.setState({ loading: false })
   }
 
+  get_passengers_by_stop() {
+    const { reservation_route_places, reservation_route } = this.props.trip
+    const point_to_idx = {}
+    reservation_route_places.forEach(point => {
+      point_to_idx[point.place_id] = point.place_name
+    })
+    const idx_up = point_to_idx[reservation_route.start]
+    const idx_down = point_to_idx[reservation_route.end]
+    return [idx_up, idx_down]
+  }
+
   render() {
     const { classes, trip } = this.props
-    const {
-      reservation_status,
-      passenger,
-      reservation_route,
-      reserved_seats,
-    } = trip
+    const { reservation_status, passenger, reserved_seats } = trip
+    const [start, end] = this.get_passengers_by_stop()
     return (
       <Card className={classes.card}>
         <Chip
@@ -174,21 +180,23 @@ class TripReservationsCard extends Component {
         <CardHeader
           className={classes.avatar}
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              B
-            </Avatar>
+            passenger.passenger_avatar ? (
+              <Avatar src={passenger.passenger_avatar}></Avatar>
+            ) : (
+              <Avatar aria-label="recipe">{passenger.passenger_name[0]}</Avatar>
+            )
           }
-          title={passenger.first_name + ' ' + passenger.last_name}
+          title={passenger.passenger_name}
         />
         <CardContent className={classes.cardContent}>
           <div className={classes.marginCard}>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="start-circle-icon" />
-              {reservation_route.start.name}
+              {start}
             </Typography>
             <Typography variant="body1" component="p">
               <FontAwesomeIcon icon={faCircle} className="end-circle-icon" />
-              {reservation_route.end.name}
+              {end}
             </Typography>
           </div>
           <div className={classes.marginCard}>
@@ -230,14 +238,15 @@ TripReservationsCard.propTypes = {
   declinedReservationSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   trip: PropTypes.object.isRequired,
+  trip_id: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
   acceptReservationSubmit: (token, trip_id, reservation_id) =>
-    dispatch(acceptReservation(token, reservation_id)),
+    dispatch(acceptReservation(token, trip_id, reservation_id)),
   declinedReservationSubmit: (token, trip_id, reservation_id) =>
-    dispatch(declinedReservation(token, reservation_id)),
+    dispatch(declinedReservation(token, trip_id, reservation_id)),
 })
 
 const mapStateToProps = state => ({

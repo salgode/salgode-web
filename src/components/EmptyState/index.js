@@ -17,6 +17,7 @@ const useStyles = makeStyles({
     height: '102%',
     position: 'fixed',
     top: 56,
+    zIndex: -1,
   },
   circularProgress: {
     position: 'relative',

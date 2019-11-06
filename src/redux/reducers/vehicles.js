@@ -22,6 +22,16 @@ export default function vehiclesReducer(state = {}, action) {
         loading: false,
         error: 'Error while fetching vehicles',
       }
+    case vehiclesActions.CREATE_VEHICLE:
+      return { ...state, loading: true }
+    case vehiclesActions.CREATE_VEHICLE_SUCCESS:
+      return { ...state, loading: false }
+    case vehiclesActions.CREATE_VEHICLE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: 'Error while fetching vehicles',
+      }
     default:
       return state
   }

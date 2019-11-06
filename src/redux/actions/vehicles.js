@@ -5,6 +5,9 @@ export const actions = {
   UPDATE_VEHICLE: 'UPDATE_VEHICLE',
   UPDATE_VEHICLE_SUCCESS: 'UPDATE_VEHICLE_SUCCESS',
   UPDATE_VEHICLE_FAIL: 'UPDATE_VEHICLE_FAIL',
+  CREATE_VEHICLE: 'CREATE_VEHICLE',
+  CREATE_VEHICLE_SUCCESS: 'CREATE_VEHICLE_SUCCESS',
+  CREATE_VEHICLE_FAIL: 'CREATE_VEHICLE_FAIL',
 }
 export function fetchUserVehicles(authToken) {
   return {
@@ -28,6 +31,22 @@ export function updateUserVehicle(authToken, vehicle_data) {
       request: {
         url: `user/vehicles/${vehicle_data.vehicle_id}`,
         method: 'put',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        data: vehicle_data,
+      },
+    },
+  }
+}
+
+export function createUserVehicle(authToken, vehicle_data) {
+  return {
+    type: actions.CREATE_VEHICLE,
+    payload: {
+      request: {
+        url: `user/vehicles`,
+        method: 'post',
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
