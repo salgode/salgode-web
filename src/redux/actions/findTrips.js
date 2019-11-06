@@ -37,7 +37,7 @@ export function reserveTrip(authToken, trip_id, reserved_seats, start, end) {
         },
         data: {
           trip_id,
-          reserved_seats,
+          reserved_seats: parseInt(reserved_seats),
           route: {
             start,
             end,

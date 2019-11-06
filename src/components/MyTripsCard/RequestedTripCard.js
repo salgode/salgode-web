@@ -146,6 +146,7 @@ class RequestedTrip extends Component {
       )
     }
     this.setState({ loading: false })
+    this.props.reloadReservations()
   }
 
   renderSwitchStop(key, last) {
@@ -268,6 +269,7 @@ RequestedTrip.propTypes = {
   classes: PropTypes.object.isRequired,
   trip: PropTypes.object.isRequired,
   user: PropTypes.object.isRequired,
+  reloadReservations: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
