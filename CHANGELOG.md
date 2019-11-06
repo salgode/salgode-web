@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/Varuscl/salgode-web/compare/v1.0.0...v1.0.1) (2019-11-06)
+
+
+### Bug Fixes
+
+* signin/up when login for first time ([#59](https://github.com/Varuscl/salgode-web/issues/59)) ([34e8192](https://github.com/Varuscl/salgode-web/commit/34e8192580f9b2689d9701eb25d54f0b37f6f75c))
+* signin/up when login for first time ([#60](https://github.com/Varuscl/salgode-web/issues/60)) ([c6c1a27](https://github.com/Varuscl/salgode-web/commit/c6c1a27e1282808997ea90da15f2cdfb4883893a))
+
 ## 1.0.0 (2019-11-04)
 
 
