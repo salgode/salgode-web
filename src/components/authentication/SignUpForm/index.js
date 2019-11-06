@@ -134,7 +134,7 @@ class SignUpForm extends Component {
   onChangePassword({ target: { value: password } }) {
     this.setState(oldState => ({
       password,
-      validity: { ...oldState.validity, password: password.length > 3 },
+      validity: { ...oldState.validity, password: password.length > 7 },
     }))
   }
 
@@ -143,7 +143,7 @@ class SignUpForm extends Component {
       passwordRepeat,
       validity: {
         ...oldState.validity,
-        passwordRepeat: passwordRepeat.length > 3,
+        passwordRepeat: passwordRepeat.length > 7,
       },
     }))
   }
