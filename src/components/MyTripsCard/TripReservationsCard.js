@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Loading from '../Loading/Loading'
 
 // Components
 import './index.sass'
@@ -134,6 +135,7 @@ class TripReservationsCard extends Component {
       )
     }
     this.setState({ loading: false })
+    this.props.rePassengerReservations()
   }
 
   async declinedReservationSubmit() {
@@ -153,6 +155,7 @@ class TripReservationsCard extends Component {
       )
     }
     this.setState({ loading: false })
+    this.props.reloadReservations()
   }
 
   get_passengers_by_stop() {
@@ -167,6 +170,7 @@ class TripReservationsCard extends Component {
   }
 
   render() {
+    if (this.state.loading) return <Loading />
     const { classes, trip } = this.props
     const { reservation_status, passenger, reserved_seats } = trip
     const [start, end] = this.get_passengers_by_stop()
@@ -240,6 +244,8 @@ TripReservationsCard.propTypes = {
   trip: PropTypes.object.isRequired,
   trip_id: PropTypes.string.isRequired,
   user: PropTypes.object.isRequired,
+  rePassengerReservations: PropTypes.func.isRequired,
+  reloadReservations: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
