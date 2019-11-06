@@ -30,6 +30,7 @@ export default function createTripReducer(state = {}, action) {
         startStop: '',
         endStop: '',
         startTime: '',
+        middleStops: [],
       }
     case createTripActions.CREATE_TRIP:
       return { ...state, loading: true }

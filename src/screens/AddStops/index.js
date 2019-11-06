@@ -23,6 +23,7 @@ import {
   addMiddleStop,
   removeMiddleStop,
   createTrip,
+  clearCreateTripInfo,
 } from '../../redux/actions/createtrip'
 
 class AddStopsScreen extends Component {
@@ -78,6 +79,7 @@ class AddStopsScreen extends Component {
     )
     if (payload) {
       history.push(routes.myTrips)
+      this.props.clearCreateTripInfo()
     }
   }
 
@@ -135,8 +137,8 @@ class AddStopsScreen extends Component {
 
 AddStopsScreen.propTypes = {
   spots: PropTypes.array.isRequired,
-  endStop: PropTypes.object.isRequired,
-  spaceCar: PropTypes.string.isRequired,
+  endStop: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
+  spaceCar: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   carUsed: PropTypes.string.isRequired,
   startStop: PropTypes.object.isRequired,
   middleStops: PropTypes.array.isRequired,
@@ -144,6 +146,7 @@ AddStopsScreen.propTypes = {
   addMiddleStop: PropTypes.func.isRequired,
   removeMiddleStop: PropTypes.func.isRequired,
   createTrip: PropTypes.func.isRequired,
+  clearCreateTripInfo: PropTypes.func.isRequired,
   getAllSpots: PropTypes.func.isRequired,
   history: PropTypes.object,
   user: PropTypes.object,
@@ -167,6 +170,7 @@ const mapDispatchToProps = {
   addMiddleStop,
   removeMiddleStop,
   createTrip,
+  clearCreateTripInfo,
 }
 
 export default connect(
