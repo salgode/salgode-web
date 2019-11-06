@@ -83,7 +83,9 @@ class ConfirmEmail extends Component {
           size="large"
           className={classes.button}
         >
-          {isLoggedIn.token ? 'Buscar viajes' : 'Iniciar sesión'}
+          {isLoggedIn && isLoggedIn.token != null
+            ? 'Buscar viajes'
+            : 'Iniciar sesión'}
         </Button>
       </Container>
     )
