@@ -96,7 +96,7 @@ export function createTrip(authToken, route_points, etd, spaceCar, carID) {
         data: {
           vehicle_id: carID,
           route_points: route_points_ids,
-          available_seats: spaceCar,
+          available_seats: parseInt(spaceCar),
           etd_info: {
             etd: etd,
             etd_policy: 'strict',
