@@ -40,6 +40,19 @@ class MyTripDetails extends Component {
     this.setState({ loading: false })
   }
 
+  rePassengerReservations = () => {
+    this.setState({ loading: true })
+    this.getReservations()
+    this.getTripManifest()
+    this.setState({ loading: false })
+  }
+
+  reloadReservations = () => {
+    this.setState({ loading: true })
+    this.getReservations()
+    this.setState({ loading: false })
+  }
+
   async getReservations() {
     const { match } = this.props
     const response = await this.props.fetchTripReservations(
@@ -103,7 +116,12 @@ class MyTripDetails extends Component {
       return reservations.map((reservation, i) => {
         return (
           <Grid item md={4} key={i}>
-            <TripReservationsCard trip={reservation} trip_id={params.id} />
+            <TripReservationsCard
+              trip={reservation}
+              trip_id={params.id}
+              reloadReservations={this.reloadReservations}
+              rePassengerReservations={this.rePassengerReservations}
+            />
           </Grid>
         )
       })

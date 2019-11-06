@@ -100,6 +100,7 @@ class FindTripScreen extends Component {
       )
     }
     this.setState({ loading: false })
+    this.getTrips()
   }
 
   renderTrips(trips) {

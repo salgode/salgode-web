@@ -28,6 +28,10 @@ class RequestedTrip extends Component {
     this.getTrips()
   }
 
+  reloadReservations = () => {
+    this.getTrips()
+  }
+
   async getTrips() {
     this.setState({ loading: true })
     const response = await this.props.fetchRequestedTrips(this.props.user.token)
@@ -47,7 +51,10 @@ class RequestedTrip extends Component {
       return trips.map((trip, i) => {
         return (
           <Grid item md={4} key={i}>
-            <RequestedTripCard trip={trip} />
+            <RequestedTripCard
+              trip={trip}
+              reloadReservations={this.reloadReservations}
+            />
           </Grid>
         )
       })
