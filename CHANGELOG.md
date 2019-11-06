@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/Varuscl/salgode-web/compare/v1.0.1...v1.0.2) (2019-11-06)
+
+
+### Bug Fixes
+
+* update package-lock.json ([7c7562a](https://github.com/Varuscl/salgode-web/commit/7c7562aa3b5df3e90a480f5e0502d451f3ddaf2f))
+
 ### [1.0.1](https://github.com/Varuscl/salgode-web/compare/v1.0.0...v1.0.1) (2019-11-06)
 
 
