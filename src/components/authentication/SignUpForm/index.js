@@ -34,6 +34,14 @@ const ERROR = {
   idBack: 'Debes subir una foto trasera de tu carnet',
 }
 
+const PHOTO_SUBTITLE = {
+  selfieImage: '¡Sonríe! Esta foto la verán los demás usuarios.',
+  idFront:
+    '¡Que salga lo mejor posible! Influirá en la validación de tu cuenta.',
+  idBack:
+    '¡Que salga lo mejor posible! Influirá en la validación de tu cuenta.',
+}
+
 const styles = theme => ({
   '@global': {
     body: {
@@ -41,7 +49,7 @@ const styles = theme => ({
     },
   },
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -50,9 +58,12 @@ const styles = theme => ({
     width: '50%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
+  main: {
+    padding: 0,
+  },
   [theme.breakpoints.down('sm')]: {
     form: {
-      width: '80%',
+      width: '100%',
     },
   },
   submit: {
@@ -165,15 +176,13 @@ class SignUpForm extends Component {
     }))
   }
 
-  onChangeImage = name => event => {
-    if (event.currentTarget) {
-      this.setState(oldState => ({
-        validity: {
-          ...oldState.validity,
-          [name]: true,
-        },
-      }))
-    }
+  onChangeImage = name => {
+    this.setState(oldState => ({
+      validity: {
+        ...oldState.validity,
+        [name]: true,
+      },
+    }))
   }
 
   async onImageUpload(image) {
@@ -279,7 +288,7 @@ class SignUpForm extends Component {
     })
 
     return (
-      <Container component="main">
+      <Container component="main" className={classes.main}>
         {loading && <Loading />}
         <CssBaseline />
         <div className={classes.paper}>
@@ -389,24 +398,27 @@ class SignUpForm extends Component {
               <Grid container item xs={12} md={12} justify="center">
                 <UploadImage
                   id="selfieImage"
-                  label="Selfie"
-                  onChange={this.onChangeImage}
+                  title="Selfie"
+                  subtitle={PHOTO_SUBTITLE['selfieImage']}
+                  onChange={() => this.onChangeImage('selfieImage')}
                   ref={this.selfieImage}
                 />
               </Grid>
               <Grid container item xs={12} md={12} justify="center">
                 <UploadImage
                   id="idFront"
-                  label="Foto frontal carnet"
-                  onChange={this.onChangeImage}
+                  title="Foto frontal carnet"
+                  subtitle={PHOTO_SUBTITLE['idFront']}
+                  onChange={() => this.onChangeImage('idFront')}
                   ref={this.idFront}
                 />
               </Grid>
               <Grid container item xs={12} md={12} justify="center">
                 <UploadImage
                   id="idBack"
-                  label="Foto trasera carnet"
-                  onChange={this.onChangeImage}
+                  title="Foto trasera carnet"
+                  subtitle={PHOTO_SUBTITLE['idBack']}
+                  onChange={() => this.onChangeImage('idBack')}
                   ref={this.idBack}
                 />
               </Grid>
