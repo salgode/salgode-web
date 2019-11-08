@@ -37,6 +37,10 @@ class SignUpScreen extends Component {
     if (user.error || !user.payload.data.email || !user.payload.data.user_id) {
       this.setState({ loading: false })
       return alert(MESSAGE)
+    } else {
+      alert(
+        '¡Registro exitoso! Se te envío un correo electrónico para que confirmes tu cuenta. Necesitarás confirmar tu correo antes de iniciar sesión'
+      )
     }
 
     setObject(USER_DATA, user.payload.data)
