@@ -21,6 +21,18 @@ import uploadFile from '../../../utils/uploadFile'
 import './style.sass'
 import Loading from '../../Loading/Loading'
 
+const ERROR = {
+  name: 'Tu nombre debe tener más de 3 caracteres',
+  lastName: 'Tu apellido debe tener más de 3 caracteres',
+  email: 'Tu mail tiene el formato incorrecto',
+  phoneNumber: 'Tu teléfono tiene el formato incorrecto',
+  password: 'Tu contraseña debe tener al menos 8 caracteres',
+  passwordRepeat: 'Tus contraseñas no coinciden',
+  selfie: 'Debes subir una foto selfie',
+  idFront: 'Debes subir una foto frontal de tu carnet',
+  idBack: 'Debes subir una foto trasera de tu carnet',
+}
+
 const styles = theme => ({
   '@global': {
     body: {
@@ -59,7 +71,6 @@ class SignUpForm extends Component {
       phoneNumber: '',
       password: '',
       passwordRepeat: '',
-      selfie: '',
       loading: false,
 
       validity: {
@@ -134,7 +145,11 @@ class SignUpForm extends Component {
   onChangePassword({ target: { value: password } }) {
     this.setState(oldState => ({
       password,
-      validity: { ...oldState.validity, password: password.length > 7 },
+      validity: {
+        ...oldState.validity,
+        password: password.length > 7,
+        passwordRepeat: password === this.state.passwordRepeat,
+      },
     }))
   }
 
@@ -143,7 +158,8 @@ class SignUpForm extends Component {
       passwordRepeat,
       validity: {
         ...oldState.validity,
-        passwordRepeat: passwordRepeat.length > 7,
+        passwordRepeat:
+          passwordRepeat.length > 7 && passwordRepeat === this.state.password,
       },
     }))
   }
@@ -193,7 +209,7 @@ class SignUpForm extends Component {
       this.state.validity.selfieImage &&
       this.state.validity.idFront &&
       this.state.validity.idBack
-    return validity && this.state.password === this.state.passwordRepeat
+    return validity
   }
 
   async submit() {
@@ -225,7 +241,7 @@ class SignUpForm extends Component {
         dniBackLink,
       })
     } else {
-      alert('Asegurate de tener todos los campos completos')
+      alert('Asegurate de haber subido las 3 fotos')
     }
   }
 
@@ -245,8 +261,21 @@ class SignUpForm extends Component {
       passwordRepeat,
       phoneNumber,
       loading,
+      validity,
     } = this.state
     const { classes } = this.props
+
+    const error = {}
+    Object.keys(validity).map(key => {
+      if (
+        !validity[key] &&
+        (typeof this.state[key] === 'undefined' || this.state[key].length > 0)
+      ) {
+        error[key] = ERROR[key]
+      } else {
+        error[key] = ''
+      }
+    })
 
     return (
       <Container component="main">
@@ -269,6 +298,8 @@ class SignUpForm extends Component {
                   id="firstName"
                   label="Nombre"
                   autoFocus
+                  error={error.name.length > 0}
+                  helperText={error.name}
                   value={name}
                   onChange={this.onChangeName}
                   onKeyPress={this.handleEnter}
@@ -283,6 +314,8 @@ class SignUpForm extends Component {
                   label="Apellido"
                   name="lastName"
                   autoComplete="lname"
+                  error={error.lastName.length > 0}
+                  helperText={error.lastName}
                   value={lastName}
                   onChange={this.onChangeLastname}
                   onKeyPress={this.handleEnter}
@@ -298,6 +331,8 @@ class SignUpForm extends Component {
                   name="email"
                   autoComplete="email"
                   type="email"
+                  error={error.email.length > 0}
+                  helperText={error.email}
                   value={email}
                   onChange={this.onChangeEmail}
                   onKeyPress={this.handleEnter}
@@ -310,6 +345,8 @@ class SignUpForm extends Component {
                   fullWidth
                   label="Número de Teléfono"
                   type="tel"
+                  error={error.phoneNumber.length > 0}
+                  helperText={error.phoneNumber}
                   value={phoneNumber}
                   onChange={this.onChangePhoneNumber}
                   onKeyPress={this.handleEnter}
@@ -325,6 +362,8 @@ class SignUpForm extends Component {
                   id="password"
                   autoComplete="current-password"
                   type="password"
+                  error={error.password.length > 0}
+                  helperText={error.password}
                   value={password}
                   onChange={this.onChangePassword}
                   onKeyPress={this.handleEnter}
@@ -339,6 +378,8 @@ class SignUpForm extends Component {
                   id="passwordRepeat"
                   autoComplete="current-password"
                   type="password"
+                  error={error.passwordRepeat.length > 0}
+                  helperText={error.passwordRepeat}
                   value={passwordRepeat}
                   onChange={this.onChangePasswordRepeat}
                   onKeyPress={this.handleEnter}
@@ -391,7 +432,6 @@ class SignUpForm extends Component {
               variant="contained"
               color="secondary"
               className={classes.submit}
-              disabled={!this.getValidity()}
               onClick={() => this.submit()}
             >
               Registrarse
