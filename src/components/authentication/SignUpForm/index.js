@@ -10,6 +10,8 @@ import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
+import Loading from '../../Loading/Loading'
+import UploadImage from '../../UploadImage'
 
 // utils
 import {
@@ -19,7 +21,6 @@ import {
 } from '../../../utils/userInputs'
 import uploadFile from '../../../utils/uploadFile'
 import './style.sass'
-import Loading from '../../Loading/Loading'
 
 const ERROR = {
   name: 'Tu nombre debe tener más de 3 caracteres',
@@ -386,44 +387,28 @@ class SignUpForm extends Component {
                 />
               </Grid>
               <Grid container item xs={12} md={12} justify="center">
-                <Grid item xs={12} sm={12}>
-                  <Typography className="image-center">Selfie</Typography>
-                </Grid>
-                <Grid item xs={12} sm={2}>
-                  <input
-                    type="file"
-                    ref={this.selfieImage}
-                    onChange={this.onChangeImage('selfieImage')}
-                  />
-                </Grid>
+                <UploadImage
+                  id="selfieImage"
+                  label="Selfie"
+                  onChange={this.onChangeImage}
+                  ref={this.selfieImage}
+                />
               </Grid>
               <Grid container item xs={12} md={12} justify="center">
-                <Grid item xs={12} sm={12}>
-                  <Typography className="image-center">
-                    Foto frontal Cédula de Identidad
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={2}>
-                  <input
-                    type="file"
-                    ref={this.idFront}
-                    onChange={this.onChangeImage('idFront')}
-                  />
-                </Grid>
+                <UploadImage
+                  id="idFront"
+                  label="Foto frontal carnet"
+                  onChange={this.onChangeImage}
+                  ref={this.idFront}
+                />
               </Grid>
               <Grid container item xs={12} md={12} justify="center">
-                <Grid item xs={12} sm={12}>
-                  <Typography className="image-center">
-                    Foto trasera Cédula de Identidad
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={2}>
-                  <input
-                    type="file"
-                    ref={this.idBack}
-                    onChange={this.onChangeImage('idBack')}
-                  />
-                </Grid>
+                <UploadImage
+                  id="idBack"
+                  label="Foto trasera carnet"
+                  onChange={this.onChangeImage}
+                  ref={this.idBack}
+                />
               </Grid>
             </Grid>
             <Button
