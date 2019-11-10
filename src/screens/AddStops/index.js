@@ -138,7 +138,7 @@ class AddStopsScreen extends Component {
 AddStopsScreen.propTypes = {
   spots: PropTypes.array.isRequired,
   endStop: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
-  spaceCar: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  spaceCar: PropTypes.number,
   carUsed: PropTypes.string.isRequired,
   startStop: PropTypes.object.isRequired,
   middleStops: PropTypes.array.isRequired,

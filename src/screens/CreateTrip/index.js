@@ -29,7 +29,6 @@ import SimpleBreadcrumbs from '../../components/Breadcrumbs/index'
 
 import './style.sass'
 import Paper from '@material-ui/core/Paper'
-import TextField from '@material-ui/core/TextField'
 
 class CreateTripScreen extends Component {
   state = {
@@ -55,13 +54,6 @@ class CreateTripScreen extends Component {
       this.setState({ pickedDate: date })
     } else {
       alert('La fecha tiene que ser mayor a hoy día')
-    }
-  }
-
-  handleChange = () => event => {
-    if (event.target.value > 0) {
-      this.props.setSpaceInCar(event.target.value)
-      this.setState({ reserved_seats: event.target.value })
     }
   }
 
@@ -149,16 +141,14 @@ class CreateTripScreen extends Component {
 
             <Grid item xs={12} md={12} align="center">
               <Typography align="center">Asientos a reservar</Typography>
-              <TextField
-                required
-                variant="outlined"
-                margin="normal"
-                type="number"
-                id="email"
-                name="email"
-                autoComplete="off"
-                value={this.state.reserved_seats}
-                onChange={this.handleChange('reserved_seats')}
+              <Select
+                className="search"
+                onChange={option => this.props.setSpaceInCar(option.value)}
+                options={[...Array(20).keys()].map(n => ({
+                  label: n + 1,
+                  value: n + 1,
+                }))}
+                placeholder="Seleccionar..."
               />
             </Grid>
             <Grid item xs={12} md={12} align="center">
