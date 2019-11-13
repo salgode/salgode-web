@@ -11,18 +11,53 @@ import CardContent from '@material-ui/core/CardContent'
 import CardHeader from '@material-ui/core/CardHeader'
 import CardMedia from '@material-ui/core/CardMedia'
 import Collapse from '@material-ui/core/Collapse'
+import Container from '@material-ui/core/Container'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
+import MailIcon from '@material-ui/icons/Mail'
+import PhoneIcon from '@material-ui/icons/Phone'
 import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = () => ({
+  alignIcon: {
+    alignItems: 'center',
+    display: 'flex',
+    '& p': {
+      marginLeft: '8px',
+    },
+  },
+  bigAvatar: {
+    margin: 10,
+    width: 100,
+    height: 100,
+  },
+  cardActions: {
+    justifyContent: 'center',
+  },
+  cardContent: {
+    padding: '0 32px 0',
+  },
+  expandMenu: {
+    padding: '0 16px 0',
+  },
+  profileHeader: {
+    '& div': {
+      flex: 'inherit',
+    },
+    justifyContent: 'center',
+  },
+})
 
 class ProfileCard extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      expanded1: false,
+      expanded1: true,
       expanded2: false,
+      expanded3: false,
     }
   }
 
@@ -59,25 +94,21 @@ class ProfileCard extends Component {
   }
 
   render() {
-    const { user } = this.props
-    const { expanded1, expanded2 } = this.state
+    const { user, classes } = this.props
+    const { expanded1, expanded2, expanded3 } = this.state
     return (
-      <Card className="card">
+      <Card className={classes.mainCard}>
         <CardHeader
-          avatar={<Avatar className="bigAvatar" src={user.selfieLink} />}
+          avatar={
+            <Avatar className={classes.bigAvatar} src={user.selfieLink} />
+          }
           title={user.name + ' ' + user.lastName}
           subheader="Usuario"
+          className={classes.profileHeader}
         />
-        <CardContent>
-          <Typography variant="body2" component="p">
-            Correo: {user.email}
-            <br />
-            Telefono: {user.phone}
-          </Typography>
-        </CardContent>
-        <CardActions disableSpacing>
+        <CardActions disableSpacing className={classes.expandMenu}>
           <Typography variant="h6" component="h6">
-            Vehículos
+            Información personal
           </Typography>
           <IconButton
             onClick={() => this.handleExpandClick('expanded1', expanded1)}
@@ -88,15 +119,25 @@ class ProfileCard extends Component {
           </IconButton>
         </CardActions>
         <Collapse in={expanded1} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Grid container spacing={2}>
-              {this.renderCars()}
-            </Grid>
+          <CardContent className={classes.cardContent}>
+            <Container className={classes.alignIcon}>
+              <MailIcon color="primary" />
+              <Typography variant="body2" component="p">
+                {user.email}
+              </Typography>
+            </Container>
+            <Container className={classes.alignIcon}>
+              <PhoneIcon color="primary" />
+              <Typography variant="body2" component="p">
+                {user.phone}
+              </Typography>
+            </Container>
           </CardContent>
         </Collapse>
-        <CardActions disableSpacing>
+
+        <CardActions disableSpacing className={classes.expandMenu}>
           <Typography variant="h6" component="h6">
-            Documentos
+            Vehículos
           </Typography>
           <IconButton
             onClick={() => this.handleExpandClick('expanded2', expanded2)}
@@ -107,7 +148,26 @@ class ProfileCard extends Component {
           </IconButton>
         </CardActions>
         <Collapse in={expanded2} timeout="auto" unmountOnExit>
-          <CardContent>
+          <CardContent className={classes.cardContent}>
+            <Grid container spacing={2}>
+              {this.renderCars()}
+            </Grid>
+          </CardContent>
+        </Collapse>
+        <CardActions disableSpacing className={classes.expandMenu}>
+          <Typography variant="h6" component="h6">
+            Documentos
+          </Typography>
+          <IconButton
+            onClick={() => this.handleExpandClick('expanded3', expanded3)}
+            aria-expanded={expanded3}
+            aria-label="show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={expanded3} timeout="auto" unmountOnExit>
+          <CardContent className={classes.cardContent}>
             <CardMedia>
               <img src={user.dniFrontLink} />
             </CardMedia>
@@ -122,10 +182,15 @@ class ProfileCard extends Component {
             </CardMedia>
           </CardContent>
         </Collapse>
-        <CardActions>
-          <Link to={routes.updateUser}>
-            <Button size="small">Editar Perfil</Button>
-          </Link>
+        <CardActions className={classes.cardActions}>
+          <Button
+            component={Link}
+            variant="contained"
+            color="secondary"
+            to={routes.updateUser}
+          >
+            Editar Perfil
+          </Button>
         </CardActions>
       </Card>
     )
@@ -134,6 +199,7 @@ class ProfileCard extends Component {
 
 ProfileCard.propTypes = {
   user: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
 }
 
-export default ProfileCard
+export default withStyles(styles)(ProfileCard)
