@@ -76,6 +76,33 @@ class ConfirmEmail extends Component {
           </Typography>
         </Container>
         <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          className={classes.firstButton}
+          onClick={() => {
+            window.location.replace(
+              'https://apps.apple.com/us/app/salgode-comparte-tu-viaje/id1487651479?ls=1'
+            )
+          }}
+        >
+          App iOS
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          className={classes.button}
+          onClick={() => {
+            window.location.replace(
+              'https://play.google.com/store/apps/details?id=cl.salgode.salgode'
+            )
+          }}
+        >
+          App Android
+        </Button>
+        <Button
+          transparent
           component={Link}
           to="/"
           variant="contained"
@@ -83,7 +110,7 @@ class ConfirmEmail extends Component {
           size="large"
           className={classes.button}
         >
-          {isLoggedIn && isLoggedIn.token != null
+          {isLoggedIn !== null && isLoggedIn.token
             ? 'Buscar viajes'
             : 'Iniciar sesión'}
         </Button>
@@ -104,7 +131,7 @@ const styles = theme => ({
     },
   },
   button: {
-    marginTop: '10vh',
+    marginTop: '1vh',
   },
   container: {
     display: 'flex',
@@ -114,6 +141,9 @@ const styles = theme => ({
   },
   error: {
     color: '#d50000',
+  },
+  firstButton: {
+    marginTop: '10vh',
   },
   icon: {
     fontSize: 100,
