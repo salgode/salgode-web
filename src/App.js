@@ -18,6 +18,7 @@ import {
   PassengerTrips,
   MyTripDetails,
   TripProgress,
+  LandingRedirect,
 } from './screens'
 
 import routes from './routes.js'
@@ -33,13 +34,14 @@ const App = () => {
           <NavbarWrapper />
           <Container className="appContainer">
             <Switch>
-              <Route exact path={routes.signIn} component={SignIn} />
-              <Route exact path={routes.signUp} component={SignUp} />
+              <PrivateRoute exact path={routes.signIn} component={SignIn} />
+              <PrivateRoute exact path={routes.signUp} component={SignUp} />
               <Route
                 exact
                 path={routes.confirmEmail}
                 component={ConfirmEmail}
               />
+              <Route exact path={routes.redirect} component={LandingRedirect} />
               <PrivateRoute
                 exact
                 path={routes.requestTrip}
@@ -76,7 +78,7 @@ const App = () => {
                 path={routes.currentTrip}
                 component={TripProgress}
               />
-              <Route component={NotFound} />
+              <PrivateRoute component={NotFound} />
             </Switch>
           </Container>
         </BrowserRouter>
