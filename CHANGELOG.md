@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.1.0 (2019-11-14)
+
+
+### Bug Fixes
+
+* add dniBack, dniFront, selfie to update user action ([#32](https://github.com/salgode/salgode-web/issues/32)) ([2596e7b](https://github.com/salgode/salgode-web/commit/2596e7b))
+* add selfieLink to updateUser object ([ae2c875](https://github.com/salgode/salgode-web/commit/ae2c875))
+* change navbar logo to text and fix menu icon ([#11](https://github.com/salgode/salgode-web/issues/11)) ([80f2f9d](https://github.com/salgode/salgode-web/commit/80f2f9d))
+* create trip and make reservation adding headers ([6eff758](https://github.com/salgode/salgode-web/commit/6eff758))
+* create trip when is not driver ([7e982b3](https://github.com/salgode/salgode-web/commit/7e982b3))
+* find trip for change on backend of name to place_name ([#55](https://github.com/salgode/salgode-web/issues/55)) ([4d941c4](https://github.com/salgode/salgode-web/commit/4d941c4))
+* handle no user when opening app for first time ([#41](https://github.com/salgode/salgode-web/issues/41)) ([7a32992](https://github.com/salgode/salgode-web/commit/7a32992))
+* hide navbar when logged out ([#38](https://github.com/salgode/salgode-web/issues/38)) ([1fbd8dd](https://github.com/salgode/salgode-web/commit/1fbd8dd))
+* hours and minutes when bellow to 10 ([d97af6c](https://github.com/salgode/salgode-web/commit/d97af6c))
+* key in user action (drivers -> driver) ([a0ae324](https://github.com/salgode/salgode-web/commit/a0ae324))
+* name of places ([#47](https://github.com/salgode/salgode-web/issues/47)) ([a601c28](https://github.com/salgode/salgode-web/commit/a601c28))
+* navbar title alignment before sign in ([#43](https://github.com/salgode/salgode-web/issues/43)) ([ac83d3c](https://github.com/salgode/salgode-web/commit/ac83d3c))
+* payload at sign in accept ([#7](https://github.com/salgode/salgode-web/issues/7)) ([6e3b556](https://github.com/salgode/salgode-web/commit/6e3b556))
+* payload at sign in accept ([#7](https://github.com/salgode/salgode-web/issues/7)) ([0f0c970](https://github.com/salgode/salgode-web/commit/0f0c970))
+* place name in requested trips ([bd48d0f](https://github.com/salgode/salgode-web/commit/bd48d0f))
+* profile bug with styles ([6e1e789](https://github.com/salgode/salgode-web/commit/6e1e789))
+* remove unnecesary loadings and fix loading display ([#42](https://github.com/salgode/salgode-web/issues/42)) ([d3e1024](https://github.com/salgode/salgode-web/commit/d3e1024))
+* request trips action ([#51](https://github.com/salgode/salgode-web/issues/51)) ([61d50e3](https://github.com/salgode/salgode-web/commit/61d50e3))
+* signin/up when login for first time ([#59](https://github.com/salgode/salgode-web/issues/59)) ([34e8192](https://github.com/salgode/salgode-web/commit/34e8192))
+* signin/up when login for first time ([#60](https://github.com/salgode/salgode-web/issues/60)) ([c6c1a27](https://github.com/salgode/salgode-web/commit/c6c1a27))
+* update package-lock.json ([7c7562a](https://github.com/salgode/salgode-web/commit/7c7562a))
+* update user reducer ([3d2239b](https://github.com/salgode/salgode-web/commit/3d2239b))
+* **circleci:** fixed config ([ae3cef0](https://github.com/salgode/salgode-web/commit/ae3cef0))
+* **circleci:** fixed config ([e6d9b04](https://github.com/salgode/salgode-web/commit/e6d9b04))
+* yarn add axios ([b481bc3](https://github.com/salgode/salgode-web/commit/b481bc3))
+* **yarn lock:** rebuild file ([7a2d436](https://github.com/salgode/salgode-web/commit/7a2d436))
+
+
+### Chore
+
+* **circleci:** added circleci ([4aa869c](https://github.com/salgode/salgode-web/commit/4aa869c))
+* initialize repository ([6b0eba8](https://github.com/salgode/salgode-web/commit/6b0eba8))
+* SASS usage ([#3](https://github.com/salgode/salgode-web/issues/3)) ([a70f3b7](https://github.com/salgode/salgode-web/commit/a70f3b7))
+
+
+### Features
+
+* add basic sign up screen ([#5](https://github.com/salgode/salgode-web/issues/5)) ([b7cf8d5](https://github.com/salgode/salgode-web/commit/b7cf8d5))
+* add basic update user form with redux-form ([dc31a18](https://github.com/salgode/salgode-web/commit/dc31a18))
+* add material-ui and an example of usage ([#1](https://github.com/salgode/salgode-web/issues/1)) ([d45f587](https://github.com/salgode/salgode-web/commit/d45f587))
+* remove web sign in button on confirm email ([#77](https://github.com/salgode/salgode-web/issues/77)) ([cb6a78e](https://github.com/salgode/salgode-web/commit/cb6a78e))
+* **circleci:** final CircleCI ([6f9269c](https://github.com/salgode/salgode-web/commit/6f9269c))
+* added authentication components ([#2](https://github.com/salgode/salgode-web/issues/2)) ([027f98d](https://github.com/salgode/salgode-web/commit/027f98d))
+
+
+### Refactor
+
+* sign up screen ([#8](https://github.com/salgode/salgode-web/issues/8)) ([a903913](https://github.com/salgode/salgode-web/commit/a903913))
+
 ### [1.0.3](https://github.com/salgode/salgode-web/compare/v1.0.2...v1.0.3) (2019-11-13)
 
 ### [1.0.2](https://github.com/Varuscl/salgode-web/compare/v1.0.1...v1.0.2) (2019-11-06)
