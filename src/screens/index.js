@@ -1,6 +1,7 @@
 export { default as SignIn } from './SignIn/index'
 export { default as SignUp } from './SignUp/index'
 export { default as ConfirmEmail } from './ConfirmEmail/index'
+export { default as LandingRedirect } from './LandingRedirect/index'
 export { default as RequestTrip } from './FindTrip/index'
 export { default as MyTrips } from './MyTrips/index'
 export { default as CreateTrip } from './CreateTrip/index'

@@ -13,4 +13,5 @@ export default {
   myTripDetails: '/my-trips/:id',
   currentTrip: '/progress/:id',
   confirmEmail: '/confirm/email',
+  redirect: '/redirect',
 }
