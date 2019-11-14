@@ -34,8 +34,8 @@ const App = () => {
           <NavbarWrapper />
           <Container className="appContainer">
             <Switch>
-              <Route exact path={routes.signIn} component={SignIn} />
-              <Route exact path={routes.signUp} component={SignUp} />
+              <PrivateRoute exact path={routes.signIn} component={SignIn} />
+              <PrivateRoute exact path={routes.signUp} component={SignUp} />
               <Route
                 exact
                 path={routes.confirmEmail}
@@ -78,7 +78,7 @@ const App = () => {
                 path={routes.currentTrip}
                 component={TripProgress}
               />
-              <Route component={NotFound} />
+              <PrivateRoute component={NotFound} />
             </Switch>
           </Container>
         </BrowserRouter>
