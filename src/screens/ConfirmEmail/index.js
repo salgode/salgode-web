@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 
 import Loading from '../../components/Loading/Loading'
 import { Button, Container, Typography } from '@material-ui/core'
@@ -10,7 +9,6 @@ import { withStyles } from '@material-ui/core/styles'
 
 import axios from 'axios'
 import queryString from 'query-string'
-import { getObject, USER_DATA } from '../../utils/storeData'
 import { BACKEND_CONFIRM_EMAIL } from '../../constants'
 
 const SUCCESS_TITLE = '¡Correo confirmado!'
@@ -44,7 +42,6 @@ class ConfirmEmail extends Component {
   render() {
     const { loading, error } = this.state
     const { classes } = this.props
-    const isLoggedIn = getObject(USER_DATA)
 
     if (loading) {
       return <Loading />
@@ -100,19 +97,6 @@ class ConfirmEmail extends Component {
           }}
         >
           App Android
-        </Button>
-        <Button
-          transparent
-          component={Link}
-          to="/"
-          variant="contained"
-          color="primary"
-          size="large"
-          className={classes.button}
-        >
-          {isLoggedIn !== null && isLoggedIn.token
-            ? 'Buscar viajes'
-            : 'Iniciar sesión'}
         </Button>
       </Container>
     )
