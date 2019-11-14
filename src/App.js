@@ -18,6 +18,7 @@ import {
   PassengerTrips,
   MyTripDetails,
   TripProgress,
+  LandingRedirect,
 } from './screens'
 
 import routes from './routes.js'
@@ -40,6 +41,7 @@ const App = () => {
                 path={routes.confirmEmail}
                 component={ConfirmEmail}
               />
+              <Route exact path={routes.redirect} component={LandingRedirect} />
               <PrivateRoute
                 exact
                 path={routes.requestTrip}
